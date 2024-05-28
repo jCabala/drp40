@@ -1,8 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import config from "@/data/navbarConfig";
+import type { NavbarConfig } from "@/data/navbarConfig";
 
-export default function Navbar() {
+type Props = {
+  navConfig: NavbarConfig;
+};
+
+export default function Navbar({ navConfig }: Props) {
   const [navbarOpen, setNavbarOpen] = useState(false);
   return (
     <>
@@ -13,7 +17,7 @@ export default function Navbar() {
               className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"
               href="#pablo"
             >
-              {config.title}
+              {navConfig.title}
             </a>
             <button
               className="text-white cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
@@ -31,7 +35,7 @@ export default function Navbar() {
             id="example-navbar-danger"
           >
             <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
-              {config.links.map((link) => (
+              {navConfig.links.map((link) => (
                 <li className="nav-item" key={link.title}>
                   <a
                     className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
