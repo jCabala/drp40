@@ -1,8 +1,10 @@
+"use client";
 import Card from "@/components/Card";
+import { APIProvider, Map } from "@vis.gl/react-google-maps";
 
 export default function Home() {
   return (
-    <main className="min-h-screen px-5 py-5">
+    <div className="w-full flex flex-row">
       <section className="w-1/3">
         <Card
           image="https://i.ibb.co/r2zns1m/image-01.jpg"
@@ -25,6 +27,20 @@ export default function Home() {
           Button="View Details"
         />
       </section>
-    </main>
+      <section
+        className="fixed right-0 w-1/3 h-screen bg-red-300 ml-4"
+        style={{ width: "calc(66.666667% - 2rem)" }}
+      >
+        <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}>
+          <Map
+            className="w-full h-screen"
+            defaultCenter={{ lat: 22.54992, lng: 0 }}
+            defaultZoom={3}
+            gestureHandling={"greedy"}
+            disableDefaultUI={true}
+          />
+        </APIProvider>
+      </section>
+    </div>
   );
 }

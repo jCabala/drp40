@@ -20,7 +20,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Navbar navConfig={navbarConfig} />
-        {children}
+        <main className="relative top-14 min-h-screen px-5 py-5">
+          {children}
+        </main>
       </body>
     </html>
   );
