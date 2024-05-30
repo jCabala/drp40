@@ -1,0 +1,11 @@
+build:
+  # Sets the Dockerfile in root of project to be used in the Heroku build process
+  docker:
+    web: Dockerfile
+  # Sets the heroku Secret key to be an argument in Dockerfile
+  config:
+    NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+
+# Heroku script to start the web dyno
+run:
+  web: npm start
