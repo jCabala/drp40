@@ -4,6 +4,10 @@ FROM node:20
 # Set the working directory inside the container  
 WORKDIR /app  
 
+# Set environment variable for Google API key
+ARG NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+ENV NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+
 # Copy package.json and package-lock.json to the container  
 COPY package*.json ./  
 
