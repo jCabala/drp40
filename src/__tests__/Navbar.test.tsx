@@ -20,6 +20,6 @@ const exampleConfig: NavbarConfig = {
 describe("Navbar", () => {
   test("renders the title", () => {
     render(<Navbar navConfig={exampleConfig} />);
-    expect(screen.getByText("TITLE2")).toBeInTheDocument();
+    expect(screen.getByText("TITLE")).toBeInTheDocument();
   });
 });
