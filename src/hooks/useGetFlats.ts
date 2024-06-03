@@ -14,8 +14,8 @@ function useGetFlats() {
           rentPerWeek: data.rentPerWeek,
           numberOfGaps: data.numberOfGaps,
           numberOfRooms: data.numberOfRooms,
-          lng: 1,
-          lat: 69,
+          lng: data.longitude,
+          lat: data.latitude,
           images: data.images,
           labels: [
             { name: "Women only", color: "#C70039" },
