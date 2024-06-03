@@ -7,6 +7,8 @@ WORKDIR /app
 # Set environment variable for Google API key
 ARG NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 ENV NEXT_PUBLIC_GOOGLE_MAPS_API_KEY $NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+ARG FIREBASE_API_KEY
+ENV FIREBASE_API_KEY $FIREBASE_API_KEY
 
 # Copy package.json and package-lock.json to the container  
 COPY package*.json ./  
