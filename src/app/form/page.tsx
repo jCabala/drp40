@@ -78,7 +78,7 @@ function Form() {
           componentRestrictions: { country: 'uk' },
         }}
         apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
-
+        className={inputStyle}
         onPlaceSelected={(place: any) => {
           const latitude = place.geometry.location.lat();
           const longitude = place.geometry.location.lng();
@@ -86,7 +86,7 @@ function Form() {
           lngRef.current = longitude;
           addressRef.current = place.formatted_address;
         }}
-        />;
+        />
       <input
         type="number"
         className={inputStyle}

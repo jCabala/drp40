@@ -32,7 +32,7 @@ function MainFlatsViev({ flats }: Props) {
           <Map
             className="w-full h-screen pb-24 pr-4"
             defaultCenter={{ lat: 51.509865, lng: -0.118092 }}
-            defaultZoom={6}
+            defaultZoom={12}
             gestureHandling={"greedy"}
             disableDefaultUI={true}
           >
