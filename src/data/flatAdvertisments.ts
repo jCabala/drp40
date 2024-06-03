@@ -3,8 +3,8 @@ export type FlatAdvertisment = {
   rentPerWeek: number;
   numberOfRooms: number;
   numberOfGaps: number;
-  img1: string;
-  img2: string;
+  images: string[];
+  labels: { name: string; color: string }[];
   lat: number;
   lng: number;
 };
