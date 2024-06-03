@@ -3,8 +3,8 @@ import React, { useRef } from "react";
 import { db, storage } from "@/lib/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
-import { useLoadScript } from '@react-google-maps/api';
-import { useForm } from 'react-hook-form';
+import { useLoadScript } from "@react-google-maps/api";
+import { useForm } from "react-hook-form";
 import { usePlacesWidget } from "react-google-autocomplete";
 import Autocomplete from "react-google-autocomplete";
 
@@ -19,7 +19,6 @@ function Form() {
   const lngRef = useRef<number>(0);
   const latRef = useRef<number>(0);
   const addressRef = useRef<string>();
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -53,7 +52,7 @@ function Form() {
     }
 
     // Add flat to database
-    
+
     await addDoc(collection(db, "flats"), {
       address: addr,
       longitude: lng,
@@ -62,7 +61,7 @@ function Form() {
       numberOfRooms: parseInt(rooms),
       numberOfGaps: parseInt(gaps),
       images: imgUrls,
-    }); 
+    });
 
     alert("Flat added!");
   };
@@ -74,8 +73,8 @@ function Form() {
     >
       <Autocomplete
         options={{
-          types: ['address'],
-          componentRestrictions: { country: 'uk' },
+          types: ["address"],
+          componentRestrictions: { country: "uk" },
         }}
         apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
         className={inputStyle}
@@ -86,7 +85,7 @@ function Form() {
           lngRef.current = longitude;
           addressRef.current = place.formatted_address;
         }}
-        />
+      />
       <input
         type="number"
         className={inputStyle}
