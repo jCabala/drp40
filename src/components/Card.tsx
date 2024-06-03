@@ -33,7 +33,7 @@ function Card({
         <div>
           <p className="mx-1">
             <b className="text-orange-500">Rent: </b>
-            {rentPerWeek} $/week
+            {rentPerWeek} £/week
           </p>
           <p className="mx-1">
             <b className="text-orange-500">Campus travel: </b>30 min
