@@ -19,6 +19,7 @@ function MainFlatsViev({ flats }: Props) {
               rentPerWeek={flat.rentPerWeek}
               numberOfGaps={flat.numberOfGaps}
               numberOfRooms={flat.numberOfRooms}
+              labels={flat.labels}
             />
           ))}
         </section>
@@ -29,7 +30,7 @@ function MainFlatsViev({ flats }: Props) {
       >
         <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}>
           <Map
-            className="w-full h-screen"
+            className="w-full h-screen pb-24 pr-4"
             defaultCenter={{ lat: 51.509865, lng: -0.118092 }}
             defaultZoom={6}
             gestureHandling={"greedy"}

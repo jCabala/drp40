@@ -17,6 +17,10 @@ function useGetFlats() {
           lng: 1,
           lat: 69,
           images: data.images,
+          labels: [
+            { name: "Women only", color: "#C70039" },
+            { name: "No smoking", color: "#FFC300" },
+          ],
         };
       });
 
