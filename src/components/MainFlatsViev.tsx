@@ -2,6 +2,7 @@ import React from "react";
 import Card from "./Card";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
+import FloatingButton from "./FloatingButton";
 
 type Props = { flats: FlatAdvertisment[] };
 
@@ -45,6 +46,7 @@ function MainFlatsViev({ flats }: Props) {
           </Map>
         </APIProvider>
       </section>
+      <FloatingButton path="/form" message="+" />
     </div>
   );
 }

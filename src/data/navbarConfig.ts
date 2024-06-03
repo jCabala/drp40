@@ -16,10 +16,6 @@ const navbarConfig: NavbarConfig = {
       path: "/",
     },
     {
-      title: "Add Listing",
-      path: "/form",
-    },
-    {
       title: "About",
       path: "/about",
     },

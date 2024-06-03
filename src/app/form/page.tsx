@@ -3,10 +3,10 @@ import React, { useRef } from "react";
 import { db, storage } from "@/lib/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
-import { useLoadScript } from "@react-google-maps/api";
-import { useForm } from "react-hook-form";
-import { usePlacesWidget } from "react-google-autocomplete";
 import Autocomplete from "react-google-autocomplete";
+import { useState } from "react";
+import LoadingOverlay from "@/components/LoadingOverlay";
+import PopUpWIndow from "@/components/PopUpWindow";
 
 const inputStyle =
   "shadow appearance-none border border-orange-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline";
@@ -19,8 +19,13 @@ function Form() {
   const lngRef = useRef<number>(0);
   const latRef = useRef<number>(0);
   const addressRef = useRef<string>();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccessful, setIsSuccessful] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     // Upload images
     const images = imgRef.current?.files;
@@ -52,7 +57,6 @@ function Form() {
     }
 
     // Add flat to database
-
     await addDoc(collection(db, "flats"), {
       address: addr,
       longitude: lng,
@@ -62,64 +66,72 @@ function Form() {
       numberOfGaps: parseInt(gaps),
       images: imgUrls,
     });
-
-    alert("Flat added!");
+    setIsLoading(false);
+    setIsSuccessful(true);
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-    >
-      <Autocomplete
-        options={{
-          types: ["address"],
-          componentRestrictions: { country: "uk" },
-        }}
-        apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
-        className={inputStyle}
-        onPlaceSelected={(place: any) => {
-          const latitude = place.geometry.location.lat();
-          const longitude = place.geometry.location.lng();
-          latRef.current = latitude;
-          lngRef.current = longitude;
-          addressRef.current = place.formatted_address;
-        }}
-      />
-      <input
-        type="number"
-        className={inputStyle}
-        ref={rentRef}
-        placeholder="Rent per week"
-        required
-      />
-      <input
-        type="number"
-        className={inputStyle}
-        ref={roomsRef}
-        placeholder="Number of rooms"
-        required
-      />
-      <input
-        type="number"
-        className={inputStyle}
-        ref={gapsRef}
-        placeholder="Number of gaps"
-        required
-      />
-      <input
-        type="file"
-        className={inputStyle}
-        ref={imgRef}
-        multiple
-        accept="image/png, image/gif, image/jpeg, image/jpg, image/webp"
-      />
-      <input
-        className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
-        type="submit"
-        value="Submit"
-      />
-    </form>
+    <div className="relative">
+      {isLoading && <LoadingOverlay />}{" "}
+      {/* Render loading overlay when isLoading is true */}
+      {isSuccessful && (
+        <PopUpWIndow message="Upload Successful!" buttonText="FINISH" />
+      )}{" "}
+      {/* Render loading overlay when isLoading is true */}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+      >
+        <Autocomplete
+          options={{
+            types: ["address"],
+            componentRestrictions: { country: "uk" },
+          }}
+          apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+          className={inputStyle}
+          onPlaceSelected={(place: any) => {
+            const latitude = place.geometry.location.lat();
+            const longitude = place.geometry.location.lng();
+            latRef.current = latitude;
+            lngRef.current = longitude;
+            addressRef.current = place.formatted_address;
+          }}
+        />
+        <input
+          type="number"
+          className={inputStyle}
+          ref={rentRef}
+          placeholder="Rent per week"
+          required
+        />
+        <input
+          type="number"
+          className={inputStyle}
+          ref={roomsRef}
+          placeholder="Number of rooms"
+          required
+        />
+        <input
+          type="number"
+          className={inputStyle}
+          ref={gapsRef}
+          placeholder="Number of gaps"
+          required
+        />
+        <input
+          type="file"
+          className={inputStyle}
+          ref={imgRef}
+          multiple
+          accept="image/png, image/gif, image/jpeg, image/jpg, image/webp"
+        />
+        <input
+          className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+          type="submit"
+          value="Submit"
+        />
+      </form>
+    </div>
   );
 }
 
