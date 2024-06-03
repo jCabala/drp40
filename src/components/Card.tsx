@@ -28,7 +28,7 @@ function Card({ id, img1, rentPerWeek, numberOfRooms, numberOfGaps }: Props) {
         <p>Number of rooms: {numberOfRooms}</p>
         <p>Looking for {numberOfGaps} tenants</p>
         <Link href={`/flat/${id}`}>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
             See more
           </button>
         </Link>
