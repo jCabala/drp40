@@ -1,11 +1,13 @@
 "use client";
 import MainFlatsViev from "@/components/MainFlatsViev";
-import mockFlatsData from "@/data/mockFlatsData";
+import useGetFlats from "@/hooks/useGetFlats";
 
 export default function Home() {
+  const flats = useGetFlats();
+
   return (
     <div className="w-full flex flex-row">
-      <MainFlatsViev flats={mockFlatsData} />
+      <MainFlatsViev flats={flats} />
     </div>
   );
 }

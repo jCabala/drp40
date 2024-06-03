@@ -14,8 +14,8 @@ function MainFlatsViev({ flats }: Props) {
             <Card
               id={flat.id}
               key={flat.id}
-              img1={flat.img1}
-              img2={flat.img2}
+              img1={flat.images[0]}
+              img2={flat.images[1] || flat.images[0]}
               rentPerWeek={flat.rentPerWeek}
               numberOfGaps={flat.numberOfGaps}
               numberOfRooms={flat.numberOfRooms}
