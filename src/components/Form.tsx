@@ -32,7 +32,7 @@ function Form({ onFinish }: Props) {
     // Upload images
     const images = imgRef.current?.files;
     if (!images || images?.length == 0) {
-      alert("Upload some images!");
+      alert("Upload some images of the property!");
       return;
     }
 
@@ -92,6 +92,9 @@ function Form({ onFinish }: Props) {
       {/* Render loading overlay when isLoading is true */}
       {showQuestions && (
         <div className="bg-white shadow-md rounded-lg p-8 w-full sm:max-w-md">
+          <b className="text-orange-500 content-centre">
+            Upload details for your GAP:{" "}
+          </b>
           <form
             onSubmit={handleSubmit}
             className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -101,6 +104,7 @@ function Form({ onFinish }: Props) {
                 types: ["address"],
                 componentRestrictions: { country: "uk" },
               }}
+              placeholder="Address of property"
               apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
               className={inputStyle}
               onPlaceSelected={(place: any) => {
@@ -115,23 +119,24 @@ function Form({ onFinish }: Props) {
               type="number"
               className={inputStyle}
               ref={rentRef}
-              placeholder="Rent per week"
+              placeholder="Rent (£/week)"
               required
             />
             <input
               type="number"
               className={inputStyle}
               ref={roomsRef}
-              placeholder="Number of rooms"
+              placeholder="Total occupants"
               required
             />
             <input
               type="number"
               className={inputStyle}
               ref={gapsRef}
-              placeholder="Number of gaps"
+              placeholder="Total vacancies"
               required
             />
+            <b className="text-orange-500">Select some property images: </b>
             <input
               type="file"
               className={inputStyle}
@@ -142,7 +147,7 @@ function Form({ onFinish }: Props) {
             <input
               className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
               type="submit"
-              value="Submit"
+              value="Upload"
             />
           </form>
         </div>
