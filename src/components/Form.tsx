@@ -74,7 +74,10 @@ function Form({ onFinish }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+      onClick={onFinish}
+    >
       {isLoading && <LoadingOverlay />}{" "}
       {showPopUp && (
         <PopUpWIndow
@@ -91,7 +94,10 @@ function Form({ onFinish }: Props) {
       {/* Render popUpWIndow when showPopUp is true */}
       {/* Render loading overlay when isLoading is true */}
       {showQuestions && (
-        <div className="bg-white shadow-md rounded-lg p-8 w-full sm:max-w-md">
+        <div
+          className="relative bg-white shadow-md rounded-lg p-8 w-full sm:max-w-md"
+          onClick={(e) => e.stopPropagation()} // stops if you click the form an exit
+        >
           <b className="text-orange-500 content-centre">
             Upload details for your GAP:{" "}
           </b>
@@ -99,6 +105,12 @@ function Form({ onFinish }: Props) {
             onSubmit={handleSubmit}
             className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
           >
+            <button
+              className="absolute top-2 right-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+              onClick={onFinish}
+            >
+              X
+            </button>
             <Autocomplete
               options={{
                 types: ["address"],
@@ -126,14 +138,14 @@ function Form({ onFinish }: Props) {
               type="number"
               className={inputStyle}
               ref={roomsRef}
-              placeholder="Total occupants"
+              placeholder="Total No. Rooms"
               required
             />
             <input
               type="number"
               className={inputStyle}
               ref={gapsRef}
-              placeholder="Total vacancies"
+              placeholder="Total No. vacancies"
               required
             />
             <b className="text-orange-500">Select some property images: </b>
