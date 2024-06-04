@@ -5,7 +5,7 @@ import Label from "./Label";
 type Props = {
   id: string;
   img1: string;
-  img2: string;
+  img2?: string;
   rentPerWeek: number;
   numberOfRooms: number;
   numberOfGaps: number;
@@ -15,6 +15,7 @@ type Props = {
 function Card({
   id,
   img1,
+  img2,
   rentPerWeek,
   numberOfRooms,
   numberOfGaps,
@@ -22,11 +23,18 @@ function Card({
 }: Props) {
   return (
     <div className="mb-10 overflow-hidden rounded-lg border-2 border-orange-500 shadow-5 duration-300 hover:scale-105 flex flex-row min-h-60 w-full">
-      <div className="h-full min-h-60 w-1/2 object-cover bg-center bg-[url('https://media.gettyimages.com/id/1307394117/photo/female-and-male-friends-having-breakfast-in-living-room-at-home.jpg?s=612x612&w=gi&k=20&c=jgGvUnK92GXx_mxIA6X3-9bA4Y0iSBtd8_MIS5-yWRQ=')]">
+      <div
+        style={
+          img2 ? { background: `url(${img2})`, objectFit: "scale-down" } : {}
+        }
+        className="h-full min-h-60 w-1/2"
+      >
         <img
           src={img1}
           alt=""
-          className="h-full min-h-60 w-full object-cover opacity-100 hover:opacity-0 duration-300"
+          className={`h-full min-h-60 w-full object-cover ${
+            img2 ? "opacity-100 hover:opacity-0 duration-300" : ""
+          }`}
         />
       </div>
       <div className="h-full min-h-60 p-2 w-1/2 flex flex-col justify-between">
