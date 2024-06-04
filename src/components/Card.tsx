@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import Label from "./Label";
-import { tenantsByFlatID } from "@/data/tenantData";
 
 type Props = {
   id: string;

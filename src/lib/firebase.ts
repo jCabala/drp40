@@ -2,8 +2,16 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  query,
+  where,
+} from "firebase/firestore";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
+import { TenantData } from "@/data/tenantData";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -25,6 +33,37 @@ const firebaseConfig = {
   storageBucket: process.env["NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET"],
   messagingSenderId: process.env["NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID"],
   appId: process.env["NEXT_PUBLIC_FIREBASE_APP_ID"],
+};
+
+const fetchTenants = async (callback: any) => {
+  await getDocs(collection(db, "tenants")).then((querySnapshot) => {
+    const newData: Array<TenantData> = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        name: data.name,
+        description: data.description,
+        flatID: data.flatID,
+        image: data.image,
+      };
+    });
+    callback(newData);
+  });
+};
+
+const fetchTenantsByID = async (id: string, callback: any) => {
+  const q = query(collection(db, "tenants"), where("flatID", "==", id));
+  await getDocs(q).then((querySnapshot) => {
+    const newData: Array<TenantData> = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        name: data.name,
+        description: data.description,
+        flatID: data.flatID,
+        image: data.image,
+      };
+    });
+    callback(newData);
+  });
 };
 
 const fetchFlats = async (callback: any) => {
@@ -80,4 +119,4 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 const storage = getStorage(app);
-export { db, storage, fetchFlat, fetchFlats };
+export { db, storage, fetchFlat, fetchFlats, fetchTenants, fetchTenantsByID };
