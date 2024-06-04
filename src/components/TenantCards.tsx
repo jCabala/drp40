@@ -1,11 +1,30 @@
 import React from "react";
 
 type Props = {
-  tenants: { text: string; image: string }[];
+  image: string;
+  id: number;
+  focusedId: number;
+  clickAction: any;
 };
 
-function TenantCards({ tenants }: Props) {
-  return null;
+const highlighted = "scale-125 border-4 border-orange-500";
+const normal = "hover:scale-105";
+
+function TenantCard({ image, id, focusedId, clickAction }: Props) {
+  const handleClick = () => {
+    if (id == focusedId) return;
+    clickAction(id);
+  };
+
+  return (
+    <img
+      src={image}
+      className={`w-32 h-32 mx-4 my-6 rounded-full duration-300  ${
+        id == focusedId ? highlighted : normal
+      }`}
+      onClick={handleClick}
+    />
+  );
 }
 
-export default TenantCards;
+export default TenantCard;

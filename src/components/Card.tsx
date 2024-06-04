@@ -3,7 +3,7 @@ import Link from "next/link";
 import Label from "./Label";
 
 type Props = {
-  id: number;
+  id: string;
   img1: string;
   img2: string;
   rentPerWeek: number;
