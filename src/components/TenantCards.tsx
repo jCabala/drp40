@@ -1,13 +1,11 @@
 import React from "react";
-import ImageGallery from "react-image-gallery";
 
 type Props = {
-    original: string,
-    thumbnail: string
-  };
+  tenants: { text: string; image: string }[];
+};
 
-function RoomView(images: Props[]) {
-    return <ImageGallery items={images} showPlayButton={false} thumbnailPosition="right"/>;
+function TenantCards({ tenants }: Props) {
+  return null;
 }
 
-export default RoomView;
+export default TenantCards;
