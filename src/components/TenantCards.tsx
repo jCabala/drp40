@@ -19,7 +19,7 @@ function TenantCard({ image, id, focusedId, clickAction }: Props) {
   return (
     <img
       src={image}
-      className={`w-32 h-32 mx-4 my-6 rounded-full duration-300  ${
+      className={`w-32 h-32 mx-4 my-6 rounded-lg object-cover duration-300  ${
         id == focusedId ? highlighted : normal
       }`}
       onClick={handleClick}

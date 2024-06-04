@@ -5,12 +5,14 @@ import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import { useState } from "react";
 import Form from "./Form";
 import Overlay from "./Overlay";
+import { tenants, tenantsByFlatID } from "@/data/tenantData";
 
 type Props = { flats: FlatAdvertisment[] };
 const centerPlaceholder = { lat: 51.509865, lng: -0.118092 };
 
 function MainFlatsViev({ flats }: Props) {
   const [showForm, setShowForm] = useState(false);
+  console.log(tenantsByFlatID(flats[0].id));
 
   return (
     <div className="w-full flex flex-row">
@@ -21,7 +23,11 @@ function MainFlatsViev({ flats }: Props) {
               id={flat.id}
               key={flat.id}
               img1={flat.images[0]}
-              img2={flat.images[1] || flat.images[0]}
+              img2={
+                tenantsByFlatID(flat.id)[0]
+                  ? tenantsByFlatID(flat.id)[0].image
+                  : flat.images[0]
+              }
               rentPerWeek={flat.rentPerWeek}
               numberOfGaps={flat.numberOfGaps}
               numberOfRooms={flat.numberOfRooms}

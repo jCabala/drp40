@@ -1,7 +1,7 @@
 "use client";
 import MainFlatsViev from "@/components/MainFlatsViev";
 import { useState, useEffect } from "react";
-import { db, fetchFlats} from "../lib/firebase";
+import { fetchFlats } from "../lib/firebase";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import LoadingOverlay from "@/components/LoadingOverlay";
 

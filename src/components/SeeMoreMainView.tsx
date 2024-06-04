@@ -2,12 +2,13 @@ import RoomView from "@/components/RoomView";
 import TenantCard from "./TenantCards";
 import { useState } from "react";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
+import { TenantData } from "@/data/tenantData";
 
 type Props = {
   lat: number;
   lng: number;
   images: { original: string; thumbnail: string }[];
-  tenants: { image: string; description: string }[];
+  tenants: TenantData[];
 };
 
 const fadedDesc = "opacity-0";

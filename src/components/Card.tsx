@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Label from "./Label";
+import { tenantsByFlatID } from "@/data/tenantData";
 
 type Props = {
   id: string;
@@ -9,6 +10,7 @@ type Props = {
   rentPerWeek: number;
   numberOfRooms: number;
   numberOfGaps: number;
+  tenant?: string;
   labels?: { name: string; color: string }[];
 };
 
