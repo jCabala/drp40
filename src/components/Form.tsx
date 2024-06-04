@@ -74,7 +74,7 @@ function Form({ onFinish }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <section>
       {isLoading && <LoadingOverlay />}{" "}
       {showPopUp && (
         <PopUpWIndow
@@ -152,7 +152,7 @@ function Form({ onFinish }: Props) {
           </form>
         </div>
       )}
-    </div>
+    </section>
   );
 }
 

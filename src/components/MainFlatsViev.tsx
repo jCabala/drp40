@@ -4,8 +4,10 @@ import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import { useState } from "react";
 import Form from "./Form";
+import Overlay from "./Overlay";
 
 type Props = { flats: FlatAdvertisment[] };
+const centerPlaceholder = { lat: 51.509865, lng: -0.118092 };
 
 function MainFlatsViev({ flats }: Props) {
   const [showForm, setShowForm] = useState(false);
@@ -38,7 +40,11 @@ function MainFlatsViev({ flats }: Props) {
         >
           <Map
             className="w-full h-screen pb-24 pr-4"
-            defaultCenter={{ lat: 51.509865, lng: -0.118092 }}
+            defaultCenter={
+              flats.length == 0
+                ? centerPlaceholder
+                : { lng: flats[0].lng, lat: flats[0].lat }
+            }
             defaultZoom={12}
             gestureHandling={"greedy"}
             disableDefaultUI={true}
@@ -54,11 +60,17 @@ function MainFlatsViev({ flats }: Props) {
       </section>
       <button
         onClick={() => setShowForm(true)}
-        className="fixed bottom-4 right-4 bg-orange-500 text-white py-3 px-6 rounded-full shadow-lg z-50"
+        className="fixed w-20 h-20 bottom-4 right-4 bg-orange-500 pt-3 pb-6 px-3 rounded-full shadow-lg z-40 duration-200 hover:scale-110 flex justify-center items-center"
       >
-        +
+        <span className="text-white text-center text-8xl">+</span>
       </button>
-      {showForm && <Form onFinish={() => setShowForm(false)} />}{" "}
+      {showForm && (
+        <>
+          <Overlay onClick={() => setShowForm(false)}>
+            <Form onFinish={() => setShowForm(false)} />
+          </Overlay>
+        </>
+      )}{" "}
       {/* Render form when showForm is true */}
     </div>
   );

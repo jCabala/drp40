@@ -2,3 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import "~react-image-gallery/styles/css/image-gallery.css";
+
+:root:has(.no-doc-scroll) {
+  overflow: hidden;
+}

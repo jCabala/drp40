@@ -7,7 +7,7 @@ import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import LoadingOverlay from "@/components/LoadingOverlay";
 
 export default function Page({ params: { id } }: { params: { id: string } }) {
-  // Query da
+  // Query database
   const [flat, setFlat] = useState<FlatAdvertisment | undefined>(undefined);
   useEffect(() => {
     fetchFlat(id, setFlat);
