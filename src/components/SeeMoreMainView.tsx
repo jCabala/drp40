@@ -38,7 +38,7 @@ export default function SeeMoreMainViews({ lat, lng, images, tenants }: Props) {
         >
           <Map
             className="w-full h-2/3 pb-4 pr-4"
-            defaultCenter={{ lat: 51.509865, lng: -0.118092 }}
+            defaultCenter={{ lat: lat, lng: lng }}
             defaultZoom={12}
             gestureHandling={"greedy"}
             disableDefaultUI={true}

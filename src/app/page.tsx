@@ -1,42 +1,21 @@
 "use client";
 import MainFlatsViev from "@/components/MainFlatsViev";
 import { useState, useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../lib/firebase";
+import { db, fetchFlats} from "../lib/firebase";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 export default function Home() {
-  const [flats, setFlats] = useState<Array<FlatAdvertisment>>([]);
-  const fetchFlats = async () => {
-    await getDocs(collection(db, "flats")).then((querySnapshot) => {
-      const newData: Array<FlatAdvertisment> = querySnapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          rentPerWeek: data.rentPerWeek,
-          numberOfGaps: data.numberOfGaps,
-          numberOfRooms: data.numberOfRooms,
-          lng: data.longitude,
-          lat: data.latitude,
-          images: data.images,
-          labels: [
-            { name: "Women only", color: "#C70039" },
-            { name: "No smoking", color: "#FFC300" },
-          ],
-        };
-      });
-
-      console.log(flats, newData);
-      setFlats(newData);
-    });
-  };
+  const [flats, setFlats] = useState<Array<FlatAdvertisment> | undefined>(
+    undefined
+  );
   useEffect(() => {
-    fetchFlats();
+    fetchFlats(setFlats);
   }, []);
 
   return (
     <div className="w-full flex flex-row">
-      <MainFlatsViev flats={flats} />
+      {flats ? <MainFlatsViev flats={flats} /> : <LoadingOverlay />}
     </div>
   );
 }
