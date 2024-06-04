@@ -33,7 +33,7 @@ function Card({
         <div>
           <p className="mx-1">
             <b className="text-orange-500">Rent: </b>
-            {rentPerWeek} $/week
+            {rentPerWeek} £/week
           </p>
           <p className="mx-1">
             <b className="text-orange-500">Campus travel: </b>30 min
@@ -48,7 +48,7 @@ function Card({
           </p>
           <div className="flex flex-wrap pt-3">
             {labels?.map((label) => (
-              <Label name={label.name} color={label.color} />
+              <Label key={label.name} name={label.name} color={label.color} />
             ))}{" "}
           </div>
         </div>
