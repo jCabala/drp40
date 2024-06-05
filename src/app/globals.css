@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 @import "~react-image-gallery/styles/css/image-gallery.css";
+
+:root:has(.no-doc-scroll) {
+  position: fixed;
+  top: var(--st, 0);
+  inline-size: 100%;
+  overflow-y: scroll;
+}
