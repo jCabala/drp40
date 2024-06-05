@@ -28,8 +28,6 @@ function MainFlatsViev({ flats }: Props) {
       ? flats.filter((flat) => flat.lat === selectedFlat.lat)
       : flats;
 
-  console.log(tenantsByFlatID(flats[0].id));
-
   return (
     <div className="w-full flex flex-row">
       {

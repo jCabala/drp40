@@ -20,6 +20,7 @@ function Form({ onFinish }: Props) {
   const lngRef = useRef<number>(0);
   const latRef = useRef<number>(0);
   const addressRef = useRef<string>();
+  const houseDescriptionRef = useRef<HTMLTextAreaElement>(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
@@ -42,8 +43,9 @@ function Form({ onFinish }: Props) {
     const lat = latRef.current;
     const lng = lngRef.current;
     const addr = addressRef.current;
+    const houseDescription = houseDescriptionRef.current?.value || "";
     console.log(rent, rooms, gaps);
-    if (!rent || !rooms || !gaps || !addr) {
+    if (!rent || !rooms || !gaps || !addr || !houseDescription) {
       alert("Fill all fields!");
       return;
     }
@@ -67,6 +69,7 @@ function Form({ onFinish }: Props) {
       numberOfRooms: parseInt(rooms),
       numberOfGaps: parseInt(gaps),
       images: imgUrls,
+      houseDescription: houseDescription,
     });
     setIsLoading(false);
     setShowQuestions(false);
@@ -150,6 +153,15 @@ function Form({ onFinish }: Props) {
               ref={imgRef}
               multiple
               accept="image/png, image/gif, image/jpeg, image/jpg, image/webp"
+            />
+            <b className="text-orange-500">
+              Add a description for your property
+            </b>
+            <textarea
+              className="border border-orange-500 mb-2 resize-none"
+              rows={6}
+              cols={30}
+              ref={houseDescriptionRef}
             />
             <input
               className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"

@@ -10,16 +10,17 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
   // Query database
   const [flat, setFlat] = useState<FlatAdvertisment | undefined>(undefined);
   const [tenantDB, setTenants] = useState<TenantData[] | undefined>(undefined);
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     fetchFlat(id, setFlat);
-  }, []);
-  useEffect(() => {
     fetchTenantsByID(id, setTenants);
+    setTimeout(() => setLoading(false), 800);
   }, []);
 
   return (
     <div className="w-full flex flex-row">
-      {flat && tenantDB != undefined? (
+      {loading && <LoadingOverlay />}
+      {flat && tenantDB != undefined && (
         <SeeMoreMainViews
           lat={flat.lat}
           lng={flat.lng}
@@ -29,9 +30,8 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
           images={flat.images.map((img) => ({ original: img, thumbnail: img }))}
           tenants={tenantDB}
           labels={flat.labels}
+          houseDescription={flat.houseDescription}
         />
-      ) : (
-        <LoadingOverlay />
       )}
     </div>
   );

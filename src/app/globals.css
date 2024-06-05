@@ -9,3 +9,7 @@
   inline-size: 100%;
   overflow-y: scroll;
 }
+
+.image-gallery-slide img {
+  height: 500px;
+}

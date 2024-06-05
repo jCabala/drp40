@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, DocumentData } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import {
   collection,
@@ -66,24 +66,29 @@ const fetchTenantsByID = async (id: string, callback: any) => {
   });
 };
 
+const getFlatData = (id: string, data: DocumentData) => {
+  return {
+    id: id,
+    address: data.address,
+    rentPerWeek: data.rentPerWeek,
+    numberOfGaps: data.numberOfGaps,
+    numberOfRooms: data.numberOfRooms,
+    lng: data.longitude,
+    lat: data.latitude,
+    images: data.images,
+    houseDescription: data.houseDescription,
+    labels: [
+      { name: "Women only", color: "#C70039" },
+      { name: "No smoking", color: "#FFC300" },
+    ],
+  };
+};
+
 const fetchFlats = async (callback: any) => {
   await getDocs(collection(db, "flats")).then((querySnapshot) => {
     const newData: Array<FlatAdvertisment> = querySnapshot.docs.map((doc) => {
       const data = doc.data();
-      return {
-        id: doc.id,
-        address: data.address,
-        rentPerWeek: data.rentPerWeek,
-        numberOfGaps: data.numberOfGaps,
-        numberOfRooms: data.numberOfRooms,
-        lng: data.longitude,
-        lat: data.latitude,
-        images: data.images,
-        labels: [
-          { name: "Women only", color: "#C70039" },
-          { name: "No smoking", color: "#FFC300" },
-        ],
-      };
+      return getFlatData(doc.id, data);
     });
 
     callback(newData);
@@ -96,19 +101,7 @@ const fetchFlat = async (id: string, callback: any) => {
   if (docSnap.exists()) {
     const data = docSnap.data();
     console.log(data.images);
-    const newData = {
-      id: data.id,
-      rentPerWeek: data.rentPerWeek,
-      numberOfGaps: data.numberOfGaps,
-      numberOfRooms: data.numberOfRooms,
-      lng: data.longitude,
-      lat: data.latitude,
-      images: data.images,
-      labels: [
-        { name: "Women only", color: "#C70039" },
-        { name: "No smoking", color: "#FFC300" },
-      ],
-    };
+    const newData = getFlatData(docSnap.id, data);
     callback(newData);
   } else {
     alert("Invalid url!!!");
