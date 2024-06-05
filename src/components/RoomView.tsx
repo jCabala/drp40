@@ -11,6 +11,7 @@ function RoomView({ images }: Props) {
       items={images}
       showPlayButton={false}
       thumbnailPosition="right"
+      showFullscreenButton={false}
     />
   );
 }

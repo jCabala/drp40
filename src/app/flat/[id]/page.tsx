@@ -30,6 +30,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
           images={flat.images.map((img) => ({ original: img, thumbnail: img }))}
           tenants={tenantDB}
           labels={flat.labels}
+          houseDescription={flat.houseDescription}
         />
       )}
     </div>

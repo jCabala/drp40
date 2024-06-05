@@ -44,7 +44,7 @@ export default function SeeMoreMainViews({
   };
 
   return (
-    <div className="grid grid-cols-5">
+    <div className="grid grid-cols-5 w-full">
       <div className="col-span-3">
         <RoomView images={images} />
 
