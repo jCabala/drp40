@@ -26,14 +26,20 @@ function Card({
     <div className="mb-10 overflow-hidden rounded-lg border-2 border-orange-500 shadow-5 duration-300 hover:scale-105 flex flex-row min-h-60 w-full">
       <div
         style={
-          img2 ? { background: `url(${img2})`, objectFit: "scale-down" } : {}
+          img2
+            ? {
+                background: `url(${img2})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }
+            : {}
         }
-        className="h-full min-h-60 w-1/2"
+        className="bg-center bg-black w-1/2"
       >
         <img
           src={img1}
           alt=""
-          className={`h-full min-h-60 w-full object-cover ${
+          className={`size-full object-cover ${
             img2 ? "opacity-100 hover:opacity-0 duration-300" : ""
           }`}
         />
