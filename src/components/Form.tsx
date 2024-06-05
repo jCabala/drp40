@@ -4,25 +4,24 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 import Autocomplete from "react-google-autocomplete";
 import { useState } from "react";
-import LoadingOverlay from "./LoadingOverlay";
 import PopUpWIndow from "./PopUpWindow";
 
-type Props = { onFinish: () => void };
+type Props = { onFinish: () => void, isLoading: boolean, setIsLoading: (loading: boolean) => void};
 
 const inputStyle =
   "shadow appearance-none border border-orange-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline";
 
-function Form({ onFinish }: Props) {
+function Form({ onFinish, isLoading, setIsLoading }: Props) {
   const rentRef = useRef<HTMLInputElement>(null);
   const roomsRef = useRef<HTMLInputElement>(null);
   const gapsRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<HTMLInputElement>(null);
+  const tenantsRef = useRef<HTMLInputElement>(null);
+  const houseDescriptionRef = useRef<HTMLTextAreaElement>(null);
   const lngRef = useRef<number>(0);
   const latRef = useRef<number>(0);
   const addressRef = useRef<string>();
-  const houseDescriptionRef = useRef<HTMLTextAreaElement>(null);
 
-  const [isLoading, setIsLoading] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
   const [showQuestions, setShowQuestions] = useState(true);
 
@@ -60,6 +59,7 @@ function Form({ onFinish }: Props) {
       imgUrls.push(url);
     }
 
+    console.log(tenantsRef.current?.value.split(","));
     // Add flat to database
     await addDoc(collection(db, "flats"), {
       address: addr,
@@ -71,14 +71,16 @@ function Form({ onFinish }: Props) {
       images: imgUrls,
       houseDescription: houseDescription,
     });
-    setIsLoading(false);
-    setShowQuestions(false);
-    setShowPopUp(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+      setShowQuestions(false);
+      setShowPopUp(true);
+    }, 1000);
   };
 
   return (
-    <section>
-      {isLoading && <LoadingOverlay />}{" "}
+    <>
       {showPopUp && (
         <PopUpWIndow
           message="Upload Successful!"
@@ -95,15 +97,16 @@ function Form({ onFinish }: Props) {
       {/* Render loading overlay when isLoading is true */}
       {showQuestions && (
         <div
-          className="relative bg-white shadow-md rounded-lg p-8 w-full sm:max-w-md"
+          className="bg-white px-6 pt-32 pb-4 w-full sm:max-w-md"
           onClick={(e) => e.stopPropagation()} // stops if you click the form an exit
         >
+
           <b className="text-orange-500 content-centre">
             Upload details for your GAP:{" "}
           </b>
           <form
             onSubmit={handleSubmit}
-            className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+            className="bg-white rounded px-8 pb-8 mb-4 w-full"
           >
             <button
               className="absolute top-2 right-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
@@ -163,6 +166,19 @@ function Form({ onFinish }: Props) {
               cols={30}
               ref={houseDescriptionRef}
             />
+            <br />
+            <b className="text-orange-500">Add current flatmates</b>
+            <p className="text-xs">
+              (If your current flatmates already have accounts enter their
+              emails, separated by a comma)
+            </p>
+
+            <input
+              type="email"
+              className={inputStyle}
+              multiple
+              ref={tenantsRef}
+            />
             <input
               className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
               type="submit"
@@ -171,7 +187,7 @@ function Form({ onFinish }: Props) {
           </form>
         </div>
       )}
-    </section>
+    </>
   );
 }
 
