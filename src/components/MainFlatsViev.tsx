@@ -12,7 +12,6 @@ const centerPlaceholder = { lat: 51.509865, lng: -0.118092 };
 
 function MainFlatsViev({ flats }: Props) {
   const [showForm, setShowForm] = useState(false);
-  console.log(tenantsByFlatID(flats[0].id));
 
   return (
     <div className="w-full flex flex-row">

@@ -13,6 +13,7 @@ type Props = {
   rentPerWeek: number;
   numberOfRooms: number;
   numberOfGaps: number;
+  houseDescription?: string;
   labels?: { name: string; color: string }[];
 };
 
@@ -27,6 +28,7 @@ export default function SeeMoreMainViews({
   lng,
   images,
   tenants,
+  houseDescription,
   labels,
 }: Props) {
   const [focusedTenant, setFocusedTenant] = useState<number>(0);
@@ -73,10 +75,25 @@ export default function SeeMoreMainViews({
             </div>
             <div className="flex flex-wrap justify-center w-2/3">
               {labels?.map((label) => (
-                <Label className="h-10" key={label.name} name={label.name} color={label.color} />
+                <Label
+                  className="h-10"
+                  key={label.name}
+                  name={label.name}
+                  color={label.color}
+                />
               ))}{" "}
             </div>
           </div>
+          {houseDescription != null ? (
+            <div className="mt-2">
+              <h3 className="px-2 text-xl font-bold mb-1 text-gray-700">
+                Property Description
+              </h3>
+              <p className="mx-3 my-1">{houseDescription}</p>
+            </div>
+          ) : (
+            <></>
+          )}
         </section>
       </div>
       <div className="min-h-screen col-span-2">
@@ -111,7 +128,7 @@ export default function SeeMoreMainViews({
             descFade ? fadedDesc : visibleDesc
           }`}
         >
-          {tenants[focusedTenant].description}
+          {tenants.length > 0 && tenants[focusedTenant].description}
         </p>
       </div>
     </div>
