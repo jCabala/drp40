@@ -1,5 +1,6 @@
 export type FlatAdvertisment = {
   id: number;
+  address: string;
   rentPerWeek: number;
   numberOfRooms: number;
   numberOfGaps: number;

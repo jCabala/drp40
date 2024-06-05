@@ -1,31 +1,53 @@
 import React from "react";
 import Card from "./Card";
-import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
+import {
+  APIProvider,
+  Map,
+  Marker,
+  InfoWindow,
+} from "@vis.gl/react-google-maps";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Form from "./Form";
 
 type Props = { flats: FlatAdvertisment[] };
 
 function MainFlatsViev({ flats }: Props) {
   const [showForm, setShowForm] = useState(false);
+  const [selectedFlat, setSelectedFlat] = useState<FlatAdvertisment | null>(
+    null
+  );
 
   return (
     <div className="w-full flex flex-row">
       {
         <section className="w-1/3">
-          {flats.map((flat) => (
-            <Card
-              id={flat.id}
-              key={flat.id}
-              img1={flat.images[0]}
-              img2={flat.images[1] || flat.images[0]}
-              rentPerWeek={flat.rentPerWeek}
-              numberOfGaps={flat.numberOfGaps}
-              numberOfRooms={flat.numberOfRooms}
-              labels={flat.labels}
-            />
-          ))}
+          {selectedFlat
+            ? flats
+                .filter((flat) => flat.lat == selectedFlat.lat)
+                .map((flat) => (
+                  <Card
+                    id={flat.id}
+                    key={flat.id}
+                    img1={flat.images[0]}
+                    img2={flat.images[1] || flat.images[0]}
+                    rentPerWeek={flat.rentPerWeek}
+                    numberOfGaps={flat.numberOfGaps}
+                    numberOfRooms={flat.numberOfRooms}
+                    labels={flat.labels}
+                  />
+                ))
+            : flats.map((flat) => (
+                <Card
+                  id={flat.id}
+                  key={flat.id}
+                  img1={flat.images[0]}
+                  img2={flat.images[1] || flat.images[0]}
+                  rentPerWeek={flat.rentPerWeek}
+                  numberOfGaps={flat.numberOfGaps}
+                  numberOfRooms={flat.numberOfRooms}
+                />
+              ))}
         </section>
       }
       <section
@@ -47,8 +69,39 @@ function MainFlatsViev({ flats }: Props) {
               <Marker
                 key={flat.id}
                 position={{ lat: flat.lat, lng: flat.lng }}
+                onMouseOver={() => {
+                  setSelectedFlat(flat);
+                  console.log("ONHOVER", selectedFlat?.address);
+                }}
+                onClick={() => {
+                  console.log("ONCLICK", flat.address);
+                }}
               />
             ))}
+
+            {selectedFlat && (
+              <InfoWindow
+                position={{ lat: selectedFlat.lat, lng: selectedFlat.lng }}
+                onCloseClick={() => setSelectedFlat(null)}
+                options={{ pixelOffset: new window.google.maps.Size(0, -30) }}
+              >
+                <div className="p-2 bg-white shadow-lg rounded-lg max-w-xs flex items-start space-x-2">
+                  <img
+                    src={selectedFlat.images[0]}
+                    alt="Flat"
+                    className="w-24 h-24 object-cover rounded-lg"
+                  />
+                  <div className="flex flex-col justify-start">
+                    <h2 className="text-lg font-bold text-orange-500 mb-1">
+                      Address
+                    </h2>
+                    <p className="text-gray-700 text-sm">
+                      {selectedFlat.address}
+                    </p>
+                  </div>
+                </div>
+              </InfoWindow>
+            )}
           </Map>
         </APIProvider>
       </section>

@@ -120,10 +120,8 @@ function Form({ onFinish }: Props) {
               apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
               className={inputStyle}
               onPlaceSelected={(place: any) => {
-                const latitude = place.geometry.location.lat();
-                const longitude = place.geometry.location.lng();
-                latRef.current = latitude;
-                lngRef.current = longitude;
+                latRef.current = place.geometry.location.lat();
+                lngRef.current = place.geometry.location.lng();
                 addressRef.current = place.formatted_address;
               }}
             />

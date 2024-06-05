@@ -11,6 +11,7 @@ function useGetFlats() {
         const data = doc.data();
         return {
           id: parseInt(doc.id),
+          address: data.address,
           rentPerWeek: data.rentPerWeek,
           numberOfGaps: data.numberOfGaps,
           numberOfRooms: data.numberOfRooms,
