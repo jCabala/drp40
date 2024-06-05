@@ -105,7 +105,7 @@ function MainFlatsViev({ flats }: Props) {
                   setSelectedFlat(null);
                   setShowReducedCards(false);
                 }}
-                options={{ pixelOffset: new window.google.maps.Size(0, -30) }}
+                pixelOffset={new google.maps.Size(0, -30)}
               >
                 <div className="p-2 bg-white shadow-lg rounded-lg max-w-xs flex items-start space-x-2">
                   <img
