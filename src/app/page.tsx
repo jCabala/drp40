@@ -9,13 +9,22 @@ export default function Home() {
   const [flats, setFlats] = useState<Array<FlatAdvertisment> | undefined>(
     undefined
   );
-  useEffect(() => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getFlats = () => {
+    setIsLoading(true);
     fetchFlats(setFlats);
+    setTimeout(() => setIsLoading(false), 600);
+  }
+
+  useEffect(() => {
+    getFlats();  
   }, []);
 
   return (
     <div className="w-full flex flex-row">
-      {flats ? <MainFlatsViev flats={flats} /> : <LoadingOverlay />}
+      {isLoading && <LoadingOverlay />}
+      {flats && <MainFlatsViev getFlats={getFlats} flats={flats} />}
     </div>
   );
 }

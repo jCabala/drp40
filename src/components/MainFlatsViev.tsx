@@ -7,27 +7,35 @@ import {
   InfoWindow,
 } from "@vis.gl/react-google-maps";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import Form from "./Form";
 import Overlay from "./Overlay";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import LoadingOverlay from "./LoadingOverlay";
+import Alert from "./Alert";
 
-type Props = { flats: FlatAdvertisment[] };
+type Props = { flats: FlatAdvertisment[]; getFlats: () => void };
 const centerPlaceholder = { lat: 51.509865, lng: -0.118092 };
 
-function MainFlatsViev({ flats }: Props) {
+function MainFlatsViev({ flats, getFlats }: Props) {
   const [showForm, setShowForm] = useState(false);
   const [isFormLoading, setIsFormLoading] = useState(false);
   const [selectedFlat, setSelectedFlat] = useState<FlatAdvertisment | null>(
     null
   );
   const [showReducedCards, setShowReducedCards] = useState(false);
-
+  const [alertText, setAlertText] = useState<string | undefined>(undefined)
+  
   const filteredFlats =
     selectedFlat && showReducedCards
       ? flats.filter((flat) => flat.lat === selectedFlat.lat)
       : flats;
+
+  useEffect(() => {
+    if (alertText) {
+      setTimeout(() => setAlertText(undefined), 3000);
+    }
+  }, [alertText]);
 
   return (
     <>
@@ -137,13 +145,19 @@ function MainFlatsViev({ flats }: Props) {
           <Overlay onClick={() => setShowForm(false)}>
             <Form
               setIsLoading={setIsFormLoading}
-              onFinish={() => setShowForm(false)}
+              setAlertText={setAlertText}
+              onFinish={() => {
+                getFlats();
+                setShowForm(false);
+              }}
             />
           </Overlay>
         )}{" "}
         {/* Render form when showForm is true */}
       </div>
       {isFormLoading && <LoadingOverlay />}
+      {alertText && <Alert exitAction={() => setAlertText(undefined)} text={alertText}/>}
+      
     </>
   );
 }

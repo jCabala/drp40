@@ -9,12 +9,13 @@ import PopUpWIndow from "./PopUpWindow";
 type Props = {
   onFinish: () => void;
   setIsLoading: (loading: boolean) => void;
+  setAlertText: (text: string) => void;
 };
 
 const inputStyle =
   "shadow appearance-none border border-orange-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline";
 
-function Form({ onFinish, setIsLoading }: Props) {
+function Form({ onFinish, setIsLoading, setAlertText }: Props) {
   const rentRef = useRef<HTMLInputElement>(null);
   const roomsRef = useRef<HTMLInputElement>(null);
   const gapsRef = useRef<HTMLInputElement>(null);
@@ -35,11 +36,6 @@ function Form({ onFinish, setIsLoading }: Props) {
 
     // Upload images
     const images = imgRef.current?.files;
-    if (!images || images?.length == 0) {
-      alert("Upload some images of the property!");
-      return;
-    }
-
     const rent = rentRef.current?.value;
     const rooms = roomsRef.current?.value;
     const gaps = gapsRef.current?.value;
@@ -48,9 +44,22 @@ function Form({ onFinish, setIsLoading }: Props) {
     const addr = addressRef.current;
     const houseDescription = houseDescriptionRef.current?.value || "";
     const tenants = tenantsRef.current?.value.split(",") || [];
-    console.log(rent, rooms, gaps);
-    if (!rent || !rooms || !gaps || !addr || !houseDescription) {
-      alert("Fill all fields!");
+
+    if (!images || images?.length == 0) {
+      setAlertText("Upload some images of the property!");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!rent || !rooms || !gaps) {
+      setAlertText("Please fill in all the fields!");
+      setIsLoading(false);
+      return;
+    }
+
+    if (gaps > rooms) {
+      setAlertText("Number of vacancies cannot be more than number of rooms!");
+      setIsLoading(false);
       return;
     }
 
@@ -63,8 +72,7 @@ function Form({ onFinish, setIsLoading }: Props) {
       const url = await getDownloadURL((await uploadTask).ref);
       imgUrls.push(url);
     }
-
-    console.log(tenantsRef.current?.value.split(","));
+    /*
     // Add flat to database
     const docRef = await addDoc(collection(db, "flats"), {
       address: addr,
@@ -84,13 +92,13 @@ function Form({ onFinish, setIsLoading }: Props) {
     tenants.map(
       async (tenant) =>
         await addTenantFlatID(tenant, docRef.id, (id: string) => {})
-    );
+    ); */
 
     setTimeout(() => {
       setIsLoading(false);
       setShowQuestions(false);
       setShowPopUp(true);
-    }, 1000);
+    }, 500);
   };
 
   return (
@@ -140,6 +148,7 @@ function Form({ onFinish, setIsLoading }: Props) {
                 lngRef.current = place.geometry.location.lng();
                 addressRef.current = place.formatted_address;
               }}
+              required
             />
             <input
               type="number"
@@ -168,6 +177,7 @@ function Form({ onFinish, setIsLoading }: Props) {
               className={inputStyle}
               ref={imgRef}
               multiple
+              required
               accept="image/png, image/gif, image/jpeg, image/jpg, image/webp"
             />
             <b className="text-orange-500">
