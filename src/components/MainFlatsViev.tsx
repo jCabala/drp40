@@ -28,7 +28,7 @@ function MainFlatsViev({ flats, getFlats }: Props) {
   
   const filteredFlats =
     selectedFlat && showReducedCards
-      ? flats.filter((flat) => flat.lat === selectedFlat.lat)
+      ? flats.filter((flat) => flat.id === selectedFlat.id)
       : flats;
 
   useEffect(() => {
@@ -115,7 +115,10 @@ function MainFlatsViev({ flats, getFlats }: Props) {
                   }}
                   pixelOffset={[0, -30]}
                 >
-                  <div className="p-2 bg-white shadow-lg rounded-lg max-w-xs flex items-start space-x-2">
+                  <div
+                    onClick={() => setShowReducedCards(true)}
+                    className="p-2 bg-white shadow-lg rounded-lg max-w-xs flex items-start space-x-2 hover:bg-gray-100 transition-colors cursor-pointer"
+                  >
                     <img
                       src={selectedFlat.images[0]}
                       alt="Flat"

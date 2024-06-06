@@ -123,7 +123,7 @@ function Form({ onFinish, setIsLoading, setAlertText }: Props) {
           onClick={(e) => e.stopPropagation()} // stops if you click the form an exit
         >
           <b className="text-orange-500 content-centre">
-            Upload details for your GAP:{" "}
+            Upload details for your GAP: *{" "}
           </b>
           <form
             onSubmit={handleSubmit}
@@ -171,7 +171,7 @@ function Form({ onFinish, setIsLoading, setAlertText }: Props) {
               placeholder="Total No. vacancies"
               required
             />
-            <b className="text-orange-500">Select some property images: </b>
+            <b className="text-orange-500">Select some property images: *</b>
             <input
               type="file"
               className={inputStyle}
@@ -207,6 +207,10 @@ function Form({ onFinish, setIsLoading, setAlertText }: Props) {
               type="submit"
               value="Upload"
             />
+            <br />
+            <b className="text-sm mt-2 text-orange-500 content-centre">
+              All sections marked (*) are required{" "}
+            </b>
           </form>
         </div>
       )}
