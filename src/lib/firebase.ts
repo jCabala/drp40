@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, DocumentData } from "firebase/firestore";
+import { getFirestore, DocumentData, updateDoc } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import {
   collection,
@@ -39,15 +39,37 @@ const fetchTenants = async (callback: any) => {
   await getDocs(collection(db, "tenants")).then((querySnapshot) => {
     const newData: Array<TenantData> = querySnapshot.docs.map((doc) => {
       const data = doc.data();
-      return {
-        name: data.name,
-        description: data.description,
-        flatID: data.flatID,
-        image: data.image,
-      };
+      return getTenantData(doc.id, data);
     });
     callback(newData);
   });
+};
+
+const fetchTenantsByEmail = async (email: string, callback: any) => {
+  const q = query(collection(db, "tenants"), where("email", "==", email));
+  await getDocs(q).then((querySnapshot) => {
+    const newData: Array<TenantData> = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return getTenantData(doc.id, data);
+    });
+    callback(newData);
+  });
+};
+
+const addTenantFlatID = async (email: string, newID: string, callback: any) => {
+  const emailHandler = async (data: Array<TenantData>) => {
+    if (data.length == 1) {
+      await updateDoc(doc(db, "tenants", data[0].id), { flatID: newID });
+      callback(newID);
+    }
+  };
+
+  const tenants = await fetchTenantsByEmail(
+    email,
+    (data: Array<TenantData>) => {
+      emailHandler(data);
+    }
+  );
 };
 
 const fetchTenantsByID = async (id: string, callback: any) => {
@@ -55,15 +77,21 @@ const fetchTenantsByID = async (id: string, callback: any) => {
   await getDocs(q).then((querySnapshot) => {
     const newData: Array<TenantData> = querySnapshot.docs.map((doc) => {
       const data = doc.data();
-      return {
-        name: data.name,
-        description: data.description,
-        flatID: data.flatID,
-        image: data.image,
-      };
+      return getTenantData(doc.id, data);
     });
     callback(newData);
   });
+};
+
+const getTenantData = (id: string, data: DocumentData) => {
+  return {
+    id: id,
+    name: data.name,
+    description: data.description,
+    flatID: data.flatID,
+    image: data.image,
+    email: data.email,
+  };
 };
 
 const getFlatData = (id: string, data: DocumentData) => {
@@ -113,4 +141,13 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 const storage = getStorage(app);
-export { db, storage, fetchFlat, fetchFlats, fetchTenants, fetchTenantsByID };
+export {
+  db,
+  storage,
+  fetchFlat,
+  fetchFlats,
+  fetchTenants,
+  fetchTenantsByID,
+  fetchTenantsByEmail,
+  addTenantFlatID,
+};

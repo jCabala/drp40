@@ -136,7 +136,6 @@ function MainFlatsViev({ flats }: Props) {
         {showForm && (
           <Overlay onClick={() => setShowForm(false)}>
             <Form
-              isLoading={isFormLoading}
               setIsLoading={setIsFormLoading}
               onFinish={() => setShowForm(false)}
             />

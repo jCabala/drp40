@@ -1,17 +1,20 @@
 import React, { useRef } from "react";
-import { db, storage } from "@/lib/firebase";
+import { addTenantFlatID, db, storage } from "@/lib/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 import Autocomplete from "react-google-autocomplete";
 import { useState } from "react";
 import PopUpWIndow from "./PopUpWindow";
 
-type Props = { onFinish: () => void, isLoading: boolean, setIsLoading: (loading: boolean) => void};
+type Props = {
+  onFinish: () => void;
+  setIsLoading: (loading: boolean) => void;
+};
 
 const inputStyle =
   "shadow appearance-none border border-orange-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline";
 
-function Form({ onFinish, isLoading, setIsLoading }: Props) {
+function Form({ onFinish, setIsLoading }: Props) {
   const rentRef = useRef<HTMLInputElement>(null);
   const roomsRef = useRef<HTMLInputElement>(null);
   const gapsRef = useRef<HTMLInputElement>(null);
@@ -24,6 +27,7 @@ function Form({ onFinish, isLoading, setIsLoading }: Props) {
 
   const [showPopUp, setShowPopUp] = useState(false);
   const [showQuestions, setShowQuestions] = useState(true);
+  const [isUpdatedFlatID, updateFlatID] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +47,7 @@ function Form({ onFinish, isLoading, setIsLoading }: Props) {
     const lng = lngRef.current;
     const addr = addressRef.current;
     const houseDescription = houseDescriptionRef.current?.value || "";
+    const tenants = tenantsRef.current?.value.split(",") || [];
     console.log(rent, rooms, gaps);
     if (!rent || !rooms || !gaps || !addr || !houseDescription) {
       alert("Fill all fields!");
@@ -61,7 +66,7 @@ function Form({ onFinish, isLoading, setIsLoading }: Props) {
 
     console.log(tenantsRef.current?.value.split(","));
     // Add flat to database
-    await addDoc(collection(db, "flats"), {
+    const docRef = await addDoc(collection(db, "flats"), {
       address: addr,
       longitude: lng,
       latitude: lat,
@@ -71,6 +76,15 @@ function Form({ onFinish, isLoading, setIsLoading }: Props) {
       images: imgUrls,
       houseDescription: houseDescription,
     });
+
+    // We want to fetch tenants from the database based on email
+    // and then update the tenants table to point to the correct flatID
+    //
+
+    tenants.map(
+      async (tenant) =>
+        await addTenantFlatID(tenant, docRef.id, (id: string) => {})
+    );
 
     setTimeout(() => {
       setIsLoading(false);
@@ -100,7 +114,6 @@ function Form({ onFinish, isLoading, setIsLoading }: Props) {
           className="bg-white px-6 pt-32 pb-4 w-full sm:max-w-md"
           onClick={(e) => e.stopPropagation()} // stops if you click the form an exit
         >
-
           <b className="text-orange-500 content-centre">
             Upload details for your GAP:{" "}
           </b>
