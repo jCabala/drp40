@@ -13,3 +13,7 @@
 .image-gallery-slide img {
   height: 500px;
 }
+
+button.gm-ui-hover-effect {
+  height: 2px !important;
+}
