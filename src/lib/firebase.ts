@@ -105,10 +105,7 @@ const getFlatData = (id: string, data: DocumentData) => {
     lat: data.latitude,
     images: data.images,
     houseDescription: data.houseDescription,
-    labels: [
-      { name: "Women only", color: "#C70039" },
-      { name: "No smoking", color: "#FFC300" },
-    ],
+    labels: data?.labels || [],
   };
 };
 

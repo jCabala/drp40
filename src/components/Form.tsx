@@ -5,11 +5,18 @@ import { collection, addDoc } from "firebase/firestore";
 import Autocomplete from "react-google-autocomplete";
 import { useState } from "react";
 import PopUpWIndow from "./PopUpWindow";
+import { labelTypes } from "@/data/labelTypes";
 
 type Props = {
   onFinish: () => void;
   setIsLoading: (loading: boolean) => void;
   setAlertText: (text: string) => void;
+};
+
+type Label = {
+  name: string;
+  color: string;
+  isSet: boolean;
 };
 
 const inputStyle =
@@ -25,16 +32,17 @@ function Form({ onFinish, setIsLoading, setAlertText }: Props) {
   const lngRef = useRef<number>(0);
   const latRef = useRef<number>(0);
   const addressRef = useRef<string>();
+  const labelsRef = useRef<Label[]>(
+    labelTypes.map((label) => ({ ...label, isSet: false }))
+  );
 
   const [showPopUp, setShowPopUp] = useState(false);
   const [showQuestions, setShowQuestions] = useState(true);
-  const [isUpdatedFlatID, updateFlatID] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Upload images
     const images = imgRef.current?.files;
     const rent = rentRef.current?.value;
     const rooms = roomsRef.current?.value;
@@ -44,6 +52,9 @@ function Form({ onFinish, setIsLoading, setAlertText }: Props) {
     const addr = addressRef.current;
     const houseDescription = houseDescriptionRef.current?.value || "";
     const tenants = tenantsRef.current?.value.split(",") || [];
+    const selectedLabels = labelsRef.current
+      .filter((lbl) => lbl.isSet)
+      .map((lbl) => ({ name: lbl.name, color: lbl.color }));
 
     if (!images || images?.length == 0) {
       setAlertText("Upload some images of the property!");
@@ -72,7 +83,7 @@ function Form({ onFinish, setIsLoading, setAlertText }: Props) {
       const url = await getDownloadURL((await uploadTask).ref);
       imgUrls.push(url);
     }
-    /*
+
     // Add flat to database
     const docRef = await addDoc(collection(db, "flats"), {
       address: addr,
@@ -82,6 +93,7 @@ function Form({ onFinish, setIsLoading, setAlertText }: Props) {
       numberOfRooms: parseInt(rooms),
       numberOfGaps: parseInt(gaps),
       images: imgUrls,
+      labels: selectedLabels,
       houseDescription: houseDescription,
     });
 
@@ -92,13 +104,13 @@ function Form({ onFinish, setIsLoading, setAlertText }: Props) {
     tenants.map(
       async (tenant) =>
         await addTenantFlatID(tenant, docRef.id, (id: string) => {})
-    ); */
+    );
 
     setTimeout(() => {
       setIsLoading(false);
       setShowQuestions(false);
       setShowPopUp(true);
-    }, 500);
+    }, 200);
   };
 
   return (
@@ -202,13 +214,35 @@ function Form({ onFinish, setIsLoading, setAlertText }: Props) {
               multiple
               ref={tenantsRef}
             />
+            <b className="text-orange-500">
+              Select additional requirements for future tenants:
+            </b>
+            <div>
+              {labelTypes.map((label, idx) => (
+                <div key={idx} className="mt-2">
+                  <input
+                    type="checkbox"
+                    onChange={() =>
+                      (labelsRef.current[idx].isSet =
+                        !labelsRef.current[idx].isSet)
+                    }
+                  />
+                  <label
+                    className="font-bold ml-2"
+                    style={{ color: label.color }}
+                  >
+                    {label.name}
+                  </label>
+                </div>
+              ))}
+            </div>
             <input
-              className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+              className="mt-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
               type="submit"
               value="Upload"
             />
             <br />
-            <b className="text-sm mt-2 text-orange-500 content-centre">
+            <b className="text-sm mt-4 text-orange-500 content-centre">
               All sections marked (*) are required{" "}
             </b>
           </form>
