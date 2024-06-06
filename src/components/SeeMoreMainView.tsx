@@ -111,6 +111,9 @@ export default function SeeMoreMainViews({
 
           <Marker position={{ lat: lat, lng: lng }} />
         </APIProvider>
+        <h3 className="px-2 text-xl font-bold mb-2 text-gray-700">
+          Tenant Description
+        </h3>
         <div className="flex flex-wrap justify-center">
           {tenants.length > 0 &&
             tenants.map((tenant, idx) => (

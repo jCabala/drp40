@@ -132,7 +132,7 @@ const fetchFlat = async (id: string, callback: any) => {
     const newData = getFlatData(docSnap.id, data);
     callback(newData);
   } else {
-    alert("Invalid url!!!");
+    return;
   }
 };
 
