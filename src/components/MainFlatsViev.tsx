@@ -117,7 +117,7 @@ function MainFlatsViev({ flats, getFlats }: Props) {
                 >
                   <div
                     onClick={() => setShowReducedCards(true)}
-                    className="p-2 bg-white shadow-lg rounded-lg max-w-xs flex items-start space-x-2 hover:bg-gray-100 transition-colors cursor-pointer"
+                    className="p-2 bg-white shadow-lg rounded-lg max-w-xs flex items-start space-x-2 hover:bg-gray-600 transition-colors cursor-pointer"
                   >
                     <img
                       src={selectedFlat.images[0]}
