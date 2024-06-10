@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import { TenantData } from "@/data/tenantData";
+import { UserApplication } from "@/data/userApplication";
 
 // Your web app's Firebase configuration
 interface FirebaseConfig {
@@ -167,6 +168,27 @@ const addUserOwnedFlat = async (username: string, flatID: string) => {
   const addUser = async (username: string) => {
     await setDoc(doc(db, 'users', username), {});
   };
+
+  const addApplication = async (username: string, message: string, flatID: string) => {
+    const docRef = doc(db, `flats/${flatID}`);
+    const docSnap = await getDoc(docRef);
+    const newUserApplication: UserApplication = {
+      user: username,
+      msg: message,
+      status: "PENDING"
+    };
+    console.log("Adding application");
+    if (docSnap.exists()) {
+      const data : UserApplication[] = docSnap.data().applications || [];
+      
+      data.push(newUserApplication)
+      await updateDoc(doc(db, "flats", flatID), { applications: data });
+    } else {
+      return;
+    }
+  };
+
+
       
     
 
@@ -188,4 +210,5 @@ export {
   fetchTenantsByID,
   fetchTenantsByEmail,
   addTenantFlatID,
+  addApplication,
 };

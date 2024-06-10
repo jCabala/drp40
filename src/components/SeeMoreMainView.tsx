@@ -8,8 +8,10 @@ import Alert from "./Alert";
 import LoadingOverlay from "./LoadingOverlay";
 import AddFlatForm from "./AddFlatForm";
 import Overlay from "./Overlay";
+import ApplyFlatForm from "./ApplyFlatForm";
 
 type Props = {
+  flatID: string;
   lat: number;
   lng: number;
   images: { original: string; thumbnail: string }[];
@@ -25,6 +27,7 @@ const fadedDesc = "opacity-0";
 const visibleDesc = "opacity-100";
 
 export default function SeeMoreMainViews({
+  flatID,
   rentPerWeek,
   numberOfGaps,
   numberOfRooms,
@@ -152,12 +155,13 @@ export default function SeeMoreMainViews({
       <div>
         {showForm && (
           <Overlay onClick={() => setShowForm(false)}>
-            <AddFlatForm
+            <ApplyFlatForm
               setIsLoading={setIsFormLoading}
               setAlertText={setAlertText}
               onFinish={() => {
                 setShowForm(false);
               }}
+              flatID={flatID}
             />
           </Overlay>
         )}{" "}

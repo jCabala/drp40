@@ -22,6 +22,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
       {loading && <LoadingOverlay />}
       {flat && tenantDB != undefined && (
         <SeeMoreMainViews
+          flatID={flat.id}
           lat={flat.lat}
           lng={flat.lng}
           rentPerWeek={flat.rentPerWeek}
