@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { useState } from "react";
-import PopUpWIndow from "./PopUpWindow";
+import PopUpWIndow from "../helper/PopUpWindow";
 import { addApplication } from "@/lib/firebase";
 
 import Cookies from "js-cookie";

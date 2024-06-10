@@ -6,8 +6,8 @@ import { TenantData } from "@/data/tenantData";
 import Label from "../cards/Label";
 import Alert from "../helper/Alert";
 import LoadingOverlay from "../helper/LoadingOverlay";
-import AddFlatForm from "../forms/AddFlatForm";
 import Overlay from "../helper/Overlay";
+import ApplyFlatForm from "../forms/ApplyFlatForm";
 
 type Props = {
   flatID: string;
