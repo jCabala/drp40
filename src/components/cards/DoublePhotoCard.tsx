@@ -5,40 +5,51 @@ type Props = {
   img2?: string;
   children?: string | JSX.Element | JSX.Element[];
   containerClassName?: string;
+  onImgClick?: () => void;
+  color?: string;
 };
 
 function DoublePhotoCard({
   img1,
   img2,
   children,
-  containerClassName
+  containerClassName,
+  onImgClick,
+  color
 }: Props) {
+  const col = color || "orange";
   return (
-      <div className="mb-10 overflow-hidden rounded-lg border-2 border-orange-500 shadow-5 duration-300 hover:scale-105 flex flex-row min-h-60 w-full">
-        <div
-          style={
-            img2
-              ? {
-                  background: `url(${img2})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }
-              : {}
-          }
-          className="bg-center bg-black w-1/2"
-        >
-          <img
-            src={img1}
-            alt=""
-            className={`size-full object-cover ${
-              img2 ? "opacity-100 hover:opacity-0 duration-300" : ""
-            }`}
-          />
-        </div>
-        <div className={containerClassName || "h-full min-h-60 p-2 w-1/2 flex flex-col justify-between"}>
-          {children}
-        </div>
+    <div className={`mb-10 overflow-hidden rounded-lg border-2 border-${col}-500 shadow-5 duration-300 hover:scale-105 flex flex-row min-h-60 w-full`}>
+      <div
+        style={
+          img2
+            ? {
+                background: `url(${img2})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }
+            : {}
+        }
+        className="bg-center bg-black w-1/2 cursor-pointer"
+        onClick={onImgClick ? onImgClick : () => {}}
+      >
+        <img
+          src={img1}
+          alt=""
+          className={`size-full object-cover ${
+            img2 ? "opacity-100 hover:opacity-0 duration-300" : ""
+          }`}
+        />
       </div>
+      <div
+        className={
+          containerClassName ||
+          "h-full min-h-60 p-2 w-1/2 flex flex-col justify-between"
+        }
+      >
+        {children}
+      </div>
+    </div>
   );
 }
 
