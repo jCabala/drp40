@@ -88,6 +88,7 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
 
     // Add flat to database
     const docRef = await addDoc(collection(db, "flats"), {
+      lister: username,
       address: addr,
       longitude: lng,
       latitude: lat,

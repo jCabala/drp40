@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { addUser } from "@/lib/firebase";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -15,6 +16,7 @@ const Login: React.FC = () => {
     console.log("Email:", email);
     console.log("Password:", password);
     Cookies.set("username", email);
+    addUser(email);
     MyRouter.push("/explore");
   };
 

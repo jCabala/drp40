@@ -6,6 +6,7 @@ import {
   collection,
   getDocs,
   getDoc,
+  setDoc,
   doc,
   query,
   where,
@@ -152,17 +153,23 @@ const fetchUserFlatsOwned = async (username: string, callback: any) => {
 const addUserOwnedFlat = async (username: string, flatID: string) => {
   const docRef = doc(db, `users/${username}`);
   const docSnap = await getDoc(docRef);
+  console.log("Adding user owned flats...");
   if (docSnap.exists()) {
     const data : string[] = docSnap.data().flatsOwned || [];
-    console.log(data);
+    console.log("current user owned flat", data);
     data.push(flatID)
     await updateDoc(doc(db, "users", username), { flatsOwned: data });
   } else {
     return;
   }
+};
+
+  const addUser = async (username: string) => {
+    await setDoc(doc(db, 'users', username), {});
+  };
       
     
-  };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -172,6 +179,7 @@ const storage = getStorage(app);
 export {
   db,
   storage,
+  addUser,
   fetchFlat,
   fetchFlats,
   fetchUserFlatsOwned,
