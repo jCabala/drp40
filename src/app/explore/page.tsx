@@ -1,9 +1,9 @@
 "use client";
-import MainFlatsViev from "@/components/MainFlatsViev";
+import ExploreViev from "@/components/views/ExploreViev";
 import { useState, useEffect } from "react";
 import { fetchFlats } from "../../lib/firebase";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
-import LoadingOverlay from "@/components/LoadingOverlay";
+import LoadingOverlay from "@/components/helper/LoadingOverlay";
 import Cookies from "js-cookie";
 
 export default function Explore() {
@@ -29,7 +29,7 @@ export default function Explore() {
   return (
     <div className="w-full flex flex-row">
       {isLoading && <LoadingOverlay />}
-      {flats && <MainFlatsViev getFlats={getFlats} flats={flats} />}
+      {flats && <ExploreViev getFlats={getFlats} flats={flats} />}
     </div>
   );
 }

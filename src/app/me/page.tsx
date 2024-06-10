@@ -1,10 +1,9 @@
 "use client";
-import MainFlatsViev from "@/components/MainFlatsViev";
 import { useState, useEffect } from "react";
 import { fetchUserFlatsOwned } from "../../lib/firebase";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
-import LoadingOverlay from "@/components/LoadingOverlay";
-import UserFlatsView from "@/components/UserFlatsView";
+import LoadingOverlay from "@/components/helper/LoadingOverlay";
+import UserFlatsView from "@/components/views/UserFlatsView";
 import Cookies from "js-cookie";
 
 export default function Me() {

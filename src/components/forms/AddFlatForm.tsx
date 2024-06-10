@@ -4,7 +4,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 import Autocomplete from "react-google-autocomplete";
 import { useState } from "react";
-import PopUpWIndow from "./PopUpWindow";
+import PopUpWIndow from "../helper/PopUpWindow";
 import { labelTypes } from "@/data/labelTypes";
 import Cookies from "js-cookie";
 
