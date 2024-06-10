@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { useState } from "react";
 import PopUpWIndow from "../helper/PopUpWindow";
 import { registerUser } from "@/lib/firebase";
-import { addTenantFlatID, addUserOwnedFlat, db, storage } from "@/lib/firebase";
+import { addTenantFlatID, db, storage } from "@/lib/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 
@@ -49,11 +49,16 @@ function RegistrationForm({ onFinish, setIsLoading, setAlertText }: Props) {
       storage,
       `userImages/${profilePic?.name}-${Date.now()}`
     );
-    const uploadTask = uploadBytes(storageRef, profilePic);
 
-    const profileUrl = await getDownloadURL((await uploadTask).ref);
+    if (profilePic && email && password && description) {
+      const uploadTask = uploadBytes(storageRef, profilePic);
 
-    registerUser(email, password, description, profileUrl);
+      const profileUrl = await getDownloadURL((await uploadTask).ref);
+
+      registerUser(email, password, description, profileUrl);
+    } else {
+      console.log("ERR: Invalid registration");
+    }
 
     setTimeout(() => {
       setIsLoading(false);

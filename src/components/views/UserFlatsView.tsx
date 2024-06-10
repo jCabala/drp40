@@ -32,16 +32,27 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
       </section>
       <section className="w-3/5 ml-6 flex flex-col items-center justify-center">
         {focusedFlat && focusedFlat.applications.length > 0 ? (
-          focusedFlat.applications.map((application, idx) => (
-            <UserApplicationCard key={idx} application={application} />
-          ))
+          focusedFlat.applications.map(
+            (application, idx) =>
+              // Render UserApplicationCard only if application status is not 'REJECTED'
+              application.status !== "REJECTED" && (
+                <UserApplicationCard
+                  key={idx}
+                  application={application}
+                  flatID={focusedFlat.id}
+                />
+              )
+          )
         ) : (
           <p className="rounded-lg border-2 border-red-700 px-3 py-1 text-center">
-            {focusedFlat ? "No one applied yet ;(" : "Select a flat to see people who want to FILL THAT GAP!"}
+            {focusedFlat
+              ? "No one applied yet ;("
+              : "Select a flat to see people who want to FILL THAT GAP!"}
           </p>
         )}
       </section>
     </div>
   );
 }
+
 export default UserFlatsView;

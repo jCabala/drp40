@@ -4,7 +4,6 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   // Check if the username cookie is set
   const userID = request.cookies.get('userID');
-  console.log("MIDDLEWARE USER", userID);
 
   // If username is not set, redirect to the login page
   if (!userID) {

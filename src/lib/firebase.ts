@@ -167,6 +167,27 @@ const addUserOwnedFlatByID = async (userID: string, flatID: string) => {
   }
 };
 
+const updateApplication = async (flatID: string, approve: boolean, userEmail: string) => {
+  const docRef = doc(db, `flats/${flatID}`);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    console.log("In flat update")
+    const data : UserApplication[] = docSnap.data().applications || [];
+    console.log(data)
+    let newData: UserApplication[];
+    if (approve) {
+      newData = data.map(application => application.user.email === userEmail ? { ...application, status: "APPROVED" } : { ...application, status: "REJECTED" });
+    } else {
+      newData = data.map(application => application.user.email === userEmail ? { ...application, status: "REJECTED" } : application);
+    }
+    
+    console.log(newData)
+    await updateDoc(doc(db, "flats", flatID), { applications: newData });
+  } else {
+    return;
+  }
+}
+
 const getUserIdByEmail = async (email: string) => {
   const q = query(collection(db, "users"), where("email", "==", email));
     const querySnapshot = await getDocs(q);
@@ -192,6 +213,7 @@ const getUserIdByEmail = async (email: string) => {
   const getUserData = (id: string, data: DocumentData) => {
     const profile: UserProfile = {
       email: data.email,
+      userID: id,
       description: data.description,
       profilePic: data.profilePic
     };
@@ -210,6 +232,17 @@ const getUserIdByEmail = async (email: string) => {
       console.log("FETCHING USER", userProfile);
     }
     return userProfile;
+  };
+
+  const fetchUserIdByEmail = async (email: string) => {
+    const q = query(collection(db, "users"), where("email", "==", email));
+  
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0];
+      return doc.id;
+    }
+    return ;
   };
 
   const fetchUserByID = async (userID: string): Promise<UserProfile | null> => {
@@ -259,11 +292,14 @@ export {
   fetchFlats,
   getUserIdByEmail,
   fetchUserByEmail,
+  fetchUserByID,
   fetchTenants,
   fetchTenantsByID,
   fetchTenantsByEmail,
   fetchUserFlatsOwnedByID,
+  fetchUserIdByEmail,
   addTenantFlatID,
   addApplication,
   addUserOwnedFlatByID,
+  updateApplication,
 };

@@ -11,6 +11,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
   const [flat, setFlat] = useState<FlatAdvertisment | undefined>(undefined);
   const [tenantDB, setTenants] = useState<TenantData[] | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
+  console.log("FLAT ID", id);
   useEffect(() => {
     fetchFlat(id, setFlat);
     fetchTenantsByID(id, setTenants);
