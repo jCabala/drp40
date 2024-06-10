@@ -1,13 +1,13 @@
-import RoomView from "@/components/RoomView";
-import TenantCard from "./TenantCards";
+import RoomView from "@/components/views/RoomView";
+import TenantCard from "../cards/TenantCards";
 import { useState } from "react";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import { TenantData } from "@/data/tenantData";
-import Label from "./Label";
-import Alert from "./Alert";
-import LoadingOverlay from "./LoadingOverlay";
-import AddFlatForm from "./AddFlatForm";
-import Overlay from "./Overlay";
+import Label from "../cards/Label";
+import Alert from "../helper/Alert";
+import LoadingOverlay from "../helper/LoadingOverlay";
+import AddFlatForm from "../forms/AddFlatForm";
+import Overlay from "../helper/Overlay";
 
 type Props = {
   lat: number;

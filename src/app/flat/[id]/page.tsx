@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import SeeMoreMainViews from "@/components/SeeMoreMainView";
+import SeeMoreView from "@/components/views/SeeMoreView";
 import { TenantData } from "@/data/tenantData";
 import { fetchFlat, fetchTenantsByID } from "@/lib/firebase";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
-import LoadingOverlay from "@/components/LoadingOverlay";
+import LoadingOverlay from "@/components/helper/LoadingOverlay";
 
 export default function Page({ params: { id } }: { params: { id: string } }) {
   // Query database
@@ -21,7 +21,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
     <div className="w-full flex flex-row">
       {loading && <LoadingOverlay />}
       {flat && tenantDB != undefined && (
-        <SeeMoreMainViews
+        <SeeMoreView
           lat={flat.lat}
           lng={flat.lng}
           rentPerWeek={flat.rentPerWeek}

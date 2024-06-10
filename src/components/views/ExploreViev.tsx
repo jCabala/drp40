@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "./Card";
+import SeeFlatCard from "../cards/SeeFlatCard";
 import {
   APIProvider,
   Map,
@@ -8,11 +8,11 @@ import {
 } from "@vis.gl/react-google-maps";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import { useState, useEffect } from "react";
-import AddFlatForm from "./AddFlatForm";
-import Overlay from "./Overlay";
+import AddFlatForm from "../forms/AddFlatForm";
+import Overlay from "../helper/Overlay";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import LoadingOverlay from "./LoadingOverlay";
-import Alert from "./Alert";
+import LoadingOverlay from "../helper/LoadingOverlay";
+import Alert from "../helper/Alert";
 
 type Props = { flats: FlatAdvertisment[]; getFlats: () => void };
 const centerPlaceholder = { lat: 51.509865, lng: -0.118092 };
@@ -58,7 +58,7 @@ function MainFlatsViev({ flats, getFlats }: Props) {
                     exitActive: "opacity-0 scale-90 animate-fadeOut",
                   }}
                 >
-                  <Card
+                  <SeeFlatCard
                     id={flat.id}
                     img1={flat.images[0]}
                     img2={flat.images[1] || flat.images[0]}
