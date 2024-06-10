@@ -105,6 +105,7 @@ const getFlatData = (id: string, data: DocumentData) => {
     lat: data.latitude,
     images: data.images,
     houseDescription: data.houseDescription,
+    applications: data?.applications || [],
     labels: data?.labels || [],
   };
 };
