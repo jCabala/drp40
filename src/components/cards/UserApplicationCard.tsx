@@ -8,7 +8,7 @@ function UserApplicationCard({ application }: Props) {
   return (
     <div className="overflow-hidden rounded-lg border-2 border-emerald-500 shadow-5 duration-300 hover:scale-105 flex flex-row h-32 w-full mb-4">
       <img
-        src="https://i.pinimg.com/236x/c2/52/aa/c252aabbf05ca42e49efee18fbe162f6.jpg"
+        src={application.user.profilePic}
         alt=""
         className="h-full object-scale-down"
       />
