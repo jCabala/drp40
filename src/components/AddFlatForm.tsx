@@ -1,11 +1,12 @@
 import React, { useRef } from "react";
-import { addTenantFlatID, db, storage } from "@/lib/firebase";
+import { addTenantFlatID, addUserOwnedFlat, db, storage } from "@/lib/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 import Autocomplete from "react-google-autocomplete";
 import { useState } from "react";
 import PopUpWIndow from "./PopUpWindow";
 import { labelTypes } from "@/data/labelTypes";
+import Cookies from "js-cookie";
 
 type Props = {
   onFinish: () => void;
@@ -22,7 +23,7 @@ type Label = {
 const inputStyle =
   "shadow appearance-none border border-orange-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline";
 
-function Form({ onFinish, setIsLoading, setAlertText }: Props) {
+function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
   const rentRef = useRef<HTMLInputElement>(null);
   const roomsRef = useRef<HTMLInputElement>(null);
   const gapsRef = useRef<HTMLInputElement>(null);
@@ -38,6 +39,7 @@ function Form({ onFinish, setIsLoading, setAlertText }: Props) {
 
   const [showPopUp, setShowPopUp] = useState(false);
   const [showQuestions, setShowQuestions] = useState(true);
+  const username = Cookies.get("username");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,6 +107,9 @@ function Form({ onFinish, setIsLoading, setAlertText }: Props) {
       async (tenant) =>
         await addTenantFlatID(tenant, docRef.id, (id: string) => {})
     );
+
+    // We want to add that this user owns this listing
+    addUserOwnedFlat(username, docRef.id);
 
     setTimeout(() => {
       setIsLoading(false);
@@ -252,4 +257,4 @@ function Form({ onFinish, setIsLoading, setAlertText }: Props) {
   );
 }
 
-export default Form;
+export default AddFlatForm;

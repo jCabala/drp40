@@ -12,8 +12,12 @@ const navbarConfig: NavbarConfig = {
   title: "Fill that gap please",
   links: [
     {
-      title: "Home",
-      path: "/",
+      title: "Explore",
+      path: "/explore",
+    },
+    {
+      title: "Me",
+      path: "/me",
     },
   ],
 };

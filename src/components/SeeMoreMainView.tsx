@@ -4,6 +4,10 @@ import { useState } from "react";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import { TenantData } from "@/data/tenantData";
 import Label from "./Label";
+import Alert from "./Alert";
+import LoadingOverlay from "./LoadingOverlay";
+import AddFlatForm from "./AddFlatForm";
+import Overlay from "./Overlay";
 
 type Props = {
   lat: number;
@@ -33,6 +37,9 @@ export default function SeeMoreMainViews({
 }: Props) {
   const [focusedTenant, setFocusedTenant] = useState<number>(0);
   const [descFade, setDescFade] = useState<boolean>(false);
+  const [showForm, setShowForm] = useState(false);
+  const [isFormLoading, setIsFormLoading] = useState(false);
+  const [alertText, setAlertText] = useState<string | undefined>(undefined);
 
   const clickAction = (id: number) => {
     setTimeout(() => {
@@ -82,6 +89,14 @@ export default function SeeMoreMainViews({
                   color={label.color}
                 />
               ))}{" "}
+            </div>
+            <div className="flex flex-wrap justify-center w-2/3">
+              <button
+                onClick={() => setShowForm(true)}
+                className="fixed w-20 h-20 bottom-4 right-4 bg-orange-500 pt-3 pb-6 px-3 rounded-full shadow-lg z-40 duration-200 hover:scale-110 flex justify-center items-center"
+              >
+                <span className="text-white text-center text-sm">APPLY</span>
+              </button>
             </div>
           </div>
           {houseDescription != null ? (
@@ -134,6 +149,24 @@ export default function SeeMoreMainViews({
           {tenants.length > 0 && tenants[focusedTenant].description}
         </p>
       </div>
+      <div>
+        {showForm && (
+          <Overlay onClick={() => setShowForm(false)}>
+            <AddFlatForm
+              setIsLoading={setIsFormLoading}
+              setAlertText={setAlertText}
+              onFinish={() => {
+                setShowForm(false);
+              }}
+            />
+          </Overlay>
+        )}{" "}
+        {/* Render form when showForm is true */}
+      </div>
+      {isFormLoading && <LoadingOverlay />}
+      {alertText && (
+        <Alert exitAction={() => setAlertText(undefined)} text={alertText} />
+      )}
     </div>
   );
 }

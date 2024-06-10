@@ -15,7 +15,7 @@ const Login: React.FC = () => {
     console.log("Email:", email);
     console.log("Password:", password);
     Cookies.set("username", email);
-    MyRouter.push("/dashboard");
+    MyRouter.push("/explore");
   };
 
   return (
@@ -54,14 +54,12 @@ const Login: React.FC = () => {
             className="w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-indigo-200"
           />
         </div>
-        {/* <Link href={`/dashboard`}> */}
         <button
           type="submit"
           className="w-full px-4 py-2 text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-200"
         >
           Login
         </button>
-        {/* </Link> */}
       </form>
     </div>
   );

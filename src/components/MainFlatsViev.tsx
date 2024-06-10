@@ -8,7 +8,7 @@ import {
 } from "@vis.gl/react-google-maps";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import { useState, useEffect } from "react";
-import Form from "./Form";
+import AddFlatForm from "./AddFlatForm";
 import Overlay from "./Overlay";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import LoadingOverlay from "./LoadingOverlay";
@@ -24,8 +24,8 @@ function MainFlatsViev({ flats, getFlats }: Props) {
     null
   );
   const [showReducedCards, setShowReducedCards] = useState(false);
-  const [alertText, setAlertText] = useState<string | undefined>(undefined)
-  
+  const [alertText, setAlertText] = useState<string | undefined>(undefined);
+
   const filteredFlats =
     selectedFlat && showReducedCards
       ? flats.filter((flat) => flat.id === selectedFlat.id)
@@ -146,7 +146,7 @@ function MainFlatsViev({ flats, getFlats }: Props) {
         </button>
         {showForm && (
           <Overlay onClick={() => setShowForm(false)}>
-            <Form
+            <AddFlatForm
               setIsLoading={setIsFormLoading}
               setAlertText={setAlertText}
               onFinish={() => {
@@ -159,8 +159,9 @@ function MainFlatsViev({ flats, getFlats }: Props) {
         {/* Render form when showForm is true */}
       </div>
       {isFormLoading && <LoadingOverlay />}
-      {alertText && <Alert exitAction={() => setAlertText(undefined)} text={alertText}/>}
-      
+      {alertText && (
+        <Alert exitAction={() => setAlertText(undefined)} text={alertText} />
+      )}
     </>
   );
 }

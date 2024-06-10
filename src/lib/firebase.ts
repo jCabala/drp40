@@ -12,8 +12,6 @@ import {
 } from "firebase/firestore";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import { TenantData } from "@/data/tenantData";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 interface FirebaseConfig {
@@ -121,17 +119,50 @@ const fetchFlats = async (callback: any) => {
 };
 
 const fetchFlat = async (id: string, callback: any) => {
+  callback(await _fetchFlat(id));
+};
+
+// Helper to actually return the flat object
+const _fetchFlat = async (id: string) => {
   const docRef = doc(db, `flats/${id}`);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     const data = docSnap.data();
     console.log(data.images);
-    const newData = getFlatData(docSnap.id, data);
-    callback(newData);
+    return getFlatData(docSnap.id, data);
   } else {
     return;
   }
 };
+
+const fetchUserFlatsOwned = async (username: string, callback: any) => {
+  const docRef = doc(db, `users/${username}`);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    const data : string[] = docSnap.data().flatsOwned || [];
+    console.log("FLAT IDS", data);
+    const flatsOwned = await Promise.all(data.map((id) => _fetchFlat(id)));
+    console.log("OWNED FLATS",flatsOwned);
+    callback(flatsOwned);
+  } else {
+    return;
+  }
+};
+
+const addUserOwnedFlat = async (username: string, flatID: string) => {
+  const docRef = doc(db, `users/${username}`);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    const data : string[] = docSnap.data().flatsOwned || [];
+    console.log(data);
+    data.push(flatID)
+    await updateDoc(doc(db, "users", username), { flatsOwned: data });
+  } else {
+    return;
+  }
+      
+    
+  };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -143,6 +174,8 @@ export {
   storage,
   fetchFlat,
   fetchFlats,
+  fetchUserFlatsOwned,
+  addUserOwnedFlat,
   fetchTenants,
   fetchTenantsByID,
   fetchTenantsByEmail,
