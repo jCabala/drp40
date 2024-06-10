@@ -166,7 +166,15 @@ const addUserOwnedFlat = async (username: string, flatID: string) => {
 };
 
   const addUser = async (username: string) => {
-    await setDoc(doc(db, 'users', username), {});
+    const userRef = doc(db, 'users', username);
+    const docSnap = await getDoc(userRef);
+  
+    if (!docSnap.exists()) {
+      await setDoc(userRef, {});
+      console.log(`User ${username} added successfully.`);
+    } else {
+      console.log(`User ${username} already exists.`);
+    }
   };
 
   const addApplication = async (username: string, message: string, flatID: string) => {
