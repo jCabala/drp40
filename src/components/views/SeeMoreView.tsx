@@ -1,4 +1,3 @@
-import RoomView from "@/components/views/RoomView";
 import TenantCard from "../cards/TenantCards";
 import { useState } from "react";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
@@ -8,6 +7,7 @@ import Alert from "../helper/Alert";
 import LoadingOverlay from "../helper/LoadingOverlay";
 import Overlay from "../helper/Overlay";
 import ApplyFlatForm from "../forms/ApplyFlatForm";
+import ImageGallery from 'react-image-gallery';
 
 type Props = {
   flatID: string;
@@ -55,8 +55,12 @@ export default function SeeMoreMainViews({
   return (
     <div className="grid grid-cols-5 w-full">
       <div className="col-span-3">
-        <RoomView images={images} />
-
+      <ImageGallery
+      items={images}
+      showPlayButton={false}
+      thumbnailPosition="right"
+      showFullscreenButton={false}
+    />
         <section className="pr-12 mx-2 my-4 w-full">
           <h3 className="px-2 text-xl font-bold mb-1 text-gray-700">
             Basic Information
