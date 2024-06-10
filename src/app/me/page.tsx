@@ -16,7 +16,12 @@ export default function Me() {
 
   const getOwnedFlats = () => {
     setIsLoading(true);
-    fetchUserFlatsOwned(username, setOwnedFlats);
+    if (username) {
+      fetchUserFlatsOwned(username, setOwnedFlats);
+    } else {
+      console.log("LOGIN ERROR? NO USER SET");
+    }
+
     setTimeout(() => setIsLoading(false), 600);
   };
 

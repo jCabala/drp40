@@ -109,7 +109,11 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
     );
 
     // We want to add that this user owns this listing
-    addUserOwnedFlat(username, docRef.id);
+    if (username) {
+      addUserOwnedFlat(username, docRef.id);
+    } else {
+      console.log("LOGIN ERROR? NO USER SET");
+    }
 
     setTimeout(() => {
       setIsLoading(false);
