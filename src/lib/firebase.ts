@@ -6,7 +6,7 @@ import {
   collection,
   getDocs,
   getDoc,
-  setDoc,
+  addDoc,
   doc,
   query,
   where,
@@ -14,6 +14,7 @@ import {
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import { TenantData } from "@/data/tenantData";
 import { UserApplication } from "@/data/userApplication";
+import { UserProfile } from "@/data/userProfile";
 
 // Your web app's Firebase configuration
 interface FirebaseConfig {
@@ -137,8 +138,8 @@ const _fetchFlat = async (id: string) => {
   }
 };
 
-const fetchUserFlatsOwned = async (username: string, callback: any) => {
-  const docRef = doc(db, `users/${username}`);
+const fetchUserFlatsOwnedByID = async (userID: string, callback: any) => {
+  const docRef = doc(db, `users/${userID}`);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     const data : string[] = docSnap.data().flatsOwned || [];
@@ -151,55 +152,98 @@ const fetchUserFlatsOwned = async (username: string, callback: any) => {
   }
 };
 
-const addUserOwnedFlat = async (username: string, flatID: string) => {
-  const docRef = doc(db, `users/${username}`);
+const addUserOwnedFlatByID = async (userID: string, flatID: string) => {
+  const docRef = doc(db, `users/${userID}`);
   const docSnap = await getDoc(docRef);
   console.log("Adding user owned flats...");
   if (docSnap.exists()) {
     const data : string[] = docSnap.data().flatsOwned || [];
     console.log("current user owned flat", data);
     data.push(flatID)
-    await updateDoc(doc(db, "users", username), { flatsOwned: data });
+    await updateDoc(doc(db, "users", userID), { flatsOwned: data });
   } else {
     return;
   }
 };
 
-  const addUser = async (username: string) => {
-    const userRef = doc(db, 'users', username);
-    const docSnap = await getDoc(userRef);
-  
-    if (!docSnap.exists()) {
-      await setDoc(userRef, {});
-      console.log(`User ${username} added successfully.`);
+const getUserIdByEmail = async (email: string) => {
+  const q = query(collection(db, "users"), where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0]; // Assuming there is only one document with the given email
+      return doc.id;
     } else {
-      console.log(`User ${username} already exists.`);
+      console.log("No document found with the given email");
+      return null;
+    }
+};
+
+  const registerUser = async (email: string, password: string, description: string, profilePic: string) => {
+      const docRef = await addDoc(collection(db, "users"), {
+        email: email,
+        password: password,
+        description: description,
+        profilePic: profilePic,
+      })
+  };
+
+  const getUserData = (id: string, data: DocumentData) => {
+    const profile: UserProfile = {
+      email: data.email,
+      description: data.description,
+      profilePic: data.profilePic
+    };
+    return profile
+  };
+
+  const fetchUserByEmail = async (email: string): Promise<UserProfile | null> => {
+    const q = query(collection(db, "users"), where("email", "==", email));
+    let userProfile: UserProfile | null = null;
+  
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0];
+      const data = doc.data();
+      userProfile = getUserData(doc.id, data); 
+      console.log("FETCHING USER", userProfile);
+    }
+    return userProfile;
+  };
+
+  const fetchUserByID = async (userID: string): Promise<UserProfile | null> => {
+    const docRef = doc(db, "users", userID);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return docSnap.data() as UserProfile; // Type assertion if you have a UserProfile type
+    } else {
+      console.log("No document found with the given ID");
+      return null;
     }
   };
 
-  const addApplication = async (username: string, message: string, flatID: string) => {
+  const addApplication = async (userID: string, message: string, flatID: string) => {
     const docRef = doc(db, `flats/${flatID}`);
     const docSnap = await getDoc(docRef);
-    const newUserApplication: UserApplication = {
-      user: username,
-      msg: message,
-      status: "PENDING"
-    };
-    console.log("Adding application");
-    if (docSnap.exists()) {
-      const data : UserApplication[] = docSnap.data().applications || [];
-      
-      data.push(newUserApplication)
-      await updateDoc(doc(db, "flats", flatID), { applications: data });
-    } else {
-      return;
+    const userProfile = await fetchUserByID(userID);
+    if (userProfile) {
+      const newUserApplication: UserApplication = {
+        user: userProfile,
+        msg: message,
+        status: "PENDING"
+      };
+      if (docSnap.exists()) {
+        const data : UserApplication[] = docSnap.data().applications || [];
+        
+        data.push(newUserApplication)
+        await updateDoc(doc(db, "flats", flatID), { applications: data });
+      } else {
+        return;
+      }
     }
-  };
-
-
-      
     
-
+  };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -209,14 +253,16 @@ const storage = getStorage(app);
 export {
   db,
   storage,
-  addUser,
+  registerUser,
   fetchFlat,
   fetchFlats,
-  fetchUserFlatsOwned,
-  addUserOwnedFlat,
+  getUserIdByEmail,
+  fetchUserByEmail,
   fetchTenants,
   fetchTenantsByID,
   fetchTenantsByEmail,
+  fetchUserFlatsOwnedByID,
   addTenantFlatID,
   addApplication,
+  addUserOwnedFlatByID,
 };

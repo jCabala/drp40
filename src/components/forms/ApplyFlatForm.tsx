@@ -24,7 +24,7 @@ function ApplyFlatForm({
   const msgRef = useRef<HTMLTextAreaElement>(null);
   const [showPopUp, setShowPopUp] = useState(false);
   const [showQuestions, setShowQuestions] = useState(true);
-  const username = Cookies.get("username");
+  const userID = Cookies.get("userID");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,8 +39,8 @@ function ApplyFlatForm({
     }
 
     // Add flat to database
-    if (username) {
-      addApplication(username, msg, flatID);
+    if (userID) {
+      addApplication(userID, msg, flatID);
     } else {
       console.log("ERR: No user logged in");
     }

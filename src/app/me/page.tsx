@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { fetchUserFlatsOwned } from "../../lib/firebase";
+import { fetchUserFlatsOwnedByID } from "../../lib/firebase";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import LoadingOverlay from "@/components/helper/LoadingOverlay";
 import UserFlatsView from "@/components/views/UserFlatsView";
@@ -11,12 +11,12 @@ export default function Me() {
     Array<FlatAdvertisment> | undefined
   >(undefined);
   const [isLoading, setIsLoading] = useState(true);
-  const username = Cookies.get("username");
+  const userID = Cookies.get("userID");
 
   const getOwnedFlats = () => {
     setIsLoading(true);
-    if (username) {
-      fetchUserFlatsOwned(username, setOwnedFlats);
+    if (userID) {
+      fetchUserFlatsOwnedByID(userID, setOwnedFlats);
     } else {
       console.log("LOGIN ERROR? NO USER SET");
     }
@@ -27,8 +27,6 @@ export default function Me() {
   useEffect(() => {
     getOwnedFlats();
   }, []);
-
-  console.log("DASH USER", username);
 
   return (
     <div className="w-full flex flex-row">

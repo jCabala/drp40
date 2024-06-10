@@ -1,5 +1,10 @@
 import React, { useRef } from "react";
-import { addTenantFlatID, addUserOwnedFlat, db, storage } from "@/lib/firebase";
+import {
+  addTenantFlatID,
+  addUserOwnedFlatByID,
+  db,
+  storage,
+} from "@/lib/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 import Autocomplete from "react-google-autocomplete";
@@ -39,12 +44,11 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
 
   const [showPopUp, setShowPopUp] = useState(false);
   const [showQuestions, setShowQuestions] = useState(true);
-  const username = Cookies.get("username");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
+    const userID = Cookies.get("userID");
     const images = imgRef.current?.files;
     const rent = rentRef.current?.value;
     const rooms = roomsRef.current?.value;
@@ -88,7 +92,7 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
 
     // Add flat to database
     const docRef = await addDoc(collection(db, "flats"), {
-      lister: username,
+      lister: userID,
       address: addr,
       longitude: lng,
       latitude: lat,
@@ -110,8 +114,8 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
     );
 
     // We want to add that this user owns this listing
-    if (username) {
-      addUserOwnedFlat(username, docRef.id);
+    if (userID) {
+      addUserOwnedFlatByID(userID, docRef.id);
     } else {
       console.log("LOGIN ERROR? NO USER SET");
     }
