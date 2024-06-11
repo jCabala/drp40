@@ -46,7 +46,7 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
           focusedFlat.applications.map(
             (application, idx) =>
               // Render UserApplicationCard only if application status is not 'REJECTED'
-              application.status !== "REJECTED" && (
+              (
                 <UserApplicationCard
                   key={idx}
                   applicationID={application}

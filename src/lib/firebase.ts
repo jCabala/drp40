@@ -255,7 +255,6 @@ const getUserIdByEmail = async (email: string) => {
 
     if (!querySnapshot.empty) {
       const refDoc = querySnapshot.docs[0];
-      const application = refDoc.data();
       const newStatus = approve ? "APPROVED" : "REJECTED";
 
       await updateDoc(doc(db, "applications", refDoc.id), { status: newStatus });
@@ -283,7 +282,8 @@ const getUserIdByEmail = async (email: string) => {
     const querySnapshot = await getDocs(q);
     const updatePromises = querySnapshot.docs.map(async (docSnapshot) => {
       const docRef = doc(db, "applications", docSnapshot.id);
-      if (docRef.data().status == "PENDING") {
+      const userApplication = docSnap.data() as UserApplication;
+      if (userApplication.status == "PENDING") {
         await updateDoc(docRef, { status: "REJECTED" });
       }
       
