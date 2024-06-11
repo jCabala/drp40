@@ -13,7 +13,6 @@ import {
   where,
 } from "firebase/firestore";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
-import { TenantData } from "@/data/tenantData";
 import { UserApplication } from "@/data/userApplication";
 import { UserProfile } from "@/data/userProfile";
 
@@ -37,64 +36,19 @@ const firebaseConfig = {
   appId: process.env["NEXT_PUBLIC_FIREBASE_APP_ID"],
 };
 
-const fetchTenants = async (callback: any) => {
-  await getDocs(collection(db, "tenants")).then((querySnapshot) => {
-    const newData: Array<TenantData> = querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return getTenantData(doc.id, data);
-    });
-    callback(newData);
-  });
-};
-
-const fetchTenantsByEmail = async (email: string, callback: any) => {
-  const q = query(collection(db, "tenants"), where("email", "==", email));
-  await getDocs(q).then((querySnapshot) => {
-    const newData: Array<TenantData> = querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return getTenantData(doc.id, data);
-    });
-    callback(newData);
-  });
-};
-
-const addTenantFlatID = async (email: string, newID: string, callback: any) => {
-  const emailHandler = async (data: Array<TenantData>) => {
-    if (data.length == 1) {
-      await updateDoc(doc(db, "tenants", data[0].id), { flatID: newID });
-      callback(newID);
-    }
-  };
-
-  const tenants = await fetchTenantsByEmail(
-    email,
-    (data: Array<TenantData>) => {
-      emailHandler(data);
-    }
-  );
-};
 
 const fetchTenantsByID = async (id: string, callback: any) => {
-  const q = query(collection(db, "tenants"), where("flatID", "==", id));
-  await getDocs(q).then((querySnapshot) => {
-    const newData: Array<TenantData> = querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return getTenantData(doc.id, data);
-    });
-    callback(newData);
-  });
+  const docRef = doc(db, `flats/${id}`);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    const data : string[] = docSnap.data().tenants || [];
+    const tenants = await Promise.all(data.map((id) => fetchUserByID(id)));
+    callback(tenants);
+  } else {
+    return;
+  }
 };
 
-const getTenantData = (id: string, data: DocumentData) => {
-  return {
-    id: id,
-    name: data.name,
-    description: data.description,
-    flatID: data.flatID,
-    image: data.image,
-    email: data.email,
-  };
-};
 
 const getFlatData = (id: string, data: DocumentData) => {
   return {
@@ -134,7 +88,7 @@ const fetchNotOwnedFlats = async (userID: string, callback: any) => {
       });
       callback(newData);
     } else {
-      console.log("No document found with the given email");
+      console.log("No document found with the given ID");
       return null;
     }
 };
@@ -173,7 +127,7 @@ const fetchUserFlatsOwnedByID = async (userID: string, callback: any) => {
 const addUserOwnedFlatByID = async (userID: string, flatID: string) => {
   const docRef = doc(db, `users/${userID}`);
   const docSnap = await getDoc(docRef);
-  console.log("Adding user owned flats...");
+  console.log("Adding user owned flats...", userID);
   if (docSnap.exists()) {
     const data : string[] = docSnap.data().flatsOwned || [];
     console.log("current user owned flat", data);
@@ -341,12 +295,9 @@ export {
   getUserIdByEmail,
   fetchUserByEmail,
   fetchUserByID,
-  fetchTenants,
   fetchTenantsByID,
-  fetchTenantsByEmail,
   fetchUserFlatsOwnedByID,
   fetchUserIdByEmail,
-  addTenantFlatID,
   addApplication,
   addUserOwnedFlatByID,
   updateApplication,

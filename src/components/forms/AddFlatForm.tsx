@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import {
-  addTenantFlatID,
+  fetchUserByEmail,
   addUserOwnedFlatByID,
   db,
   storage,
@@ -90,7 +90,13 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
       imgUrls.push(url);
     }
 
-    // Add flat to database
+    
+    const userIDs = (
+      await Promise.all(tenants.map((email) => fetchUserByEmail(email)))
+    )
+      .map((profile) => profile?.userID)
+      .filter((userID): userID is string => typeof userID === "string");
+
     const docRef = await addDoc(collection(db, "flats"), {
       lister: userID,
       address: addr,
@@ -102,16 +108,8 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
       images: imgUrls,
       labels: selectedLabels,
       houseDescription: houseDescription,
+      tenants: userIDs,
     });
-
-    // We want to fetch tenants from the database based on email
-    // and then update the tenants table to point to the correct flatID
-    //
-
-    tenants.map(
-      async (tenant) =>
-        await addTenantFlatID(tenant, docRef.id, (id: string) => {})
-    );
 
     // We want to add that this user owns this listing
     if (userID) {

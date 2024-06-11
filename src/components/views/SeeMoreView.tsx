@@ -1,20 +1,20 @@
 import TenantCard from "../cards/TenantCards";
 import { useState } from "react";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
-import { TenantData } from "@/data/tenantData";
 import Label from "../cards/Label";
 import Alert from "../helper/Alert";
 import LoadingOverlay from "../helper/LoadingOverlay";
 import Overlay from "../helper/Overlay";
 import ApplyFlatForm from "../forms/ApplyFlatForm";
-import ImageGallery from 'react-image-gallery';
+import ImageGallery from "react-image-gallery";
+import { UserProfile } from "@/data/userProfile";
 
 type Props = {
   flatID: string;
   lat: number;
   lng: number;
   images: { original: string; thumbnail: string }[];
-  tenants: TenantData[];
+  tenants: UserProfile[];
   rentPerWeek: number;
   numberOfRooms: number;
   numberOfGaps: number;
@@ -37,30 +37,30 @@ export default function SeeMoreMainViews({
   houseDescription,
   labels,
 }: Props) {
-  const [focusedTenant, setFocusedTenant] = useState<number>(0);
+  const [focusedTenant, setFocusedTenant] = useState<UserProfile>();
   const [descFade, setDescFade] = useState<boolean>(false);
   const [showForm, setShowForm] = useState(false);
   const [isFormLoading, setIsFormLoading] = useState(false);
   const [alertText, setAlertText] = useState<string | undefined>(undefined);
 
-  const clickAction = (id: number) => {
+  const clickAction = (tenant: UserProfile) => {
     setTimeout(() => {
       setDescFade(false);
     }, 200);
 
     setDescFade(true);
-    setTimeout(() => setFocusedTenant(id), 150);
+    setTimeout(() => setFocusedTenant(tenant), 150);
   };
 
   return (
     <div className="grid grid-cols-5 w-full">
       <div className="col-span-3">
-      <ImageGallery
-      items={images}
-      showPlayButton={false}
-      thumbnailPosition="right"
-      showFullscreenButton={false}
-    />
+        <ImageGallery
+          items={images}
+          showPlayButton={false}
+          thumbnailPosition="right"
+          showFullscreenButton={false}
+        />
         <section className="pr-12 mx-2 my-4 w-full">
           <h3 className="px-2 text-xl font-bold mb-1 text-gray-700">
             Basic Information
@@ -140,10 +140,9 @@ export default function SeeMoreMainViews({
             tenants.map((tenant, idx) => (
               <TenantCard
                 key={idx}
-                id={idx}
-                focusedId={focusedTenant}
+                tenant={tenant}
                 clickAction={clickAction}
-                image={tenant.image}
+                image={tenant.profilePic}
               />
             ))}
         </div>
@@ -152,7 +151,7 @@ export default function SeeMoreMainViews({
             descFade ? fadedDesc : visibleDesc
           }`}
         >
-          {tenants.length > 0 && tenants[focusedTenant].description}
+          {tenants.length > 0 && focusedTenant?.description}
         </p>
       </div>
       <div>

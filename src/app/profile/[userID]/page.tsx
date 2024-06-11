@@ -1,8 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import SeeMoreView from "@/components/views/SeeMoreView";
-import { TenantData } from "@/data/tenantData";
-import { fetchFlat, fetchTenantsByID, fetchUserByID } from "@/lib/firebase";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import LoadingOverlay from "@/components/helper/LoadingOverlay";
 import { UserProfile } from "@/data/userProfile";

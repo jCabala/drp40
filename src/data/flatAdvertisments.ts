@@ -1,4 +1,5 @@
 import { UserApplication } from "./userApplication";
+import { UserProfile } from "./userProfile";
 
 export type FlatAdvertisment = {
   id: string;
@@ -10,6 +11,7 @@ export type FlatAdvertisment = {
   houseDescription?: string;
   labels?: { name: string; color: string }[];
   applications: UserApplication[]; 
+  tenants: UserProfile[]
   lat: number;
   lng: number;
 };

@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { useState } from "react";
 import PopUpWIndow from "../helper/PopUpWindow";
 import { registerUser } from "@/lib/firebase";
-import { addTenantFlatID, db, storage } from "@/lib/firebase";
+import { db, storage } from "@/lib/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 
