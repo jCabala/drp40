@@ -8,6 +8,7 @@ import Overlay from "../helper/Overlay";
 import ApplyFlatForm from "../forms/ApplyFlatForm";
 import ImageGallery from "react-image-gallery";
 import { UserProfile } from "@/data/userProfile";
+import QuickAccessButton from "../helper/buttons/QuickAccessButton";
 
 type Props = {
   flatID: string;
@@ -37,13 +38,15 @@ export default function SeeMoreMainViews({
   houseDescription,
   labels,
 }: Props) {
-  const [focusedTenant, setFocusedTenant] = useState<UserProfile>();
+  const [focusedTenant, setFocusedTenant] = useState<UserProfile | undefined>(
+    tenants.length > 0 ? tenants[0] : undefined
+  );
   const [descFade, setDescFade] = useState<boolean>(false);
   const [showForm, setShowForm] = useState(false);
   const [isFormLoading, setIsFormLoading] = useState(false);
   const [alertText, setAlertText] = useState<string | undefined>(undefined);
 
-  const clickAction = (tenant: UserProfile) => {
+  const tenantClickAction = (tenant: UserProfile) => {
     setTimeout(() => {
       setDescFade(false);
     }, 200);
@@ -54,7 +57,7 @@ export default function SeeMoreMainViews({
 
   return (
     <div className="grid grid-cols-5 gap-4 w-full p-6">
-      <div className="bg-gray-50 col-span-3 bg-white rounded-lg shadow-lg p-4">
+      <div className="border border-gray-200 col-span-3 bg-white rounded-lg shadow-lg p-4">
         <div className="mb-8">
           <ImageGallery
             items={images}
@@ -78,7 +81,7 @@ export default function SeeMoreMainViews({
           </Map>
         </APIProvider>
       </div>
-      <div className="bg-gray-50 col-span-2 bg-white rounded-lg shadow-lg p-4">
+      <div className="border border-gray-200 col-span-2 bg-white rounded-lg shadow-lg p-4">
         <section className="mt-4">
           <h3 className="text-2xl font-semibold text-gray-800 mb-4">
             Basic Information
@@ -111,11 +114,11 @@ export default function SeeMoreMainViews({
             </div>
           </div>
           {houseDescription && (
-            <div className="mt-6">
-              <h3 className="text-2xl font-semibold text-gray-800 mb-4">
+            <div className="mt-6 mb-6">
+              <h3 className="text-2xl font-semibold text-gray-800 mb-2">
                 Property Description
               </h3>
-              <p className="text-lg text-gray-700">{houseDescription}</p>
+              <p className="text-md text-gray-600">{houseDescription}</p>
             </div>
           )}
         </section>
@@ -128,9 +131,10 @@ export default function SeeMoreMainViews({
             <div className="flex flex-wrap justify-center">
               {tenants.map((tenant, idx) => (
                 <TenantCard
+                  isHighlighted={focusedTenant?.email === tenant.email}
                   key={idx}
                   tenant={tenant}
-                  clickAction={clickAction}
+                  clickAction={tenantClickAction}
                   image={tenant.profilePic}
                 />
               ))}
@@ -171,12 +175,11 @@ export default function SeeMoreMainViews({
       {alertText && (
         <Alert exitAction={() => setAlertText(undefined)} text={alertText} />
       )}
-      <button
+      <QuickAccessButton
         onClick={() => setShowForm(true)}
-        className="shadow-sm fixed w-20 h-20 bottom-6 right-6 bg-orange-500 rounded-full shadow-xl hover:shadow-2xl transition-transform transform hover:scale-110 flex items-center justify-center z-50"
       >
         <span className="text-white text-center text-sm">APPLY</span>
-      </button>
+      </QuickAccessButton>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Label from "@/components/cards/Label";
 import DoublePhotoCard from "./DoublePhotoCard";
+import Button from "../helper/buttons/Button";
 
 type Props = {
   id: string;
@@ -45,14 +46,17 @@ function SeeFlatCard({
           </p>
           <div className="flex flex-wrap pt-3">
             {labels?.map((label) => (
-              <Label className="text-sm" key={label.name} name={label.name} color={label.color} />
+              <Label
+                className="text-sm"
+                key={label.name}
+                name={label.name}
+                color={label.color}
+              />
             ))}{" "}
           </div>
         </div>
 
-        <button className="shadow-sm justify-self-end shadow-md bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
-          See more
-        </button>
+        <Button className="justify-self-end">See more</Button>
       </DoublePhotoCard>
     </Link>
   );

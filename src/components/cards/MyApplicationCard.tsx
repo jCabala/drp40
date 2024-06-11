@@ -1,5 +1,6 @@
 import React from "react";
 import DoublePhotoCard from "./DoublePhotoCard";
+import Button from "../helper/buttons/Button";
 
 type Props = {
   status: string;
@@ -14,9 +15,7 @@ function MyApplicationCard({ status, img1, img2 }: Props) {
         <span className="text-white rounded-md text-center mx-6 text-md bg-orange-500 px-2 py-2 font-bold">
           {status}
         </span>
-        <button className="shadow-sm justify-self-end shadow-md bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
-          Close Application
-        </button>
+        <Button className="justify-self-end">Close Application</Button>
       </DoublePhotoCard>
     </div>
   );

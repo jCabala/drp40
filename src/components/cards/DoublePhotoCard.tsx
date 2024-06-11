@@ -20,7 +20,7 @@ function DoublePhotoCard({
   const col = color || "orange";
   return (
     <div
-      className={`mb-10 overflow-hidden rounded-lg border-2 border-${col}-500 shadow-lg duration-300 hover:scale-105 flex flex-row min-h-60 w-full`}
+      className={`mb-10 overflow-hidden rounded-lg border-2 border-${col}-500 shadow-lg duration-300 hover:scale-105 flex flex-row w-full`}
     >
       <div
         style={
@@ -38,7 +38,7 @@ function DoublePhotoCard({
         <img
           src={img1}
           alt=""
-          className={`size-full object-cover ${
+          className={`size-full h-full object-cover ${
             img2 ? "opacity-100 hover:opacity-0 duration-300" : ""
           }`}
         />
@@ -46,7 +46,7 @@ function DoublePhotoCard({
       <div
         className={
           containerClassName ||
-          "h-full min-h-60 p-2 w-1/2 flex flex-col justify-between"
+          "p-2 w-1/2 flex flex-col justify-between"
         }
       >
         {children}

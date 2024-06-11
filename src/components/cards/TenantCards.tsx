@@ -4,27 +4,22 @@ import React, { useState } from "react";
 type Props = {
   image: string;
   tenant: UserProfile;
-
-  clickAction: any;
+  isHighlighted: boolean;
+  clickAction: (tenant: UserProfile) => void;
 };
 
-const highlighted = "scale-125 border-4 border-orange-500";
+const highlighted = "scale-105 border-4 border-orange-500";
 const normal = "hover:scale-105";
 
-function TenantCard({ image, tenant, clickAction }: Props) {
-  const [isHighlighted, setIsHighlighted] = useState(false);
-  const handleClick = () => {
-    clickAction(tenant);
-    setIsHighlighted(true);
-  };
+function TenantCard({ image, tenant, clickAction, isHighlighted}: Props) {
 
   return (
     <img
       src={image}
-      className={`w-32 h-32 mx-4 my-6 rounded-lg object-cover duration-300  ${
+      className={`mx-3 w-28 h-32 mx-4 my-6 rounded-lg object-cover duration-300  ${
         isHighlighted ? highlighted : normal
       }`}
-      onClick={handleClick}
+      onClick={() => clickAction(tenant)}
     />
   );
 }

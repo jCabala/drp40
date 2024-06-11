@@ -7,6 +7,7 @@ import RegistrationForm from "@/components/forms/RegistrationForm";
 import Overlay from "@/components/helper/Overlay";
 import LoadingOverlay from "@/components/helper/LoadingOverlay";
 import Alert from "@/components/helper/Alert";
+import Button from "@/components/helper/buttons/Button";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -72,12 +73,7 @@ const Login: React.FC = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-orange-200"
             />
           </div>
-          <button
-            type="submit"
-            className="w-full px-4 py-2 shadow-sm text-white bg-orange-500 rounded hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-200"
-          >
-            Login
-          </button>
+          <Button type="submit">Login</Button>
         </form>
 
         <div className="flex justify-center mt-4">

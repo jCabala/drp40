@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { UserApplication } from "@/data/userApplication";
-import DoublePhotoCard from "./DoublePhotoCard";
 import { useRouter } from "next/navigation";
 import {
   fetchApplicationByID,
   fetchUserByID,
-  fetchUserIdByEmail,
   updateApplication,
 } from "@/lib/firebase";
 import confetti from "canvas-confetti";

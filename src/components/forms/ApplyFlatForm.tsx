@@ -4,6 +4,7 @@ import PopUpWIndow from "../helper/PopUpWindow";
 import { addApplication } from "@/lib/firebase";
 
 import Cookies from "js-cookie";
+import CloseButton from "../helper/buttons/CloseButton";
 
 type Props = {
   onFinish: () => void;
@@ -80,13 +81,7 @@ function ApplyFlatForm({
             onSubmit={handleSubmit}
             className="bg-white rounded px-8 pb-8 mb-4 w-full"
           >
-            <button
-              type="button"
-              className="shadow-sm absolute top-2 right-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
-              onClick={onFinish}
-            >
-              X
-            </button>
+            <CloseButton onClick={onFinish} />
             <label className="block text-orange-500 mb-2">
               Personalized Message:
             </label>

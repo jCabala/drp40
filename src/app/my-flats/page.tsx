@@ -31,7 +31,7 @@ export default function MyFlats() {
   return (
     <div className="w-full flex flex-row">
       {isLoading && <LoadingOverlay />}
-      {
+      {ownedFlats &&
         <UserFlatsView
           getOwnedFlats={getOwnedFlats}
           ownedFlats={ownedFlats || []}

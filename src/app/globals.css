@@ -10,10 +10,31 @@
   overflow-y: scroll;
 }
 
+body, main {
+  background-color: #f9fcff;
+  background-image: linear-gradient(147deg, #f9fcff 0%, #dee4ea 74%);
+}
+
 .image-gallery-slide img {
   height: 500px;
 }
 
 button.gm-ui-hover-effect {
   height: 2px !important;
+}
+
+image-gallery-bullets .image-gallery-bullet {
+  &.active {
+    background: red !important;
+  }
+}
+
+.image-gallery-thumbnail.active,
+.image-gallery-thumbnail:hover,
+.image-gallery-thumbnail:focus {
+  border: 3px solid #f97316 !important;
+}
+
+.image-gallery-icon {
+  color: #f97316 !important;
 }

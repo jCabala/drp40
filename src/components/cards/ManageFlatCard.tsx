@@ -2,6 +2,7 @@ import React from "react";
 import DoublePhotoCard from "./DoublePhotoCard";
 import Link from "next/link";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
+import Button from "../helper/buttons/Button";
 
 type Props = {
   flat: FlatAdvertisment;
@@ -10,17 +11,13 @@ type Props = {
   focused?: boolean | null;
 };
 
-const buttonStyle = "text-white font-bold py-2 px-4 w-full rounded my-3 mx-1 shadow-sm";
-const buttonNormalStyle = `bg-orange-500 hover:bg-orange-700 ${buttonStyle}`;
-const buttonFcusedStyle = `bg-emerald-500 hover:bg-emerald-700 ${buttonStyle}`;
-
 function ManageFlatCard({
   flat,
   seeInterestedAction,
   closeAdvertisementAction,
   focused,
 }: Props) {
-  const buttonClassNames = focused ? buttonFcusedStyle : buttonNormalStyle;
+  const color = focused ? "emerald" : "orange";
   const img1 = flat.images[0];
   const img2 = flat.images.length > 1 ? flat.images[1] : flat.images[0];
   const id = flat.id;
@@ -34,15 +31,15 @@ function ManageFlatCard({
       color={focused ? "emerald" : "orange"}
     >
       <Link href={`/flat/${id}`}>
-        <button className={buttonClassNames}>See More</button>
+        <Button color={color}>See More</Button>
       </Link>
-      <button className={buttonClassNames} onClick={closeAdvertisementAction}>
+      <Button color={color} onClick={closeAdvertisementAction}>
         Close the advertisement
-      </button>
+      </Button>
 
-      <button onClick={seeInterestedAction} className={buttonClassNames}>
+      <Button onClick={seeInterestedAction} color={color}>
         See interested people
-      </button>
+      </Button>
     </DoublePhotoCard>
   );
 }

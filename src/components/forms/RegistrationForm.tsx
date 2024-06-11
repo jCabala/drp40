@@ -7,6 +7,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 
 import Cookies from "js-cookie";
+import CloseButton from "../helper/buttons/CloseButton";
 
 type Props = {
   onFinish: () => void;
@@ -93,13 +94,7 @@ function RegistrationForm({ onFinish, setIsLoading, setAlertText }: Props) {
             onSubmit={handleSubmit}
             className="bg-white rounded px-8 pb-8 mb-4 w-full"
           >
-            <button
-              type="button"
-              className="shadow-sm absolute top-2 right-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
-              onClick={onFinish}
-            >
-              X
-            </button>
+            <CloseButton onClick={onFinish} />
             <div className="mb-4">
               <label className="block text-orange-500 mb-2">Email:</label>
               <input
