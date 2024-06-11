@@ -90,7 +90,6 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
       imgUrls.push(url);
     }
 
-    
     const userIDs = (
       await Promise.all(tenants.map((email) => fetchUserByEmail(email)))
     )
