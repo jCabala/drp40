@@ -1,9 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import SeeMoreView from "@/components/views/SeeMoreView";
-import { FlatAdvertisment } from "@/data/flatAdvertisments";
-import LoadingOverlay from "@/components/helper/LoadingOverlay";
 import { UserProfile } from "@/data/userProfile";
+import { fetchUserByID } from "@/lib/firebase";
 
 export default function Page({
   params: { userID },

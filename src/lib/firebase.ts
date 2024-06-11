@@ -63,6 +63,7 @@ const getFlatData = (id: string, data: DocumentData) => {
     houseDescription: data.houseDescription,
     applications: data?.applications || [],
     labels: data?.labels || [],
+    tenants: data?.tenants || [],
   };
 };
 
@@ -70,7 +71,7 @@ const fetchAllFlats = async (callback: any) => {
   await getDocs(collection(db, "flats")).then((querySnapshot) => {
     const newData: Array<FlatAdvertisment> = querySnapshot.docs.map((doc) => {
       const data = doc.data();
-      return getFlatData(doc.id, data);
+      return getFlatData(doc.id, data) as FlatAdvertisment;
     });
 
     callback(newData);
