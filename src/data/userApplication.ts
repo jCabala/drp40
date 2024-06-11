@@ -4,5 +4,6 @@ export type UserApplication = {
     user: UserProfile;
     msg: string;
     status: string;
+    flatId: string;
   };
   

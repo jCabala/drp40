@@ -1,3 +1,4 @@
+"use client";
 import UserApplicationsView from "@/components/views/UserApplicationsView";
 import React from "react";
 
