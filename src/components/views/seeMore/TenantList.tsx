@@ -39,7 +39,7 @@ function TenantList({ tenants }: Props) {
         ))}
       </div>
       <p
-        className={`transition-opacity duration-200 mt-4 text-gray-600 ${
+        className={`transition-opacity h-32 duration-200 mt-4 text-gray-600 overflow-y-scroll ${
           descFade ? fadedDesc : visibleDesc
         }`}
       >

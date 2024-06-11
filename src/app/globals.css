@@ -21,7 +21,7 @@ main {
 }
 
 .image-gallery-slide img {
-  height: 500px;
+  height: 400px;
 }
 
 button.gm-ui-hover-effect {
@@ -42,4 +42,21 @@ image-gallery-bullets .image-gallery-bullet {
 
 .image-gallery-icon {
   color: #f97316 !important;
+}
+
+/* Scrollbar */
+
+*::-webkit-scrollbar {
+  width: 12px; /* width of the entire scrollbar */
+  z-index: -1 !important;
+}
+*::-webkit-scrollbar-track {
+  background: #f97316; /* color of the tracking area */
+  z-index: -1 !important;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: white; /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 4px solid #f97316; /* creates padding around scroll thumb */
+  z-index: -1 !important;
 }

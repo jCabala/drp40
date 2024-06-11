@@ -119,11 +119,9 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
             >
               <div className="flex flex-col items-center justify-center h-full w-full">
                 <div className="bg-orange-500 text-white text-2xl font-bold p-8 rounded-xl shadow-2xl text-center max-w-lg mx-auto">
-                  {!focusedFlat ? (
-                    <>Manage your flats all in one place</>
-                  ) : (
-                    <>No pending applications yet for this flat :(</>
-                  )}
+                  {!focusedFlat
+                    ? "Manage your flats all in one place"
+                    : "No pending applications yet for this flat :("}
                 </div>
               </div>
             </CSSTransition>

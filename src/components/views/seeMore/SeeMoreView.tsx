@@ -42,8 +42,8 @@ export default function SeeMoreMainViews({
 
   return (
     <div className="grid grid-cols-11 gap-4 w-full p-6">
-      <section className="border border-gray-200 col-span-6 bg-white rounded-lg shadow-lg p-4">
-        <div className="mb-8">
+      <section className="col-span-6 bg-white p-4">
+        <div className="mb-8 border-2 border-orange-500 p-2 rounded-md shadow-lg">
           <ImageGallery
             items={images}
             showPlayButton={false}
@@ -51,30 +51,38 @@ export default function SeeMoreMainViews({
             showFullscreenButton={false}
           />
         </div>
-        <APIProvider
-          apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
-          libraries={["places"]}
-        >
-          <Map
-            className="w-full h-80 rounded-lg mb-4"
-            defaultCenter={{ lat: lat, lng: lng }}
-            defaultZoom={12}
-            gestureHandling={"greedy"}
-            disableDefaultUI={true}
+        <div className="mb-8 border-2 border-orange-500 p-2 rounded-md shadow-lg">
+          <APIProvider
+            apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
+            libraries={["places"]}
           >
-            <Marker position={{ lat: lat, lng: lng }} />
-          </Map>
-        </APIProvider>
+            <Map
+              className="w-full h-80 rounded-lg mb-4"
+              defaultCenter={{ lat: lat, lng: lng }}
+              defaultZoom={12}
+              gestureHandling={"greedy"}
+              disableDefaultUI={true}
+            >
+              <Marker position={{ lat: lat, lng: lng }} />
+            </Map>
+          </APIProvider>
+        </div>
       </section>
-      <section className="border border-gray-200 col-span-5 bg-white rounded-lg shadow-lg p-4">
-        <BasicInformation
-          rentPerWeek={rentPerWeek}
-          numberOfRooms={numberOfRooms}
-          numberOfGaps={numberOfGaps}
-          labels={labels}
-        />
+      <section className="col-span-5 bg-white rounded-lg p-4">
+        <div className="mb-8 border-2 border-orange-500 p-2 rounded-md shadow-lg">
+          <BasicInformation
+            rentPerWeek={rentPerWeek}
+            numberOfRooms={numberOfRooms}
+            numberOfGaps={numberOfGaps}
+            labels={labels}
+          />
+        </div>
+        <div className="mb-8 border-2 border-orange-500 p-2 rounded-md shadow-lg">
         <PropertyDescription houseDescription={houseDescription} />
-        <TenantList tenants={tenants} />
+        </div>
+        <div className="mb-8 border-2 border-orange-500 p-2 rounded-md shadow-lg">
+          <TenantList tenants={tenants} />
+        </div>
       </section>
       <div>
         {showForm && (
