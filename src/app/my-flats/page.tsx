@@ -6,7 +6,7 @@ import LoadingOverlay from "@/components/helper/LoadingOverlay";
 import UserFlatsView from "@/components/views/UserFlatsView";
 import Cookies from "js-cookie";
 
-export default function Me() {
+export default function MyFlats() {
   const [ownedFlats, setOwnedFlats] = useState<
     Array<FlatAdvertisment> | undefined
   >(undefined);
@@ -31,9 +31,12 @@ export default function Me() {
   return (
     <div className="w-full flex flex-row">
       {isLoading && <LoadingOverlay />}
-      {ownedFlats && (
-        <UserFlatsView getOwnedFlats={getOwnedFlats} ownedFlats={ownedFlats} />
-      )}
+      {
+        <UserFlatsView
+          getOwnedFlats={getOwnedFlats}
+          ownedFlats={ownedFlats || []}
+        />
+      }
     </div>
   );
 }

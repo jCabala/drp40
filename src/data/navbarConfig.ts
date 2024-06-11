@@ -16,8 +16,8 @@ const navbarConfig: NavbarConfig = {
       path: "/explore",
     },
     {
-      title: "Me",
-      path: "/me",
+      title: "My Flats",
+      path: "/my-flats",
     },
   ],
 };

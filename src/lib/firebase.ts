@@ -7,6 +7,7 @@ import {
   getDocs,
   getDoc,
   addDoc,
+  deleteDoc,
   doc,
   query,
   where,
@@ -206,6 +207,32 @@ const updateApplication = async (flatID: string, approve: boolean, userEmail: st
   }
 }
 
+const closeApplication = async (flatID: string, userID: string) => {
+  console.log("IDs", flatID, userID)
+  const docRef = doc(db, `flats/${flatID}`);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    const docRef = doc(db, "flats", flatID);
+    await deleteDoc(docRef);
+    
+    const docUserRef = doc(db, `users/${userID}`);
+    const docUserSnap = await getDoc(docUserRef);
+
+    if (docUserSnap.exists()) {
+      const data : string[] = docUserSnap.data().flatsOwned || [];
+      console.log("current user owned flat", data);
+      const updatedData = data.filter(flat => flat !== flatID);
+
+      await updateDoc(doc(db, "users", userID), { flatsOwned: updatedData });
+    } else {
+      return;
+    }
+   
+    
+  } else {
+    return;
+  }
+}
 const getUserIdByEmail = async (email: string) => {
   const q = query(collection(db, "users"), where("email", "==", email));
     const querySnapshot = await getDocs(q);
@@ -323,4 +350,5 @@ export {
   addApplication,
   addUserOwnedFlatByID,
   updateApplication,
+  closeApplication,
 };
