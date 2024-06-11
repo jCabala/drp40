@@ -62,7 +62,7 @@ function UserApplicationCard({ application, flatID }: Props) {
           />
           <button
             onClick={handleSeeProfile}
-            className="shadow-sm absolute bottom-0 left-0 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-1 px-2 rounded-b-md transition duration-300 ease-in-out focus:outline-none focus:ring focus:ring-emerald-300"
+            className="absolute bottom-0 left-0 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-1 px-2 rounded-b-md transition duration-300 ease-in-out"
           >
             See Profile
           </button>
@@ -79,18 +79,40 @@ function UserApplicationCard({ application, flatID }: Props) {
             </span>
           </p>
           <div className="flex justify-end">
-            <button
-              className="shadow-sm w-24 bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded"
-              onClick={handleApprove}
-            >
-              Approve
-            </button>
-            <button
-              className="shadow-sm ml-2 w-24 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-              onClick={handleReject}
-            >
-              Reject
-            </button>
+            {application.status === "APPROVED" ? (
+              <div className="flex items-center bg-green-100 text-green-700 border border-green-500 px-4 py-2 rounded-md">
+                <svg
+                  className="w-5 h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+                Approved
+              </div>
+            ) : (
+              <>
+                <button
+                  className="w-24 bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
+                  onClick={handleApprove}
+                >
+                  Approve
+                </button>
+                <button
+                  className="ml-2 w-24 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
+                  onClick={handleReject}
+                >
+                  Reject
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
