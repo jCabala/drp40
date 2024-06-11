@@ -15,11 +15,13 @@ function DoublePhotoCard({
   children,
   containerClassName,
   onImgClick,
-  color
+  color,
 }: Props) {
   const col = color || "orange";
   return (
-    <div className={`mb-10 overflow-hidden rounded-lg border-2 border-${col}-500 shadow-5 duration-300 hover:scale-105 flex flex-row min-h-60 w-full`}>
+    <div
+      className={`mb-10 overflow-hidden rounded-lg border-2 border-${col}-500 shadow-lg duration-300 hover:scale-105 flex flex-row min-h-60 w-full`}
+    >
       <div
         style={
           img2

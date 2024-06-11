@@ -19,6 +19,10 @@ const navbarConfig: NavbarConfig = {
       title: "My Flats",
       path: "/my-flats",
     },
+    {
+      title: "My Applications",
+      path: "/my-applications",
+    }
   ],
 };
 

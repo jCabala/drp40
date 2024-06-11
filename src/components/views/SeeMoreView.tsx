@@ -53,101 +53,99 @@ export default function SeeMoreMainViews({
   };
 
   return (
-    <div className="grid grid-cols-5 w-full">
-      <div className="col-span-3">
-        <ImageGallery
-          items={images}
-          showPlayButton={false}
-          thumbnailPosition="right"
-          showFullscreenButton={false}
-        />
-        <section className="pr-12 mx-2 my-4 w-full">
-          <h3 className="px-2 text-xl font-bold mb-1 text-gray-700">
-            Basic Information
-          </h3>
-          <div className="flex flex-wrap justify-between">
-            <div className="w-1/3">
-              <p className="mx-3 my-1">
-                <b className="text-orange-500">Rent: </b>
-                {rentPerWeek} £/week
-              </p>
-              <p className="mx-3 my-1">
-                <b className="text-orange-500">Campus travel: </b>30 min
-              </p>
-              <p className="mx-3 my-1">
-                <b className="text-orange-500">Number of rooms: </b>
-                {numberOfRooms}
-              </p>
-              <p className="mx-3 my-1">
-                Looking for <b className="text-orange-500">{numberOfGaps}</b>{" "}
-                tenants
-              </p>
-              <p className="mx-3 my-1">
-                <b className="text-orange-500">Number of bathrooms: </b>2
-              </p>
-            </div>
-            <div className="flex flex-wrap justify-center w-2/3">
-              {labels?.map((label) => (
-                <Label
-                  className="h-10"
-                  key={label.name}
-                  name={label.name}
-                  color={label.color}
-                />
-              ))}{" "}
-            </div>
-            <div className="flex flex-wrap justify-center w-2/3">
-              <button
-                onClick={() => setShowForm(true)}
-                className="fixed w-20 h-20 bottom-4 right-4 bg-orange-500 pt-3 pb-6 px-3 rounded-full shadow-lg z-40 duration-200 hover:scale-110 flex justify-center items-center"
-              >
-                <span className="text-white text-center text-sm">APPLY</span>
-              </button>
-            </div>
-          </div>
-          {houseDescription != null ? (
-            <div className="mt-2">
-              <h3 className="px-2 text-xl font-bold mb-1 text-gray-700">
-                Property Description
-              </h3>
-              <p className="mx-3 my-1">{houseDescription}</p>
-            </div>
-          ) : (
-            <></>
-          )}
-        </section>
-      </div>
-      <div className="min-h-screen col-span-2">
+    <div className="grid grid-cols-5 gap-4 w-full p-6">
+      <div className="bg-gray-50 col-span-3 bg-white rounded-lg shadow-lg p-4">
+        <div className="mb-8">
+          <ImageGallery
+            items={images}
+            showPlayButton={false}
+            thumbnailPosition="right"
+            showFullscreenButton={false}
+          />
+        </div>
         <APIProvider
           apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
           libraries={["places"]}
         >
           <Map
-            className="w-full h-2/3 pb-4 pr-4"
+            className="w-full h-80 rounded-lg mb-4"
             defaultCenter={{ lat: lat, lng: lng }}
             defaultZoom={12}
             gestureHandling={"greedy"}
             disableDefaultUI={true}
-          ></Map>
-
-          <Marker position={{ lat: lat, lng: lng }} />
+          >
+            <Marker position={{ lat: lat, lng: lng }} />
+          </Map>
         </APIProvider>
-        <h3 className="px-2 text-xl font-bold mb-2 text-gray-700">
-          Tenant Description
-        </h3>
-        <div className="flex flex-wrap justify-center">
-          {tenants.length > 0 &&
-            tenants.map((tenant, idx) => (
-              <TenantCard
-                key={idx}
-                tenant={tenant}
-                clickAction={clickAction}
-                image={tenant.profilePic}
-              />
-            ))}
-        </div>
+      </div>
+      <div className="bg-gray-50 col-span-2 bg-white rounded-lg shadow-lg p-4">
+        <section className="mt-4">
+          <h3 className="text-2xl font-semibold text-gray-800 mb-4">
+            Basic Information
+          </h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-lg">
+                <b className="text-orange-500">Rent: </b>
+                {rentPerWeek} £/week
+              </p>
+              <p className="text-lg">
+                <b className="text-orange-500">Campus travel: </b>30 min
+              </p>
+              <p className="text-lg">
+                <b className="text-orange-500">Number of rooms: </b>
+                {numberOfRooms}
+              </p>
+              <p className="text-lg">
+                Looking for <b className="text-orange-500">{numberOfGaps}</b>{" "}
+                tenants
+              </p>
+              <p className="text-lg">
+                <b className="text-orange-500">Number of bathrooms: </b>2
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center">
+              {labels?.map((label) => (
+                <Label key={label.name} name={label.name} color={label.color} />
+              ))}
+            </div>
+          </div>
+          {houseDescription && (
+            <div className="mt-6">
+              <h3 className="text-2xl font-semibold text-gray-800 mb-4">
+                Property Description
+              </h3>
+              <p className="text-lg text-gray-700">{houseDescription}</p>
+            </div>
+          )}
+        </section>
+
+        {tenants.length > 0 ? (
+          <>
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4">
+              Tenant Description
+            </h3>
+            <div className="flex flex-wrap justify-center">
+              {tenants.map((tenant, idx) => (
+                <TenantCard
+                  key={idx}
+                  tenant={tenant}
+                  clickAction={clickAction}
+                  image={tenant.profilePic}
+                />
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="h-20" />
+            <div className="bg-orange-500 text-white text-2xl font-bold p-8 rounded-xl shadow-2xl text-center max-w-lg mx-auto">
+              No current tenants added
+            </div>
+          </>
+        )}
         <p
-          className={`duration-200 mt-2 mb-3 text-gray-500 font-medium min-h-60 ${
+          className={`transition-opacity duration-200 mt-4 text-gray-600 ${
             descFade ? fadedDesc : visibleDesc
           }`}
         >
@@ -166,13 +164,19 @@ export default function SeeMoreMainViews({
               flatID={flatID}
             />
           </Overlay>
-        )}{" "}
+        )}
         {/* Render form when showForm is true */}
       </div>
       {isFormLoading && <LoadingOverlay />}
       {alertText && (
         <Alert exitAction={() => setAlertText(undefined)} text={alertText} />
       )}
+      <button
+        onClick={() => setShowForm(true)}
+        className="shadow-sm fixed w-20 h-20 bottom-6 right-6 bg-orange-500 rounded-full shadow-xl hover:shadow-2xl transition-transform transform hover:scale-110 flex items-center justify-center z-50"
+      >
+        <span className="text-white text-center text-sm">APPLY</span>
+      </button>
     </div>
   );
 }

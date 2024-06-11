@@ -95,7 +95,7 @@ function RegistrationForm({ onFinish, setIsLoading, setAlertText }: Props) {
           >
             <button
               type="button"
-              className="absolute top-2 right-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+              className="shadow-sm absolute top-2 right-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
               onClick={onFinish}
             >
               X

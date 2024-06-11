@@ -2,8 +2,6 @@ import React from "react";
 import DoublePhotoCard from "./DoublePhotoCard";
 import Link from "next/link";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
-import { closeApplication } from "@/lib/firebase";
-import Cookies from "js-cookie";
 
 type Props = {
   flat: FlatAdvertisment;
@@ -12,7 +10,7 @@ type Props = {
   focused?: boolean | null;
 };
 
-const buttonStyle = "text-white font-bold py-2 px-4 w-full rounded my-3 mx-1";
+const buttonStyle = "text-white font-bold py-2 px-4 w-full rounded my-3 mx-1 shadow-sm";
 const buttonNormalStyle = `bg-orange-500 hover:bg-orange-700 ${buttonStyle}`;
 const buttonFcusedStyle = `bg-emerald-500 hover:bg-emerald-700 ${buttonStyle}`;
 
@@ -24,7 +22,7 @@ function ManageFlatCard({
 }: Props) {
   const buttonClassNames = focused ? buttonFcusedStyle : buttonNormalStyle;
   const img1 = flat.images[0];
-  const img2 = flat.images[1] || flat.images[0];
+  const img2 = flat.images.length > 1 ? flat.images[1] : flat.images[0];
   const id = flat.id;
 
   return (

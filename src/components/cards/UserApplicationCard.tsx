@@ -62,7 +62,7 @@ function UserApplicationCard({ application, flatID }: Props) {
           />
           <button
             onClick={handleSeeProfile}
-            className="absolute bottom-0 left-0 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-1 px-2 rounded-b-md transition duration-300 ease-in-out focus:outline-none focus:ring focus:ring-emerald-300"
+            className="shadow-sm absolute bottom-0 left-0 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-1 px-2 rounded-b-md transition duration-300 ease-in-out focus:outline-none focus:ring focus:ring-emerald-300"
           >
             See Profile
           </button>
@@ -80,13 +80,13 @@ function UserApplicationCard({ application, flatID }: Props) {
           </p>
           <div className="flex justify-end">
             <button
-              className="w-24 bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded"
+              className="shadow-sm w-24 bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded"
               onClick={handleApprove}
             >
               Approve
             </button>
             <button
-              className="ml-2 w-24 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              className="shadow-sm ml-2 w-24 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               onClick={handleReject}
             >
               Reject

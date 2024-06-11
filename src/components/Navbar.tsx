@@ -9,7 +9,7 @@ type Props = {
 export default function Navbar({ navConfig }: Props) {
   const [navbarOpen, setNavbarOpen] = useState(false);
   return (
-    <nav className="fixed w-full z-20 flex flex-wrap items-center justify-between h-14 bg-orange-500">
+    <nav className="fixed w-full z-20 flex flex-wrap items-center justify-between h-14 bg-orange-500 shadow-lg">
       <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
         <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
           <a

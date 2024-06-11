@@ -45,12 +45,12 @@ function SeeFlatCard({
           </p>
           <div className="flex flex-wrap pt-3">
             {labels?.map((label) => (
-              <Label key={label.name} name={label.name} color={label.color} />
+              <Label className="text-sm" key={label.name} name={label.name} color={label.color} />
             ))}{" "}
           </div>
         </div>
 
-        <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
+        <button className="shadow-sm justify-self-end shadow-md bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">
           See more
         </button>
       </DoublePhotoCard>

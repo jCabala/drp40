@@ -8,34 +8,22 @@ import {
 } from "@vis.gl/react-google-maps";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import { useState, useEffect } from "react";
-import AddFlatForm from "../forms/AddFlatForm";
-import Overlay from "../helper/Overlay";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import LoadingOverlay from "../helper/LoadingOverlay";
-import Alert from "../helper/Alert";
+import AddFlatFormButton from "../forms/AddFlatFormButton";
 
 type Props = { flats: FlatAdvertisment[]; getFlats: () => void };
 const centerPlaceholder = { lat: 51.509865, lng: -0.118092 };
 
 function MainFlatsViev({ flats, getFlats }: Props) {
-  const [showForm, setShowForm] = useState(false);
-  const [isFormLoading, setIsFormLoading] = useState(false);
   const [selectedFlat, setSelectedFlat] = useState<FlatAdvertisment | null>(
     null
   );
   const [showReducedCards, setShowReducedCards] = useState(false);
-  const [alertText, setAlertText] = useState<string | undefined>(undefined);
 
   const filteredFlats =
     selectedFlat && showReducedCards
       ? flats.filter((flat) => flat.id === selectedFlat.id)
       : flats;
-
-  useEffect(() => {
-    if (alertText) {
-      setTimeout(() => setAlertText(undefined), 3000);
-    }
-  }, [alertText]);
 
   return (
     <>
@@ -44,7 +32,8 @@ function MainFlatsViev({ flats, getFlats }: Props) {
           <section className="w-1/3">
             {filteredFlats.length === 0 ? (
               <div className="bg-orange-500 text-white text-2xl p-10 rounded-md text-center">
-                No flats advertised yet :(
+                No flats advertised yet :( <br /> (To see your adverisements
+                visit the My Flats page)
               </div>
             ) : (
               <TransitionGroup>
@@ -144,30 +133,9 @@ function MainFlatsViev({ flats, getFlats }: Props) {
             </Map>
           </APIProvider>
         </section>
-        <button
-          onClick={() => setShowForm(true)}
-          className="fixed w-20 h-20 bottom-4 right-4 bg-orange-500 pt-3 pb-6 px-3 rounded-full shadow-lg z-40 duration-200 hover:scale-110 flex justify-center items-center"
-        >
-          <span className="text-white text-center text-8xl">+</span>
-        </button>
-        {showForm && (
-          <Overlay onClick={() => setShowForm(false)}>
-            <AddFlatForm
-              setIsLoading={setIsFormLoading}
-              setAlertText={setAlertText}
-              onFinish={() => {
-                getFlats();
-                setShowForm(false);
-              }}
-            />
-          </Overlay>
-        )}{" "}
+        <AddFlatFormButton onFinish={getFlats} />
         {/* Render form when showForm is true */}
       </div>
-      {isFormLoading && <LoadingOverlay />}
-      {alertText && (
-        <Alert exitAction={() => setAlertText(undefined)} text={alertText} />
-      )}
     </>
   );
 }

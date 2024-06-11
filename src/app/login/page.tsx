@@ -26,9 +26,9 @@ const Login: React.FC = () => {
     if (id) {
       Cookies.set("userID", id);
     } else {
-      console.log("ERR: UserID not set")
+      console.log("ERR: UserID not set");
     }
-    
+
     Cookies.set("email", email);
     MyRouter.push("/explore");
   };
@@ -74,7 +74,7 @@ const Login: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-white bg-orange-500 rounded hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-200"
+            className="w-full px-4 py-2 shadow-sm text-white bg-orange-500 rounded hover:bg-orange-600 focus:outline-none focus:ring focus:ring-orange-200"
           >
             Login
           </button>
