@@ -65,7 +65,7 @@ const getFlatData = (id: string, data: DocumentData) => {
     applications: data?.applications || [],
     labels: data?.labels || [],
     tenants: data?.tenants || [],
-  };
+  } as FlatAdvertisment;
 };
 
 const fetchAllFlats = async (callback: any) => {
@@ -96,11 +96,12 @@ const fetchNotOwnedFlats = async (userID: string, callback: any) => {
 };
 
 const fetchFlat = async (id: string, callback: any) => {
-  callback(await _fetchFlat(id));
+  callback(await fetchFlatByID(id));
+  return 
 };
 
 // Helper to actually return the flat object
-const _fetchFlat = async (id: string) => {
+const fetchFlatByID = async (id: string) => {
   const docRef = doc(db, `flats/${id}`);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
@@ -118,7 +119,7 @@ const fetchUserFlatsOwnedByID = async (userID: string, callback: any) => {
   if (docSnap.exists()) {
     const data : string[] = docSnap.data().flatsOwned || [];
     console.log("FLAT IDS", data);
-    const flatsOwned = await Promise.all(data.map((id) => _fetchFlat(id)));
+    const flatsOwned = await Promise.all(data.map((id) => fetchFlatByID(id)));
     console.log("OWNED FLATS",flatsOwned);
     callback(flatsOwned);
   } else {
@@ -223,6 +224,21 @@ const getUserIdByEmail = async (email: string) => {
     }
   };
 
+  const fetchAllApplicationsByUserID = async (userID: string): Promise<UserApplication[]> => {
+    const applications: UserApplication[] = [];
+  
+    // Query the applications collection where userID field matches the passed-in value
+    const querySnapshot = await getDocs(query(collection(db, "applications"), where("userID", "==", userID)));
+  
+    // Iterate through the query snapshot
+    querySnapshot.forEach((doc) => {
+      const userProfile = doc.data() as UserApplication;
+      applications.push(userProfile);
+    });
+  
+    return applications;
+  };
+
   const addApplication = async (userID: string, message: string, flatID: string) => {
     const newUserApplication: UserApplication = {
       userID: userID,
@@ -302,6 +318,7 @@ export {
   storage,
   registerUser,
   fetchFlat,
+  fetchFlatByID,
   fetchAllFlats,
   fetchNotOwnedFlats,
   getUserIdByEmail,
@@ -312,6 +329,7 @@ export {
   fetchUserIdByEmail,
   addApplication,
   fetchApplicationByID,
+  fetchAllApplicationsByUserID,
   addUserOwnedFlatByID,
   updateApplication,
   closeAdvertisement,

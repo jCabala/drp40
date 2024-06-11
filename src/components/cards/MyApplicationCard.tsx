@@ -15,7 +15,7 @@ function MyApplicationCard({ status, img1, img2 }: Props) {
         <span className="text-white rounded-md text-center mx-6 text-md bg-orange-500 px-2 py-2 font-bold">
           {status}
         </span>
-        <Button className="justify-self-end">Close Application</Button>
+        <Button className="justify-self-end">Withdraw Application</Button>
       </DoublePhotoCard>
     </div>
   );
