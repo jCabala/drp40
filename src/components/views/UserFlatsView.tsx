@@ -4,10 +4,11 @@ import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import UserApplicationCard from "../cards/UserApplicationCard";
 import { closeAdvertisement, fetchUserByID } from "@/lib/firebase";
 import AddFlatFormButton from "../forms/AddFlatFormButton";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { fetchApplicationByID } from "@/lib/firebase";
 import { UserApplication } from "@/data/userApplication";
 import { UserProfile } from "@/data/userProfile";
+import { TransitionGroup } from "react-transition-group";
+import ListTransitionElement from "../helper/transitions/ListTransitionElement";
 
 type Props = { ownedFlats: FlatAdvertisment[]; getOwnedFlats: () => void };
 
@@ -80,37 +81,16 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
           {focusedFlat && focusedFlat.applications.length > 0 ? (
             focusedApplications?.map((application, idx) => (
               // Render UserApplicationCard only if application status is not 'REJECTED'
-              <CSSTransition
-                key={idx}
-                timeout={500}
-                classNames={{
-                  enter: `transition-opacity transform duration-500 ease-in-out delay-${
-                    idx * 150
-                  }`,
-                  enterActive: "opacity-100 scale-100 animate-fadeIn",
-                  exit: `transition-opacity transform duration-500 ease-in-out delay-${
-                    idx * 150
-                  }`,
-                  exitActive: "opacity-0 scale-90 animate-fadeOut",
-                }}
-              >
+              <ListTransitionElement key={idx} delay={150 * idx}>
                 <UserApplicationCard
                   key={idx}
                   applicationWithUser={application}
                   flatID={focusedFlat.id}
                 />
-              </CSSTransition>
+              </ListTransitionElement>
             ))
           ) : (
-            <CSSTransition
-              timeout={500}
-              classNames={{
-                enter: `transition-opacity transform duration-500 ease-in-out`,
-                enterActive: "opacity-100 scale-100 animate-fadeIn",
-                exit: `hidden`,
-                exitActive: "hidden",
-              }}
-            >
+            <ListTransitionElement>
               <div className="flex flex-col items-center justify-center h-full w-full">
                 <div className="bg-orange-500 text-white text-2xl font-bold p-8 rounded-xl shadow-2xl text-center max-w-lg mx-auto">
                   {!focusedFlat ? (
@@ -120,7 +100,7 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
                   )}
                 </div>
               </div>
-            </CSSTransition>
+            </ListTransitionElement>
           )}
         </TransitionGroup>
       </section>

@@ -7,9 +7,10 @@ import {
   InfoWindow,
 } from "@vis.gl/react-google-maps";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import AddFlatFormButton from "../forms/AddFlatFormButton";
+import ListTransitionElement from "../helper/transitions/ListTransitionElement";
 
 type Props = { flats: FlatAdvertisment[]; getFlats: () => void };
 const centerPlaceholder = { lat: 51.509865, lng: -0.118092 };
@@ -38,20 +39,7 @@ function MainFlatsViev({ flats, getFlats }: Props) {
             ) : (
               <TransitionGroup>
                 {filteredFlats.map((flat, index) => (
-                  <CSSTransition
-                    key={flat.id}
-                    timeout={500}
-                    classNames={{
-                      enter: `transition-opacity transform duration-500 ease-in-out delay-${
-                        index * 150
-                      }`,
-                      enterActive: "opacity-100 scale-100 animate-fadeIn",
-                      exit: `transition-opacity transform duration-500 ease-in-out delay-${
-                        index * 150
-                      }`,
-                      exitActive: "opacity-0 scale-90 animate-fadeOut",
-                    }}
-                  >
+                  <ListTransitionElement key={index} delay={150 * index}>
                     <SeeFlatCard
                       id={flat.id}
                       img1={flat.images[0]}
@@ -61,7 +49,7 @@ function MainFlatsViev({ flats, getFlats }: Props) {
                       numberOfRooms={flat.numberOfRooms}
                       labels={flat.labels}
                     />
-                  </CSSTransition>
+                  </ListTransitionElement>
                 ))}
               </TransitionGroup>
             )}

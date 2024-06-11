@@ -8,11 +8,9 @@ import {
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 import Autocomplete from "react-google-autocomplete";
-import { useState } from "react";
-import PopUpWIndow from "../helper/PopUpWindow";
+import FormWrapper from "./FormWrapper";
 import { labelTypes } from "@/data/labelTypes";
 import Cookies from "js-cookie";
-import CloseButton from "../helper/buttons/CloseButton";
 
 type Props = {
   onFinish: () => void;
@@ -43,12 +41,7 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
     labelTypes.map((label) => ({ ...label, isSet: false }))
   );
 
-  const [showPopUp, setShowPopUp] = useState(false);
-  const [showQuestions, setShowQuestions] = useState(true);
-
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
     const userID = Cookies.get("userID");
     const images = imgRef.current?.files;
     const rent = rentRef.current?.value;
@@ -117,174 +110,119 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
     } else {
       console.log("LOGIN ERROR? NO USER SET");
     }
-
-    setTimeout(() => {
-      setIsLoading(false);
-      setShowQuestions(false);
-      setShowPopUp(true);
-    }, 200);
   };
 
   return (
-    <>
-      {showPopUp && (
-        <PopUpWIndow
-          message="Upload Successful!"
-          buttonText="FINISH"
-          onClick={() => {
-            setIsLoading(false);
-            setShowPopUp(false);
-            setShowQuestions(true);
-            onFinish();
+    <FormWrapper
+      handleSubmit={handleSubmit}
+      onFinish={onFinish}
+      setIsLoading={setIsLoading}
+      setAlertText={setAlertText}
+      title="Upload details for your GAP: *"
+    >
+      <div className="mb-4">
+        <label className="block text-orange-500 mb-2">
+          Address of property:
+        </label>
+        <Autocomplete
+          options={{
+            types: ["address"],
+            componentRestrictions: { country: "uk" },
           }}
+          placeholder="Address of property"
+          apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+          className={inputStyle}
+          onPlaceSelected={(place: any) => {
+            latRef.current = place.geometry.location.lat();
+            lngRef.current = place.geometry.location.lng();
+            addressRef.current = place.formatted_address;
+          }}
+          required
         />
-      )}{" "}
-      {/* Render popUpWIndow when showPopUp is true */}
-      {/* Render loading overlay when isLoading is true */}
-      {showQuestions && (
-        <div
-          className="bg-white px-6 pt-10 pb-4 w-full max-w-lg mx-auto rounded-lg shadow-md relative"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <b className="text-orange-500 text-center block mb-4">
-            Upload details for your GAP: *
-          </b>
-          <form
-            onSubmit={handleSubmit}
-            className="bg-white rounded px-8 pb-8 mb-4 w-full"
-          >
-            <CloseButton onClick={onFinish} />
-            <div className="mb-4">
-              <label className="block text-orange-500 mb-2">
-                Address of property:
+      </div>
+      <div className="mb-4">
+        <label className="block text-orange-500 mb-2">Rent (£/week):</label>
+        <input
+          type="number"
+          className={inputStyle}
+          ref={rentRef}
+          placeholder="Rent (£/week)"
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-orange-500 mb-2">Total No. Rooms:</label>
+        <input
+          type="number"
+          className={inputStyle}
+          ref={roomsRef}
+          placeholder="Total No. Rooms"
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-orange-500 mb-2">
+          Total No. vacancies:
+        </label>
+        <input
+          type="number"
+          className={inputStyle}
+          ref={gapsRef}
+          placeholder="Total No. vacancies"
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <b className="block text-orange-500 mb-2">
+          Select some property images: *
+        </b>
+        <input
+          type="file"
+          className={inputStyle}
+          ref={imgRef}
+          multiple
+          required
+          accept="image/png, image/gif, image/jpeg, image/jpg, image/webp"
+        />
+      </div>
+      <div className="mb-4">
+        <b className="block text-orange-500 mb-2">
+          Add a description for your property
+        </b>
+        <textarea
+          className="border border-orange-500 w-full p-2 rounded-md h-40 resize-none"
+          ref={houseDescriptionRef}
+        />
+      </div>
+      <div className="mb-4">
+        <b className="block text-orange-500 mb-2">Add current flatmates</b>
+        <p className="text-xs mb-2">
+          (If your current flatmates already have accounts, enter their emails
+          separated by a comma)
+        </p>
+        <input type="email" className={inputStyle} multiple ref={tenantsRef} />
+      </div>
+      <div className="mb-4">
+        <b className="block text-orange-500 mb-2">
+          Select additional requirements for future tenants:
+        </b>
+        <div>
+          {labelTypes.map((label, idx) => (
+            <div key={idx} className="mt-2">
+              <input
+                type="checkbox"
+                onChange={() =>
+                  (labelsRef.current[idx].isSet = !labelsRef.current[idx].isSet)
+                }
+              />
+              <label className="font-bold ml-2" style={{ color: label.color }}>
+                {label.name}
               </label>
-              <Autocomplete
-                options={{
-                  types: ["address"],
-                  componentRestrictions: { country: "uk" },
-                }}
-                placeholder="Address of property"
-                apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
-                className={inputStyle}
-                onPlaceSelected={(place: any) => {
-                  latRef.current = place.geometry.location.lat();
-                  lngRef.current = place.geometry.location.lng();
-                  addressRef.current = place.formatted_address;
-                }}
-                required
-              />
             </div>
-            <div className="mb-4">
-              <label className="block text-orange-500 mb-2">
-                Rent (£/week):
-              </label>
-              <input
-                type="number"
-                className={inputStyle}
-                ref={rentRef}
-                placeholder="Rent (£/week)"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-orange-500 mb-2">
-                Total No. Rooms:
-              </label>
-              <input
-                type="number"
-                className={inputStyle}
-                ref={roomsRef}
-                placeholder="Total No. Rooms"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-orange-500 mb-2">
-                Total No. vacancies:
-              </label>
-              <input
-                type="number"
-                className={inputStyle}
-                ref={gapsRef}
-                placeholder="Total No. vacancies"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <b className="block text-orange-500 mb-2">
-                Select some property images: *
-              </b>
-              <input
-                type="file"
-                className={inputStyle}
-                ref={imgRef}
-                multiple
-                required
-                accept="image/png, image/gif, image/jpeg, image/jpg, image/webp"
-              />
-            </div>
-            <div className="mb-4">
-              <b className="block text-orange-500 mb-2">
-                Add a description for your property
-              </b>
-              <textarea
-                className="border border-orange-500 w-full p-2 rounded-md h-40 resize-none"
-                ref={houseDescriptionRef}
-              />
-            </div>
-            <div className="mb-4">
-              <b className="block text-orange-500 mb-2">
-                Add current flatmates
-              </b>
-              <p className="text-xs mb-2">
-                (If your current flatmates already have accounts, enter their
-                emails separated by a comma)
-              </p>
-              <input
-                type="email"
-                className={inputStyle}
-                multiple
-                ref={tenantsRef}
-              />
-            </div>
-            <div className="mb-4">
-              <b className="block text-orange-500 mb-2">
-                Select additional requirements for future tenants:
-              </b>
-              <div>
-                {labelTypes.map((label, idx) => (
-                  <div key={idx} className="mt-2">
-                    <input
-                      type="checkbox"
-                      onChange={() =>
-                        (labelsRef.current[idx].isSet =
-                          !labelsRef.current[idx].isSet)
-                      }
-                    />
-                    <label
-                      className="font-bold ml-2"
-                      style={{ color: label.color }}
-                    >
-                      {label.name}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="mb-4">
-              <input
-                className="w-full bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
-                type="submit"
-                value="Upload"
-              />
-            </div>
-            <b className="block text-sm mt-4 text-orange-500 text-center">
-              All sections marked (*) are required
-            </b>
-          </form>
+          ))}
         </div>
-      )}
-    </>
+      </div>
+    </FormWrapper>
   );
 }
 
