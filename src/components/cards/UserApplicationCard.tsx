@@ -10,36 +10,22 @@ import confetti from "canvas-confetti";
 import ReactRain from "react-rain-animation";
 import "react-rain-animation/lib/style.css";
 import { UserProfile } from "@/data/userProfile";
+import ApplyFlatForm from "../forms/ApplyFlatForm";
 
 type Props = {
-  applicationID: string;
+  applicationWithUser: UserApplication & {
+    user: UserProfile;
+  };
   flatID: string;
 };
 
-function UserApplicationCard({ applicationID, flatID }: Props) {
+function UserApplicationCard({ applicationWithUser, flatID }: Props) {
   const [showSuccessMsg, setShowSuccessMsg] = useState(false);
   const [showFailMsg, setShowFailMsg] = useState(false);
   const MyRouter = useRouter();
-  const [application, setApplication] = useState<UserApplication | null>(null);
-  const [user, setUser] = useState<UserProfile | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const fetchedApplication = await fetchApplicationByID(applicationID);
-      setApplication(fetchedApplication);
-
-      // Fetch user data if application exists
-      if (fetchedApplication) {
-        const fetchedUser = await fetchUserByID(fetchedApplication.userID);
-        setUser(fetchedUser);
-      }
-    };
-
-    fetchData();
-  }, [applicationID]);
 
   const handleSeeProfile = async () => {
-    const userID = application?.userID;
+    const userID = applicationWithUser.userID;
     console.log("UserID", userID);
     MyRouter.push(`/profile/${userID}`);
   };
@@ -67,27 +53,27 @@ function UserApplicationCard({ applicationID, flatID }: Props) {
   };
 
   const handleApprove = () => {
-    if (application) {
-      updateApplication(flatID, application.userID, true);
+    if (applicationWithUser) {
+      updateApplication(flatID, applicationWithUser.userID, true);
     }
     showConfettiAndMessage();
   };
 
   const handleReject = () => {
-    if (application) {
-      updateApplication(flatID, application.userID, false);
+    if (applicationWithUser) {
+      updateApplication(flatID, applicationWithUser.userID, false);
     }
     showRainAndMessage();
   };
 
   return (
     <>
-      {application && application.status !== "REJECTED" && (
+      {applicationWithUser && applicationWithUser.status !== "REJECTED" && (
         <>
           <div className="overflow-hidden rounded-lg border border-emerald-500 shadow-md duration-300 hover:shadow-lg flex flex-row h-auto w-full mb-4">
             <div className="relative">
               <img
-                src={user?.profilePic}
+                src={applicationWithUser.user.profilePic}
                 alt=""
                 className="h-full object-cover w-32"
               />
@@ -101,16 +87,18 @@ function UserApplicationCard({ applicationID, flatID }: Props) {
             <div className="flex flex-col flex-grow p-4">
               <p className="text-md text-gray-600 mb-2">
                 <span className="font-bold">Applicant Email:</span>{" "}
-                <span className="text-emerald-600">{user?.email}</span>
+                <span className="text-emerald-600">
+                  {applicationWithUser.user.email}
+                </span>
               </p>
               <p className="text-md text-gray-600 mb-4">
                 <span className="font-bold">Personalized Message:</span>{" "}
                 <span className="font-bold text-emerald-600">
-                  {application.msg}
+                  {applicationWithUser.msg}
                 </span>
               </p>
               <div className="flex justify-end">
-                {application.status === "APPROVED" ? (
+                {applicationWithUser.status === "APPROVED" ? (
                   <div className="flex items-center bg-green-100 text-green-700 border border-green-500 px-4 py-2 rounded-md">
                     <svg
                       className="w-5 h-5 mr-2"

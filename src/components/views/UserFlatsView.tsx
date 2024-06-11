@@ -1,22 +1,52 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import ManageFlatCard from "../cards/ManageFlatCard";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import UserApplicationCard from "../cards/UserApplicationCard";
-import { closeAdvertisement } from "@/lib/firebase";
+import { closeAdvertisement, fetchUserByID } from "@/lib/firebase";
 import AddFlatFormButton from "../forms/AddFlatFormButton";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { fetchApplicationByID } from "@/lib/firebase";
+import { UserApplication } from "@/data/userApplication";
+import { UserProfile } from "@/data/userProfile";
 
 type Props = { ownedFlats: FlatAdvertisment[]; getOwnedFlats: () => void };
 
 function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
-  const [focusedFlat, setFocusedFlat] = useState<FlatAdvertisment | null>(
-    null
-  );
+  const [focusedFlat, setFocusedFlat] = useState<FlatAdvertisment | null>(null);
+  const [focusedApplications, setFocusedApplications] =
+    useState<(UserApplication & { user: UserProfile })[]>();
 
   const closeAddvertisement = async (flatID: string) => {
     console.log("CLOSE ADVERTISEMENT");
     closeAdvertisement(flatID);
     await getOwnedFlats();
+  };
+
+  const fetchData = async () => {
+    // Fetch the application data by ID
+    if (focusedFlat) {
+      const fetchedApplications = (
+        await Promise.all(
+          focusedFlat.applications.map((app) => fetchApplicationByID(app))
+        )
+      ).filter((app): app is UserApplication => app !== null);
+
+      // If the application exists, fetch the user data by userID
+      if (fetchedApplications) {
+        const fetchedUsers = (
+          await Promise.all(
+            fetchedApplications.map((app) => fetchUserByID(app.userID))
+          )
+        ).filter((user): user is UserProfile => user !== null);
+
+        // Map the fetched users into the corresponding application objects
+        const applicationsWithUsers = fetchedApplications.map((app, idx) => ({
+          ...app,
+          user: fetchedUsers[idx],
+        }));
+        setFocusedApplications(applicationsWithUsers);
+      }
+    }
   };
 
   return (
@@ -27,7 +57,10 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
             <ManageFlatCard
               key={idx}
               flat={ownedFlat}
-              seeInterestedAction={() => setFocusedFlat(ownedFlat)}
+              seeInterestedAction={() => {
+                setFocusedFlat(ownedFlat);
+                fetchData();
+              }}
               closeAdvertisementAction={() => closeAddvertisement(ownedFlat.id)}
               focused={focusedFlat && focusedFlat.id === ownedFlat.id}
             />
@@ -43,34 +76,31 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
         )}
       </section>
       <section className="w-3/5 ml-6 flex flex-col items-center justify-center h-screen">
-
         <TransitionGroup>
           {focusedFlat && focusedFlat.applications.length > 0 ? (
-            focusedFlat.applications.map(
-              (application, idx) =>
-                // Render UserApplicationCard only if application status is not 'REJECTED'
-                  (<CSSTransition
-                    key={idx}
-                    timeout={500}
-                    classNames={{
-                      enter: `transition-opacity transform duration-500 ease-in-out delay-${
-                        idx * 150
-                      }`,
-                      enterActive: "opacity-100 scale-100 animate-fadeIn",
-                      exit: `transition-opacity transform duration-500 ease-in-out delay-${
-                        idx * 150
-                      }`,
-                      exitActive: "opacity-0 scale-90 animate-fadeOut",
-                    }}
-                  >
-                    <UserApplicationCard
-                      key={idx}
-                      applicationID={application}
-                      flatID={focusedFlat.id}
-                    />
-                  </CSSTransition>
-                )
-            )
+            focusedApplications?.map((application, idx) => (
+              // Render UserApplicationCard only if application status is not 'REJECTED'
+              <CSSTransition
+                key={idx}
+                timeout={500}
+                classNames={{
+                  enter: `transition-opacity transform duration-500 ease-in-out delay-${
+                    idx * 150
+                  }`,
+                  enterActive: "opacity-100 scale-100 animate-fadeIn",
+                  exit: `transition-opacity transform duration-500 ease-in-out delay-${
+                    idx * 150
+                  }`,
+                  exitActive: "opacity-0 scale-90 animate-fadeOut",
+                }}
+              >
+                <UserApplicationCard
+                  key={idx}
+                  applicationWithUser={application}
+                  flatID={focusedFlat.id}
+                />
+              </CSSTransition>
+            ))
           ) : (
             <CSSTransition
               timeout={500}
@@ -86,9 +116,7 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
                   {!focusedFlat ? (
                     <>Manage your flats all in one place</>
                   ) : (
-                    <>
-                      No applications yet for this flat :( 
-                    </>
+                    <>No applications yet for this flat :(</>
                   )}
                 </div>
               </div>
