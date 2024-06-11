@@ -12,7 +12,6 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
   const closeAddvertisement = () => {
     console.log("CLOSE ADDVERTISEMENT");
   };
-
   return (
     <div className="w-full flex flex-row">
       <section className="w-2/5">
@@ -20,9 +19,7 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
           {ownedFlats.map((ownedFlat) => (
             <ManageFlatCard
               key={ownedFlat.id}
-              id={ownedFlat.id}
-              img1={ownedFlat.images[0]}
-              img2={ownedFlat.images[1] || ownedFlat.images[0]}
+              flat={ownedFlat}
               seeInterestedAction={() => setFocusedFlat(ownedFlat)}
               closeAdvertisementAction={() => closeAddvertisement()}
               focused={focusedFlat && focusedFlat.id === ownedFlat.id}

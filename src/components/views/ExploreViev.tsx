@@ -42,34 +42,40 @@ function MainFlatsViev({ flats, getFlats }: Props) {
       <div className="w-full flex flex-row">
         {
           <section className="w-1/3">
-            <TransitionGroup>
-              {filteredFlats.map((flat, index) => (
-                <CSSTransition
-                  key={flat.id}
-                  timeout={500}
-                  classNames={{
-                    enter: `transition-opacity transform duration-500 ease-in-out delay-${
-                      index * 150
-                    }`,
-                    enterActive: "opacity-100 scale-100 animate-fadeIn",
-                    exit: `transition-opacity transform duration-500 ease-in-out delay-${
-                      index * 150
-                    }`,
-                    exitActive: "opacity-0 scale-90 animate-fadeOut",
-                  }}
-                >
-                  <SeeFlatCard
-                    id={flat.id}
-                    img1={flat.images[0]}
-                    img2={flat.images[1] || flat.images[0]}
-                    rentPerWeek={flat.rentPerWeek}
-                    numberOfGaps={flat.numberOfGaps}
-                    numberOfRooms={flat.numberOfRooms}
-                    labels={flat.labels}
-                  />
-                </CSSTransition>
-              ))}
-            </TransitionGroup>
+            {filteredFlats.length === 0 ? (
+              <div className="bg-orange-500 text-white text-2xl p-10 rounded-md text-center">
+                No flats advertised yet :(
+              </div>
+            ) : (
+              <TransitionGroup>
+                {filteredFlats.map((flat, index) => (
+                  <CSSTransition
+                    key={flat.id}
+                    timeout={500}
+                    classNames={{
+                      enter: `transition-opacity transform duration-500 ease-in-out delay-${
+                        index * 150
+                      }`,
+                      enterActive: "opacity-100 scale-100 animate-fadeIn",
+                      exit: `transition-opacity transform duration-500 ease-in-out delay-${
+                        index * 150
+                      }`,
+                      exitActive: "opacity-0 scale-90 animate-fadeOut",
+                    }}
+                  >
+                    <SeeFlatCard
+                      id={flat.id}
+                      img1={flat.images[0]}
+                      img2={flat.images[1] || flat.images[0]}
+                      rentPerWeek={flat.rentPerWeek}
+                      numberOfGaps={flat.numberOfGaps}
+                      numberOfRooms={flat.numberOfRooms}
+                      labels={flat.labels}
+                    />
+                  </CSSTransition>
+                ))}
+              </TransitionGroup>
+            )}
           </section>
         }
         <section

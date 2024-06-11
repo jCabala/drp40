@@ -6,7 +6,6 @@ import { fetchUserIdByEmail, updateApplication } from "@/lib/firebase";
 import confetti from "canvas-confetti";
 import ReactRain from "react-rain-animation";
 import "react-rain-animation/lib/style.css";
-import Overlay from "../helper/Overlay";
 
 type Props = { application: UserApplication; flatID: string };
 
@@ -16,6 +15,7 @@ function UserApplicationCard({ application, flatID }: Props) {
   const MyRouter = useRouter();
   const handleSeeProfile = async () => {
     const userID = application.user.userID;
+    console.log("UserID", userID);
     MyRouter.push(`/profile/${userID}`);
   };
 

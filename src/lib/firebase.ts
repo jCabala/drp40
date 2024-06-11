@@ -111,7 +111,7 @@ const getFlatData = (id: string, data: DocumentData) => {
   };
 };
 
-const fetchFlats = async (callback: any) => {
+const fetchAllFlats = async (callback: any) => {
   await getDocs(collection(db, "flats")).then((querySnapshot) => {
     const newData: Array<FlatAdvertisment> = querySnapshot.docs.map((doc) => {
       const data = doc.data();
@@ -120,6 +120,22 @@ const fetchFlats = async (callback: any) => {
 
     callback(newData);
   });
+};
+
+const fetchNotOwnedFlats = async (userID: string, callback: any) => {
+  const q = query(collection(db, "flats"), where("lister", "!=", userID));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const newData: Array<FlatAdvertisment> = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        return getFlatData(doc.id, data);
+      });
+      callback(newData);
+    } else {
+      console.log("No document found with the given email");
+      return null;
+    }
 };
 
 const fetchFlat = async (id: string, callback: any) => {
@@ -176,13 +192,15 @@ const updateApplication = async (flatID: string, approve: boolean, userEmail: st
     console.log(data)
     let newData: UserApplication[];
     if (approve) {
-      newData = data.map(application => application.user.email === userEmail ? { ...application, status: "APPROVED" } : { ...application, status: "REJECTED" });
+      newData = data.map(application => application.user.email === userEmail ? { ...application, status: "APPROVED" } : application );
+      await updateDoc(doc(db, "flats", flatID), { applications: newData });
     } else {
       newData = data.map(application => application.user.email === userEmail ? { ...application, status: "REJECTED" } : application);
+      await updateDoc(doc(db, "flats", flatID), { applications: newData });
     }
     
     console.log(newData)
-    await updateDoc(doc(db, "flats", flatID), { applications: newData });
+    
   } else {
     return;
   }
@@ -250,7 +268,9 @@ const getUserIdByEmail = async (email: string) => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      return docSnap.data() as UserProfile; // Type assertion if you have a UserProfile type
+      const userProfile = docSnap.data() as UserProfile;
+      userProfile.userID = userID;
+      return userProfile;
     } else {
       console.log("No document found with the given ID");
       return null;
@@ -289,7 +309,8 @@ export {
   storage,
   registerUser,
   fetchFlat,
-  fetchFlats,
+  fetchAllFlats,
+  fetchNotOwnedFlats,
   getUserIdByEmail,
   fetchUserByEmail,
   fetchUserByID,
