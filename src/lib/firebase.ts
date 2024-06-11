@@ -15,6 +15,7 @@ import {
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import { UserApplication } from "@/data/userApplication";
 import { UserProfile } from "@/data/userProfile";
+import ApplyFlatForm from "@/components/forms/ApplyFlatForm";
 
 // Your web app's Firebase configuration
 interface FirebaseConfig {
@@ -139,55 +140,6 @@ const addUserOwnedFlatByID = async (userID: string, flatID: string) => {
   }
 };
 
-const updateApplication = async (flatID: string, approve: boolean, userEmail: string) => {
-  const docRef = doc(db, `flats/${flatID}`);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    console.log("In flat update")
-    const data : UserApplication[] = docSnap.data().applications || [];
-    console.log(data)
-    let newData: UserApplication[];
-    if (approve) {
-      newData = data.map(application => application.user.email === userEmail ? { ...application, status: "APPROVED" } : application );
-      await updateDoc(doc(db, "flats", flatID), { applications: newData });
-    } else {
-      newData = data.map(application => application.user.email === userEmail ? { ...application, status: "REJECTED" } : application);
-      await updateDoc(doc(db, "flats", flatID), { applications: newData });
-    }
-    
-    console.log(newData)
-    
-  } else {
-    return;
-  }
-}
-
-const closeApplication = async (flatID: string, userID: string) => {
-  console.log("IDs", flatID, userID)
-  const docRef = doc(db, `flats/${flatID}`);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    const docRef = doc(db, "flats", flatID);
-    await deleteDoc(docRef);
-    
-    const docUserRef = doc(db, `users/${userID}`);
-    const docUserSnap = await getDoc(docUserRef);
-
-    if (docUserSnap.exists()) {
-      const data : string[] = docUserSnap.data().flatsOwned || [];
-      console.log("current user owned flat", data);
-      const updatedData = data.filter(flat => flat !== flatID);
-
-      await updateDoc(doc(db, "users", userID), { flatsOwned: updatedData });
-    } else {
-      return;
-    }
-   
-    
-  } else {
-    return;
-  }
-}
 const getUserIdByEmail = async (email: string) => {
   const q = query(collection(db, "users"), where("email", "==", email));
     const querySnapshot = await getDocs(q);
@@ -259,27 +211,86 @@ const getUserIdByEmail = async (email: string) => {
     }
   };
 
+  const fetchApplicationByID = async (appID: string): Promise<UserApplication | null> => {
+    const docRef = doc(db, "applications", appID);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const userProfile = docSnap.data() as UserApplication;
+      return userProfile;
+    } else {
+      console.log("No document found with the given ID");
+      return null;
+    }
+  };
+
   const addApplication = async (userID: string, message: string, flatID: string) => {
+    const newUserApplication: UserApplication = {
+      userID: userID,
+      flatID: flatID,
+      msg: message,
+      status: "PENDING" }
+
+    const applicationID = (await addDoc(collection(db, "applications"), newUserApplication)).id
+
     const docRef = doc(db, `flats/${flatID}`);
     const docSnap = await getDoc(docRef);
-    const userProfile = await fetchUserByID(userID);
-    if (userProfile) {
-      const newUserApplication: UserApplication = {
-        user: userProfile,
-        msg: message,
-        status: "PENDING"
-      };
-      if (docSnap.exists()) {
-        const data : UserApplication[] = docSnap.data().applications || [];
-        
-        data.push(newUserApplication)
-        await updateDoc(doc(db, "flats", flatID), { applications: data });
-      } else {
-        return;
-      }
+ 
+    if (docSnap.exists()) {
+      const data : string[] = docSnap.data().applications || [];
+      
+      data.push(applicationID)
+      await updateDoc(doc(db, "flats", flatID), { applications: data });
+    } else {
+      return;
     }
-    
   };
+
+  const updateApplication = async (flatID: string, userID: string, approve: boolean) => {
+    const q = query(
+      collection(db, "applications"),
+      where("userID", "==", userID),
+      where("flatID", "==", flatID) // Add your additional condition here
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const refDoc = querySnapshot.docs[0];
+      const application = refDoc.data();
+      const newStatus = approve ? "APPROVED" : "REJECTED";
+
+      await updateDoc(doc(db, "applications", refDoc.id), { status: newStatus });
+    } else {
+      console.log("No document found with the given ID");
+      return null;
+    }
+  }
+  
+  const closeAdvertisement = async (flatID: string) => {
+    // DELETE FLAT FROM flats db
+    const docRef = doc(db, `flats/${flatID}`);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const docRef = doc(db, "flats", flatID);
+      await deleteDoc(docRef);
+    }
+
+    // Look at what applications to this flat are pending and reject them
+    // automatically
+    const q = query(
+      collection(db, "applications"),
+      where("flatID", "==", flatID))
+
+    const querySnapshot = await getDocs(q);
+    const updatePromises = querySnapshot.docs.map(async (docSnapshot) => {
+      const docRef = doc(db, "applications", docSnapshot.id);
+      if (docRef.data().status == "PENDING") {
+        await updateDoc(docRef, { status: "REJECTED" });
+      }
+      
+    });
+
+    await Promise.all(updatePromises);
+  }
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -300,7 +311,8 @@ export {
   fetchUserFlatsOwnedByID,
   fetchUserIdByEmail,
   addApplication,
+  fetchApplicationByID,
   addUserOwnedFlatByID,
   updateApplication,
-  closeApplication,
+  closeAdvertisement,
 };

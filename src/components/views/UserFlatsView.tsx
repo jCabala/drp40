@@ -2,8 +2,7 @@ import React from "react";
 import ManageFlatCard from "../cards/ManageFlatCard";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import UserApplicationCard from "../cards/UserApplicationCard";
-import { closeApplication } from "@/lib/firebase";
-import Cookies from "js-cookie";
+import { closeAdvertisement } from "@/lib/firebase";
 import AddFlatFormButton from "../forms/AddFlatFormButton";
 
 type Props = { ownedFlats: FlatAdvertisment[]; getOwnedFlats: () => void };
@@ -14,32 +13,24 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
   );
 
   const closeAddvertisement = async (flatID: string) => {
-    console.log("CLOSE ADDVERTISEMENT");
-    const userID = Cookies.get("userID");
-    if (userID) {
-      closeApplication(flatID, userID);
-      await getOwnedFlats();
-    } else {
-      console.log("ERR: No userID set?");
-    }
+    console.log("CLOSE ADVERTISEMENT");
+    closeAdvertisement(flatID);
+    await getOwnedFlats();
   };
 
   return (
     <div className="w-full flex flex-row">
       <section className="flex flex-col items-center justify-center h-screen w-3/5 ml-6">
         {ownedFlats.length > 0 ? (
-          ownedFlats
-            .map((ownedFlat, idx) => (
-              <ManageFlatCard
-                key={idx}
-                flat={ownedFlat}
-                seeInterestedAction={() => setFocusedFlat(ownedFlat)}
-                closeAdvertisementAction={() =>
-                  closeAddvertisement(ownedFlat.id)
-                }
-                focused={focusedFlat && focusedFlat.id === ownedFlat.id}
-              />
-            ))
+          ownedFlats.map((ownedFlat, idx) => (
+            <ManageFlatCard
+              key={idx}
+              flat={ownedFlat}
+              seeInterestedAction={() => setFocusedFlat(ownedFlat)}
+              closeAdvertisementAction={() => closeAddvertisement(ownedFlat.id)}
+              focused={focusedFlat && focusedFlat.id === ownedFlat.id}
+            />
+          ))
         ) : (
           <div className="bg-orange-500 text-white text-3xl font-bold p-16 rounded-lg shadow-lg text-center max-w-md mx-auto">
             No flats advertised yet :(
@@ -58,7 +49,7 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
               application.status !== "REJECTED" && (
                 <UserApplicationCard
                   key={idx}
-                  application={application}
+                  applicationID={application}
                   flatID={focusedFlat.id}
                 />
               )

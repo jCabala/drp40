@@ -1,9 +1,9 @@
 import { UserProfile } from "./userProfile";
 
 export type UserApplication = {
-    user: UserProfile;
+    userID: string;
+    flatID: string
     msg: string;
     status: string;
-    flatId: string;
   };
   

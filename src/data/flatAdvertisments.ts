@@ -10,7 +10,7 @@ export type FlatAdvertisment = {
   images: string[];
   houseDescription?: string;
   labels?: { name: string; color: string }[];
-  applications: UserApplication[]; 
+  applications: string[]; 
   tenants: UserProfile[]
   lat: number;
   lng: number;
