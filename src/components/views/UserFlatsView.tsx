@@ -13,6 +13,9 @@ type Props = { ownedFlats: FlatAdvertisment[]; getOwnedFlats: () => void };
 
 function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
   const [focusedFlat, setFocusedFlat] = useState<FlatAdvertisment | null>(null);
+
+  // This contains all applications with user profiles attached, filtering out
+  // applications that have already been rejected
   const [focusedApplications, setFocusedApplications] =
     useState<(UserApplication & { user: UserProfile })[]>();
 
@@ -29,7 +32,9 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
         await Promise.all(
           focusedFlat.applications.map((app) => fetchApplicationByID(app))
         )
-      ).filter((app): app is UserApplication => app !== null);
+      )
+        .filter((app) => app?.status != "REJECTED")
+        .filter((app): app is UserApplication => app !== null);
 
       // If the application exists, fetch the user data by userID
       if (fetchedApplications) {
@@ -77,9 +82,10 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
       </section>
       <section className="w-3/5 ml-6 flex flex-col items-center justify-center h-screen">
         <TransitionGroup>
-          {focusedFlat && focusedFlat.applications.length > 0 ? (
+          {focusedFlat &&
+          focusedApplications &&
+          focusedApplications?.length > 0 ? (
             focusedApplications?.map((application, idx) => (
-              // Render UserApplicationCard only if application status is not 'REJECTED'
               <CSSTransition
                 key={idx}
                 timeout={500}
@@ -116,7 +122,7 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
                   {!focusedFlat ? (
                     <>Manage your flats all in one place</>
                   ) : (
-                    <>No applications yet for this flat :(</>
+                    <>No pending applications yet for this flat :(</>
                   )}
                 </div>
               </div>
