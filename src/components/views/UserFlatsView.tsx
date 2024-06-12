@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ManageFlatCard from "../cards/ManageFlatCard";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import UserApplicationCard from "../cards/UserApplicationCard";
@@ -8,6 +8,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { fetchApplicationByID } from "@/lib/firebase";
 import { UserApplication } from "@/data/userApplication";
 import { UserProfile } from "@/data/userProfile";
+import { set } from "firebase/database";
 
 type Props = { ownedFlats: FlatAdvertisment[]; getOwnedFlats: () => void };
 
@@ -54,6 +55,10 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
     }
   };
 
+  useEffect(() => {
+    fetchData();
+  }, [focusedFlat]);
+
   return (
     <div className="w-full flex flex-row">
       <section className="flex flex-col items-center justify-center h-screen w-3/5 ml-6">
@@ -62,9 +67,8 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
             <ManageFlatCard
               key={idx}
               flat={ownedFlat}
-              seeInterestedAction={() => {
+              seeInterestedAction={async () => {
                 setFocusedFlat(ownedFlat);
-                fetchData();
               }}
               closeAdvertisementAction={() => closeAddvertisement(ownedFlat.id)}
               focused={focusedFlat && focusedFlat.id === ownedFlat.id}

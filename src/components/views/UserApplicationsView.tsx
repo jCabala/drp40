@@ -36,7 +36,7 @@ function UserApplicationsView() {
   fetchData();
 
   return (
-    <div className="w-full flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center">
       {applicationsWithFlat && applicationsWithFlat.length > 0 ? (
         applicationsWithFlat.map((flatObj, idx) => (
           <MyApplicationCard

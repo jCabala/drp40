@@ -5,6 +5,7 @@ type Props = {
   img2?: string;
   children?: string | JSX.Element | JSX.Element[];
   containerClassName?: string;
+  maxHeight?: "52" | "56" | "60" | "64" | "72" | "80" | "96";
   onImgClick?: () => void;
   color?: string;
 };
@@ -15,12 +16,13 @@ function DoublePhotoCard({
   children,
   containerClassName,
   onImgClick,
+  maxHeight,
   color,
 }: Props) {
   const col = color || "orange";
   return (
     <div
-      className={`bg-white mb-10 overflow-hidden rounded-lg border-2 border-${col}-500 shadow-lg duration-300 hover:scale-105 flex flex-row w-full`}
+      className={`bg-white mb-10 rounded-lg border-2 border-${col}-500 shadow-lg duration-300 hover:scale-105 flex flex-row w-full ${maxHeight ? `max-h-${maxHeight}` : ""}`}
     >
       <div
         style={
@@ -38,7 +40,7 @@ function DoublePhotoCard({
         <img
           src={img1}
           alt=""
-          className={`size-full h-full object-cover ${
+          className={`size-full object-cover ${
             img2 ? "opacity-100 hover:opacity-0 duration-300" : ""
           }`}
         />
