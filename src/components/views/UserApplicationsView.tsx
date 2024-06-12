@@ -10,7 +10,9 @@ import { UserApplication } from "@/data/userApplication";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 
 type Props = {
-  applications: (UserApplication & { flat: FlatAdvertisment })[];
+  applications: (UserApplication & { flat: FlatAdvertisment } & {
+    ownerEmail: string;
+  })[];
   getApplications: () => void;
 };
 
@@ -19,7 +21,6 @@ function UserApplicationsView({ applications, getApplications }: Props) {
     applicationID: string,
     flatID: string
   ) => {
-    console.log("Withdrawing Application");
     withdrawApplication(applicationID, flatID);
     await getApplications();
   };
@@ -36,6 +37,7 @@ function UserApplicationsView({ applications, getApplications }: Props) {
             withdrawApplicationAction={() =>
               withdrawApplicationAction(flatObj.id, flatObj.flat.id)
             }
+            ownerEmail={flatObj.ownerEmail}
           />
         ))
       ) : (
