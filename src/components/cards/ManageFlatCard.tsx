@@ -23,12 +23,12 @@ function ManageFlatCard({
   const id = flat.id;
 
   return (
+    <div className="w-full max-h-60 my-4">
     <DoublePhotoCard
       img1={img1}
       img2={img2}
       onImgClick={seeInterestedAction}
       color={focused ? "emerald" : "orange"}
-      maxHeight="60"
     >
       <Link href={`/flat/${id}`}>
         <Button color={color}>See More</Button>
@@ -41,6 +41,7 @@ function ManageFlatCard({
         See interested people
       </Button>
     </DoublePhotoCard>
+    </div>
   );
 }
 
