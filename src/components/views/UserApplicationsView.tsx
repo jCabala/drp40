@@ -12,7 +12,7 @@ type Props = {
 
 function UserApplicationsView({ applications, getApplications }: Props) {
   return (
-    <div className="w-full flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center">
       {applications && applications.length > 0 ? (
         applications.map((flatObj, idx) => (
           <MyApplicationCard

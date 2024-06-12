@@ -27,8 +27,8 @@ function ManageFlatCard({
       img1={img1}
       img2={img2}
       onImgClick={seeInterestedAction}
-      containerClassName="h-full min-h-60 p-2 w-1/2 flex flex-col justify-center"
       color={focused ? "emerald" : "orange"}
+      maxHeight="60"
     >
       <Link href={`/flat/${id}`}>
         <Button color={color}>See More</Button>
