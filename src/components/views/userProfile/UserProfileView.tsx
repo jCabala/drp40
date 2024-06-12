@@ -7,7 +7,10 @@ type Props = {
   userProfile: UserProfile;
 };
 
-const containerClassName = "bg-white p-6 rounded-lg shadow-md mb-6";
+const containerClassName =
+  "border border-orange-200 bg-white p-6 rounded-lg shadow-md mb-6";
+const sectionClassName =
+  "border border-orange-200 flex flex-col items-center bg-white p-6 rounded-lg shadow-md w-full md:w-1/2";
 
 const hardcodedInfo = {
   age: 30,
@@ -26,7 +29,7 @@ function UserProfileView({ userProfile }: Props) {
 
   return (
     <div className="flex flex-col md:flex-row gap-8 w-full p-8 bg-gray-50 rounded-lg shadow-lg">
-      <section className="flex flex-col items-center bg-white p-6 rounded-lg shadow-md w-full md:w-1/2">
+      <section className={sectionClassName}>
         <div className="mb-6 bg-gray-100 border-4 border-orange-400 p-2 rounded-full shadow-lg">
           <img
             src={userProfile?.profilePic}
@@ -51,7 +54,7 @@ function UserProfileView({ userProfile }: Props) {
           </p>
         </div>
       </section>
-      <section className="flex flex-col bg-white p-6 rounded-lg shadow-md w-full md:w-1/2">
+      <section className={sectionClassName}>
         <div className={containerClassName}>
           <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
           <p className="text-gray-700">
@@ -67,14 +70,16 @@ function UserProfileView({ userProfile }: Props) {
             <strong>Smoker:</strong> {hardcodedInfo.smoker}
           </p>
         </div>
-        <div className={containerClassName}>
-          <h2 className="text-xl font-semibold mb-4">Hobbies</h2>
-          <ul className="list-disc pl-5 text-gray-700">
-            {hardcodedInfo.hobbies.map((hobby, index) => (
-              <li key={index}>{hobby}</li>
-            ))}
-          </ul>
-        </div>
+        {userProfile.hobbies && (
+          <div className={containerClassName}>
+            <h2 className="text-xl font-semibold mb-4">Hobbies</h2>
+            <ul className="list-disc pl-5 text-gray-700">
+              {userProfile.hobbies.map((hobby, index) => (
+                <li key={index}>{hobby}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </section>
     </div>
   );

@@ -48,7 +48,6 @@ function TenantList({ tenants }: Props) {
     </>
   ) : (
     <>
-      <div className="h-20" />
       <div className="bg-orange-500 text-white text-2xl font-bold p-8 rounded-xl shadow-2xl text-center max-w-lg mx-auto">
         No current tenants added
       </div>

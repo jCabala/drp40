@@ -21,6 +21,7 @@ function UpdateUserInfo({ userID }: Props) {
       {showForm && (
         <Overlay onClick={() => setShowForm(false)}>
           <AddUserInfoForm
+            userID={userID}
             onFinish={() => setShowForm(false)}
             setIsLoading={setIsFormLoading}
             setAlertText={setAlertText}

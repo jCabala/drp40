@@ -28,8 +28,7 @@ function ApplyFlatForm({
     console.log("Message: ", msg);
     if (!msg) {
       setAlertText("Please fill in all the fields!");
-      setIsLoading(false);
-      return;
+      return false;
     }
 
     // Add flat to database
@@ -38,6 +37,8 @@ function ApplyFlatForm({
     } else {
       console.log("ERR: No user logged in");
     }
+
+    return true;
   };
 
   return (

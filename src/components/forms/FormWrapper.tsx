@@ -6,7 +6,7 @@ type Props = {
   onFinish: () => void;
   setIsLoading: (loading: boolean) => void;
   setAlertText: (text: string) => void;
-  handleSubmit: (e: React.FormEvent) => Promise<void>;
+  handleSubmit: (e: React.FormEvent) => Promise<boolean>;
   title: string;
   btnText?: string;
   children: React.ReactNode;
@@ -21,7 +21,7 @@ function FormWrapper({
   handleSubmit,
   title,
   children,
-  btnText = "Upload"
+  btnText = "Upload",
 }: Props) {
   const [showPopUp, setShowPopUp] = useState(false);
   const [showQuestions, setShowQuestions] = useState(true);
@@ -30,12 +30,14 @@ function FormWrapper({
     e.preventDefault();
     setIsLoading(true);
 
-    await handleSubmit(e);
+    const res = await handleSubmit(e);
 
     setTimeout(() => {
       setIsLoading(false);
-      setShowQuestions(false);
-      setShowPopUp(true);
+      if (res) {
+        setShowQuestions(false);
+        setShowPopUp(true);
+      }
     }, 200);
   };
 

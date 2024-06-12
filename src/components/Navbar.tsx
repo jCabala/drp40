@@ -16,7 +16,10 @@ export default function Navbar({ navConfig }: Props) {
 
   const [navbarOpen, setNavbarOpen] = useState(false);
   return (
-    <nav className="fixed w-full z-20 flex flex-wrap items-center justify-between h-14 bg-orange-500 shadow-lg" style={{zIndex: 100}}>
+    <nav
+      className="fixed w-full z-20 flex flex-wrap items-center justify-between h-14 bg-orange-500 shadow-lg"
+      style={{ zIndex: 100 }}
+    >
       <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
         <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
           <a
@@ -52,17 +55,15 @@ export default function Navbar({ navConfig }: Props) {
                 </a>
               </li>
             ))}
-            {userID && (
-              <li className="nav-item">
-                <a
-                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
-                  href={`/profile/${userID}`}
-                >
-                  <i className="fab fa-facebook-square text-lg leading-lg text-white opacity-75"></i>
-                  <span className="ml-2">Your Profile</span>
-                </a>
-              </li>
-            )}
+            <li className="nav-item">
+              <a
+                className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+                href={userID ? `/profile/${userID}` : "/"}
+              >
+                <i className="fab fa-facebook-square text-lg leading-lg text-white opacity-75"></i>
+                <span className="ml-2">Your Profile</span>
+              </a>
+            </li>
           </ul>
         </div>
       </div>

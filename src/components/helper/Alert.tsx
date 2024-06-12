@@ -9,7 +9,8 @@ type Props = {
 function Alert({ title, text, exitAction }: Props) {
   return (
     <div
-      className="bg-red-100 border-2 border-red-700 text-red-700 mx-4 mt-1 px-4 py-3 rounded fixed top-0 inset-x-0 z-50"
+      className="bg-red-100 border-2 border-red-700 text-red-700 mx-4 mt-1 px-4 py-3 rounded fixed top-0 inset-x-0"
+      style={{ zIndex: 101 }}
       role="alert"
       onClick={exitAction}
     >

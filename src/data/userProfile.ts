@@ -3,5 +3,7 @@ export type UserProfile = {
     userID: string;
     description: string;
     profilePic: string;
+    phoneNumber?: string;
+    hobbies?: string[];
   };
   

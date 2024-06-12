@@ -58,20 +58,17 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
 
     if (!images || images?.length == 0) {
       setAlertText("Upload some images of the property!");
-      setIsLoading(false);
-      return;
+      return false;
     }
 
     if (!rent || !rooms || !gaps) {
       setAlertText("Please fill in all the fields!");
-      setIsLoading(false);
-      return;
+      return false;
     }
 
     if (gaps > rooms) {
       setAlertText("Number of vacancies cannot be more than number of rooms!");
-      setIsLoading(false);
-      return;
+      return false;
     }
 
     const imgUrls: string[] = [];
@@ -110,6 +107,8 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
     } else {
       console.log("LOGIN ERROR? NO USER SET");
     }
+
+    return true;
   };
 
   return (

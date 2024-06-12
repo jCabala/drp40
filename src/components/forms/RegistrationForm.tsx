@@ -45,6 +45,8 @@ function RegistrationForm({ onFinish, setIsLoading, setAlertText }: Props) {
     } else {
       console.log("ERR: Invalid registration");
     }
+
+    return true;
   };
 
   return (
