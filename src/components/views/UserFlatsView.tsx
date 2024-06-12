@@ -68,7 +68,7 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
 
   return (
     <div className="w-full flex flex-row">
-      <section className="flex flex-col items-center justify-center h-screen w-3/5 ml-6">
+      <section className="flex flex-col items-center justify-center min-h-screen w-3/5 ml-6">
         {ownedFlats.length > 0 ? (
           ownedFlats.map((ownedFlat, idx) => (
             <ManageFlatCard

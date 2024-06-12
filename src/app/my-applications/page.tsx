@@ -46,7 +46,9 @@ function MyApplications() {
         flat: flats[index],
         ownerEmail: emails[index],
       }));
-      setApplicationsWithFlat(myApplicationsWithFlat);
+      setApplicationsWithFlat(
+        myApplicationsWithFlat.filter((e) => e && e?.flat && e.flat?.images)
+      );
 
       setTimeout(() => setIsLoading(false), 600);
     }

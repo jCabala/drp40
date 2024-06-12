@@ -1,12 +1,19 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { NavbarConfig } from "@/data/navbarConfig";
+import Cookies from "js-cookie";
 
 type Props = {
   navConfig: NavbarConfig;
 };
 
 export default function Navbar({ navConfig }: Props) {
+  const [userID, setUserId] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    setUserId(Cookies.get("userID"));
+  }, []);
+
   const [navbarOpen, setNavbarOpen] = useState(false);
   return (
     <nav className="fixed w-full z-20 flex flex-wrap items-center justify-between h-14 bg-orange-500 shadow-lg" style={{zIndex: 100}}>
@@ -45,6 +52,17 @@ export default function Navbar({ navConfig }: Props) {
                 </a>
               </li>
             ))}
+            {userID && (
+              <li className="nav-item">
+                <a
+                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+                  href={`/profile/${userID}`}
+                >
+                  <i className="fab fa-facebook-square text-lg leading-lg text-white opacity-75"></i>
+                  <span className="ml-2">Your Profile</span>
+                </a>
+              </li>
+            )}
           </ul>
         </div>
       </div>
