@@ -31,7 +31,9 @@ function MyApplications() {
         ...app,
         flat: flats[index],
       }));
-      setApplicationsWithFlat(myApplicationsWithFlat);
+      setApplicationsWithFlat(
+        myApplicationsWithFlat.filter((e) => e && e?.flat && e.flat?.images)
+      );
 
       setTimeout(() => setIsLoading(false), 600);
     }

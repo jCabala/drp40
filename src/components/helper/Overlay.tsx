@@ -9,11 +9,13 @@ function Overlay({ onClick, children }: Props) {
   return (
     <section>
       <div
-        className="fixed inset-0 bg-black bg-opacity-50 z-40 no-doc-scroll"
+        className="fixed inset-0 bg-black bg-opacity-50 z-40"
         onClick={onClick}
       />
-      <div className="left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 fixed flex items-center justify-center z-40 scrollbar-hide w-auto overflow-y-scroll rounded-lg" style={{height: "96vh"}}>
-        {children}
+      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-full max-h-full overflow-y-auto scrollbar-hide">
+          {children}
+        </div>
       </div>
     </section>
   );

@@ -55,7 +55,7 @@ function FormWrapper({
       )}
       {showQuestions && (
         <div
-          className="bg-white px-6 pt-10 pb-4 w-full sm:max-w-md mx-auto rounded-lg shadow-md relative"
+          className="bg-white px-6 py-4 w-full sm:max-w-md mx-auto rounded-lg relative"
           onClick={(e) => e.stopPropagation()}
         >
           <form
@@ -70,6 +70,9 @@ function FormWrapper({
               type="submit"
               value={btnText}
             />
+            <b className="text-sm mt-4 text-orange-500 block text-center">
+              All sections marked (*) are required
+            </b>
           </form>
         </div>
       )}

@@ -24,6 +24,8 @@ type Props = {
   labels?: { name: string; color: string }[];
 };
 
+const containerClassName = "mb-8 border border-orange-200 p-2 rounded-md shadow-lg"
+
 export default function SeeMoreMainViews({
   flatID,
   rentPerWeek,
@@ -43,7 +45,7 @@ export default function SeeMoreMainViews({
   return (
     <div className="grid grid-cols-11 gap-4 w-full p-6">
       <section className="col-span-6 bg-white p-4">
-        <div className="mb-8 border-2 border-orange-500 p-2 rounded-md shadow-lg">
+        <div className={containerClassName}>
           <ImageGallery
             items={images}
             showPlayButton={false}
@@ -51,7 +53,7 @@ export default function SeeMoreMainViews({
             showFullscreenButton={false}
           />
         </div>
-        <div className="mb-8 border-2 border-orange-500 p-2 rounded-md shadow-lg">
+        <div className={containerClassName}>
           <APIProvider
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
             libraries={["places"]}
@@ -69,7 +71,7 @@ export default function SeeMoreMainViews({
         </div>
       </section>
       <section className="col-span-5 bg-white rounded-lg p-4">
-        <div className="mb-8 border-2 border-orange-500 p-2 rounded-md shadow-lg">
+        <div className={containerClassName}>
           <BasicInformation
             rentPerWeek={rentPerWeek}
             numberOfRooms={numberOfRooms}
@@ -77,10 +79,10 @@ export default function SeeMoreMainViews({
             labels={labels}
           />
         </div>
-        <div className="mb-8 border-2 border-orange-500 p-2 rounded-md shadow-lg">
+        <div className={containerClassName}>
         <PropertyDescription houseDescription={houseDescription} />
         </div>
-        <div className="mb-8 border-2 border-orange-500 p-2 rounded-md shadow-lg">
+        <div className={containerClassName}>
           <TenantList tenants={tenants} />
         </div>
       </section>
