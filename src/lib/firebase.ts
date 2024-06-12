@@ -303,7 +303,7 @@ const getUserIdByEmail = async (email: string) => {
     if (docSnap) {
       const data : string[] = docSnap.data().applications || [];
       console.log("CURRENT APPLICATION IDS stored ", data)
-      const newData = data.filter((appID) => appID === applicationID);
+      const newData = data.filter((appID) => appID !== applicationID);
       await updateDoc(doc(db, "flats", flatID), { applications: newData });
     }
     
