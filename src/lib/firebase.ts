@@ -212,11 +212,21 @@ const getUserIdByEmail = async (email: string) => {
     }
   };
 
+  const getApplicationData = (id: string, data: DocumentData) => {
+    return {
+      id: id,
+      userID: data.userID,
+      flatID: data.flatID,
+      msg: data.msg,
+      status: data.status
+    } as UserApplication;
+  };
+
   const fetchApplicationByID = async (appID: string): Promise<UserApplication | null> => {
     const docRef = doc(db, "applications", appID);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      const userProfile = docSnap.data() as UserApplication;
+      const userProfile = getApplicationData(docSnap.id, docSnap.data())
       return userProfile;
     } else {
       console.log("No document found with the given ID");
@@ -232,7 +242,7 @@ const getUserIdByEmail = async (email: string) => {
   
     // Iterate through the query snapshot
     querySnapshot.forEach((doc) => {
-      const userProfile = doc.data() as UserApplication;
+      const userProfile = getApplicationData(doc.id, doc.data());
       applications.push(userProfile);
     });
   
@@ -240,7 +250,7 @@ const getUserIdByEmail = async (email: string) => {
   };
 
   const addApplication = async (userID: string, message: string, flatID: string) => {
-    const newUserApplication: UserApplication = {
+    const newUserApplication = {
       userID: userID,
       flatID: flatID,
       msg: message,
@@ -279,8 +289,28 @@ const getUserIdByEmail = async (email: string) => {
       return null;
     }
   }
+
+  const withdrawApplication = async (applicationID: string, flatID: string) => {
+    {
+    const docRef = doc(db, "applications", applicationID);
+    await deleteDoc(docRef);
+    }
+
+    console.log("TRYING TO WITHDRAW APPLOICATION OF FLAT ID", flatID);
+
+    const docRef = doc(db, "flats", flatID);
+    const docSnap = await getDoc(docRef);
+    if (docSnap) {
+      const data : string[] = docSnap.data().applications || [];
+      console.log("CURRENT APPLICATION IDS stored ", data)
+      const newData = data.filter((appID) => appID === applicationID);
+      await updateDoc(doc(db, "flats", flatID), { applications: newData });
+    }
+    
+
+  }
   
-  const closeAdvertisement = async (flatID: string) => {
+  const closeAdvertisement = async (flatID: string, ownerID: string) => {
     // DELETE FLAT FROM flats db
     const docRef = doc(db, `flats/${flatID}`);
     const docSnap = await getDoc(docRef);
@@ -291,6 +321,7 @@ const getUserIdByEmail = async (email: string) => {
 
     // Look at what applications to this flat are pending and reject them
     // automatically
+    {
     const q = query(
       collection(db, "applications"),
       where("flatID", "==", flatID))
@@ -302,10 +333,22 @@ const getUserIdByEmail = async (email: string) => {
       if (userApplication.status == "PENDING") {
         await updateDoc(docRef, { status: "REJECTED" });
       }
-      
     });
 
     await Promise.all(updatePromises);
+  }
+
+    {
+    const docRef = doc(db, `users/${ownerID}`);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data : string[] = docSnap.data().flatsOwned || [];
+      const newData = data.filter((id) => id !== flatID);
+      await updateDoc(doc(db, "users", ownerID), { flatsOwned: newData });
+    } else {
+      return;
+    }
+}
   }
 
 // Initialize Firebase
@@ -332,5 +375,6 @@ export {
   fetchAllApplicationsByUserID,
   addUserOwnedFlatByID,
   updateApplication,
+  withdrawApplication,
   closeAdvertisement,
 };

@@ -1,4 +1,8 @@
-import { fetchAllApplicationsByUserID, fetchFlatByID } from "@/lib/firebase";
+import {
+  fetchAllApplicationsByUserID,
+  fetchFlatByID,
+  withdrawApplication,
+} from "@/lib/firebase";
 import React, { useState, useEffect } from "react";
 import MyApplicationCard from "../cards/MyApplicationCard";
 import Cookies from "js-cookie";
@@ -11,6 +15,15 @@ type Props = {
 };
 
 function UserApplicationsView({ applications, getApplications }: Props) {
+  const withdrawApplicationAction = async (
+    applicationID: string,
+    flatID: string
+  ) => {
+    console.log("Withdrawing Application");
+    withdrawApplication(applicationID, flatID);
+    await getApplications();
+  };
+
   return (
     <div className="flex flex-col justify-center items-center">
       {applications && applications.length > 0 ? (
@@ -20,6 +33,9 @@ function UserApplicationsView({ applications, getApplications }: Props) {
             img1={flatObj.flat.images[0]}
             img2={flatObj.flat.images[1] || flatObj.flat.images[0]}
             status={flatObj.status}
+            withdrawApplicationAction={() =>
+              withdrawApplicationAction(flatObj.id, flatObj.flat.id)
+            }
           />
         ))
       ) : (

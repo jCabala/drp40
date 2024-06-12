@@ -8,7 +8,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { fetchApplicationByID } from "@/lib/firebase";
 import { UserApplication } from "@/data/userApplication";
 import { UserProfile } from "@/data/userProfile";
-import { set } from "firebase/database";
+import Cookies from "js-cookie";
 
 type Props = { ownedFlats: FlatAdvertisment[]; getOwnedFlats: () => void };
 
@@ -20,10 +20,15 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
   const [focusedApplications, setFocusedApplications] =
     useState<(UserApplication & { user: UserProfile })[]>();
 
-  const closeAddvertisement = async (flatID: string) => {
-    console.log("CLOSE ADVERTISEMENT");
-    closeAdvertisement(flatID);
-    await getOwnedFlats();
+  const userID = Cookies.get("userID");
+
+  const closeAdvertisementAction = async (flatID: string) => {
+    if (userID) {
+      await closeAdvertisement(flatID, userID);
+      getOwnedFlats();
+    } else {
+      console.log("ERR: No userID set?");
+    }
   };
 
   const fetchData = async () => {
@@ -59,6 +64,8 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
     fetchData();
   }, [focusedFlat]);
 
+  console.log("OWNED FLATS", ownedFlats);
+
   return (
     <div className="w-full flex flex-row">
       <section className="flex flex-col items-center justify-center h-screen w-3/5 ml-6">
@@ -70,7 +77,9 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
               seeInterestedAction={async () => {
                 setFocusedFlat(ownedFlat);
               }}
-              closeAdvertisementAction={() => closeAddvertisement(ownedFlat.id)}
+              closeAdvertisementAction={() =>
+                closeAdvertisementAction(ownedFlat.id)
+              }
               focused={focusedFlat && focusedFlat.id === ownedFlat.id}
             />
           ))
