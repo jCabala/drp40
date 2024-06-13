@@ -6,6 +6,7 @@ import FormWrapper from "./FormWrapper";
 import FormSection from "./style/FormSection";
 import FormLabel from "./style/FormLabel";
 import { formInputStyle } from "./style/formStyles";
+import FormHeader from "./style/FormHeader";
 
 type Props = {
   onFinish: () => void;
@@ -17,12 +18,17 @@ function RegistrationForm({ onFinish, setAlertText }: Props) {
   const passwordRef = useRef<HTMLInputElement>(null);
   const profilePicRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
+  const ageRef = useRef<HTMLInputElement>(null);
+  const genderRef = useRef<HTMLSelectElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
     const images = profilePicRef.current?.files;
     const phoneNumber = phoneRef.current?.value;
+    const age = ageRef.current?.value;
+    const gender = genderRef.current?.value;
+
     let profilePic;
 
     if (images && images.length > 0) {
@@ -34,12 +40,12 @@ function RegistrationForm({ onFinish, setAlertText }: Props) {
       `userImages/${profilePic?.name}-${Date.now()}`
     );
 
-    if (profilePic && email && password && phoneNumber) {
+    if (profilePic && email && password && phoneNumber && age && gender) {
       const uploadTask = uploadBytes(storageRef, profilePic);
 
       const profileUrl = await getDownloadURL((await uploadTask).ref);
 
-      registerUser(email, password, profileUrl, phoneNumber);
+      registerUser(email, password, profileUrl, phoneNumber, gender, parseInt(age));
     } else {
       setAlertText("ERR: Invalid registration");
       return false;
@@ -76,6 +82,8 @@ function RegistrationForm({ onFinish, setAlertText }: Props) {
           required
         />
       </FormSection>
+
+      <FormHeader>More about you: </FormHeader>
       <FormSection>
         <FormLabel>Phone number:</FormLabel>
         <input
@@ -85,6 +93,24 @@ function RegistrationForm({ onFinish, setAlertText }: Props) {
           required
           ref={phoneRef}
         />
+      </FormSection>
+      <FormSection>
+        <FormLabel>Age:</FormLabel>
+        <input
+          type="number"
+          className={formInputStyle}
+          placeholder="18"
+          required
+          ref={ageRef}
+        />
+      </FormSection>
+      <FormSection>
+        <FormLabel>Gender:</FormLabel>
+        <select required ref={genderRef} className={formInputStyle}>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
       </FormSection>
       <FormSection>
         <b className="block text-orange-500 mb-2">

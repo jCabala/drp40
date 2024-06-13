@@ -169,12 +169,7 @@ function AddUserInfoForm({ userID, onFinish, setAlertText }: Props) {
       <FormHeader>Lifestyle information:</FormHeader>
       <FormSection>
         <FormLabel>Do you smoke?:</FormLabel>
-        <select
-          ref={smokerRef}
-          className={formInputStyle}
-          id="cars"
-          name="cars"
-        >
+        <select ref={smokerRef} className={formInputStyle}>
           <option value={undefined}>N/A</option>
           <option value="No">No</option>
           <option value="Yes">Yes</option>
@@ -182,7 +177,7 @@ function AddUserInfoForm({ userID, onFinish, setAlertText }: Props) {
       </FormSection>
       <FormSection>
         <FormLabel>How often do you drink?:</FormLabel>
-        <select ref={drinkRef} className={formInputStyle} id="cars" name="cars">
+        <select ref={drinkRef} className={formInputStyle}>
           <option value={undefined}>N/A</option>
           <option value="Never">Never</option>
           <option value="Sometimes">Sometimes</option>

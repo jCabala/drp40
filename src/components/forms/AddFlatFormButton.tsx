@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import Overlay from "../helper/Overlay";
 import AddFlatForm from "./AddFlatForm";
 import Alert from "../helper/Alert";
-import LoadingOverlay from "../helper/LoadingOverlay";
 import QuickAccessButton from "../helper/buttons/QuickAccessButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
     onFinish: () => void;
@@ -24,7 +25,7 @@ function AddFlatFormButton({onFinish}: Props) {
       <QuickAccessButton
         onClick={() => setShowForm(true)}
       >
-        <span className="text-white text-center text-8xl">+</span>
+        <FontAwesomeIcon icon={faPlus} className="text-white text-6xl" />
       </QuickAccessButton>
       {showForm && (
         <Overlay onClick={() => setShowForm(false)}>

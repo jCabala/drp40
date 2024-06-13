@@ -14,7 +14,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
   useEffect(() => {
     fetchFlat(id, setFlat);
     fetchTenantsByID(id, setTenants);
-    setTimeout(() => setLoading(false), 600);
+    setTimeout(() => setLoading(false), 800);
   }, []);
 
   return (

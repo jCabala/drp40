@@ -20,7 +20,7 @@ function DoublePhotoCard({
   const col = color || "orange";
   return (
     <div
-      className={`bg-white mb-10 rounded-lg border-2 border-${col}-500 shadow-lg duration-300 hover:scale-105 flex flex-row w-full h-full`}
+      className={`bg-white mb-10 rounded-lg border-2 border-${col}-500 shadow-lg flex flex-row w-full h-full`}
     >
       <div
         style={

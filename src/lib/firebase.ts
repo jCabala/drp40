@@ -155,13 +155,17 @@ const registerUser = async (
   email: string,
   password: string,
   profilePic: string,
-  phoneNumber: string
+  phoneNumber: string,
+  gender: string,
+  age: number,
 ) => {
   const docRef = await addDoc(collection(db, "users"), {
     email: email,
     password: password,
     profilePic: profilePic,
     phoneNumber: phoneNumber,
+    gender: gender,
+    age: age
   });
 };
 

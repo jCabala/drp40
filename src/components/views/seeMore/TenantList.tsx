@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import TenantCard from "@/components/cards/TenantCards";
 import { UserProfile } from "@/data/userProfile";
+import Link from "next/link";
+import Button from "@/components/helper/buttons/Button";
 
 type Props = {
   tenants: UserProfile[];
@@ -15,6 +17,8 @@ function TenantList({ tenants }: Props) {
     tenants.length > 0 ? tenants[0] : undefined
   );
   const tenantClickAction = (tenant: UserProfile) => {
+    if(tenant.userID === focusedTenant?.userID) return;
+
     setTimeout(() => {
       setDescFade(false);
     }, 200);
@@ -24,7 +28,7 @@ function TenantList({ tenants }: Props) {
   };
   return tenants.length > 0 ? (
     <>
-      <h3 className="text-2xl font-semibold text-gray-800 mb-4">
+      <h3 className="text-orange-500 text-2xl font-semibold text-gray-800 mb-4">
         Tenant Description
       </h3>
       <div className="flex flex-wrap justify-center">
@@ -43,15 +47,18 @@ function TenantList({ tenants }: Props) {
           descFade ? fadedDesc : visibleDesc
         }`}
       >
-        {tenants.length > 0 && focusedTenant?.description}
+        {focusedTenant?.description}
       </p>
-    </>
-  ) : (
-    <>
-      <div className="bg-orange-500 text-white text-2xl font-bold p-8 rounded-xl shadow-2xl text-center max-w-lg mx-auto">
-        No current tenants added
+      <div className="w-full">
+        <Link href={`/profile/${focusedTenant?.userID}`}>
+          <Button>See Profile</Button>
+        </Link>
       </div>
     </>
+  ) : (
+    <div className="bg-orange-500 text-white text-2xl font-bold p-8 rounded-xl shadow-2xl text-center max-w-lg mx-auto">
+      No current tenants added
+    </div>
   );
 }
 

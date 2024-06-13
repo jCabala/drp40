@@ -14,7 +14,7 @@ function ListTransitionElement({ children, delay = 0 }: Props) {
         enter: `transition-opacity transform duration-500 ease-in-out delay-${delay}`,
         enterActive: "opacity-100 scale-100 animate-fadeIn",
         exit: `hidden`,
-        exitActive: "hidden",
+        exitActive: "opacity-0 hidden",
       }}
     >
       {children}

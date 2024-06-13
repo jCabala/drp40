@@ -19,7 +19,7 @@ export default function Explore() {
     } else {
       console.log("ERR: USERID NOT SET?");
     }
-    setTimeout(() => setIsLoading(false), 600);
+    setTimeout(() => setIsLoading(false), 800);
   };
 
   useEffect(() => {

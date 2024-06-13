@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import Alert from "../../helper/Alert";
-import LoadingOverlay from "../../helper/LoadingOverlay";
 import Overlay from "../../helper/Overlay";
 import ApplyFlatForm from "../../forms/ApplyFlatForm";
 import ImageGallery from "react-image-gallery";
@@ -10,6 +9,8 @@ import QuickAccessButton from "../../helper/buttons/QuickAccessButton";
 import BasicInformation from "./BasicInformation";
 import TenantList from "./TenantList";
 import PropertyDescription from "./PropertyDescription";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRocket } from "@fortawesome/free-solid-svg-icons";
 
 type Props = {
   flatID: string;
@@ -24,7 +25,8 @@ type Props = {
   labels?: { name: string; color: string }[];
 };
 
-const containerClassName = "mb-8 border border-orange-200 p-2 rounded-md shadow-lg"
+const containerClassName =
+  "mb-8 border border-orange-200 p-4 rounded-md shadow-lg";
 
 export default function SeeMoreMainViews({
   flatID,
@@ -45,6 +47,7 @@ export default function SeeMoreMainViews({
     <div className="grid grid-cols-11 gap-4 w-full p-6">
       <section className="col-span-6 bg-white p-4">
         <div className={containerClassName}>
+          <h3 className="text-orange-500 text-2xl font-semibold text-gray-800 mb-4">Images</h3>
           <ImageGallery
             items={images}
             showPlayButton={false}
@@ -53,6 +56,9 @@ export default function SeeMoreMainViews({
           />
         </div>
         <div className={containerClassName}>
+          <h3 className="text-orange-500 text-2xl font-semibold text-gray-800 mb-4">
+            Location
+          </h3>
           <APIProvider
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
             libraries={["places"]}
@@ -79,7 +85,7 @@ export default function SeeMoreMainViews({
           />
         </div>
         <div className={containerClassName}>
-        <PropertyDescription houseDescription={houseDescription} />
+          <PropertyDescription houseDescription={houseDescription} />
         </div>
         <div className={containerClassName}>
           <TenantList tenants={tenants} />
@@ -103,7 +109,10 @@ export default function SeeMoreMainViews({
         <Alert exitAction={() => setAlertText(undefined)} text={alertText} />
       )}
       <QuickAccessButton onClick={() => setShowForm(true)}>
-        <span className="text-white text-center text-sm">APPLY</span>
+        <span className="font-bold text-white text-center text-xl">
+          APPLY{" "}
+          <FontAwesomeIcon icon={faRocket} className="text-xl text-white" />{" "}
+        </span>
       </QuickAccessButton>
     </div>
   );

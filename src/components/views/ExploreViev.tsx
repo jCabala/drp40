@@ -8,9 +8,7 @@ import {
 } from "@vis.gl/react-google-maps";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import { useState } from "react";
-import { TransitionGroup } from "react-transition-group";
 import AddFlatFormButton from "../forms/AddFlatFormButton";
-import ListTransitionElement from "../helper/transitions/ListTransitionElement";
 
 type Props = { flats: FlatAdvertisment[]; getFlats: () => void };
 const centerPlaceholder = { lat: 51.509865, lng: -0.118092 };
@@ -36,21 +34,20 @@ function MainFlatsViev({ flats, getFlats }: Props) {
               the My Flats page)
             </div>
           ) : (
-            <TransitionGroup>
+            <div>
               {filteredFlats.map((flat, index) => (
-                <ListTransitionElement key={index} delay={150 * index}>
-                  <SeeFlatCard
-                    id={flat.id}
-                    img1={flat.images[0]}
-                    img2={flat.images[1] || flat.images[0]}
-                    rentPerWeek={flat.rentPerWeek}
-                    numberOfGaps={flat.numberOfGaps}
-                    numberOfRooms={flat.numberOfRooms}
-                    labels={flat.labels}
-                  />
-                </ListTransitionElement>
+                <SeeFlatCard
+                  key={index}
+                  id={flat.id}
+                  img1={flat.images[0]}
+                  img2={flat.images[1] || flat.images[0]}
+                  rentPerWeek={flat.rentPerWeek}
+                  numberOfGaps={flat.numberOfGaps}
+                  numberOfRooms={flat.numberOfRooms}
+                  labels={flat.labels}
+                />
               ))}
-            </TransitionGroup>
+            </div>
           )}
         </section>
       }
@@ -79,11 +76,9 @@ function MainFlatsViev({ flats, getFlats }: Props) {
                 position={{ lat: flat.lat, lng: flat.lng }}
                 onMouseOver={() => {
                   setSelectedFlat(flat);
-                  console.log("ONHOVER", selectedFlat?.address);
                 }}
                 onClick={() => {
                   setShowReducedCards(true);
-                  console.log("ONCLICK", flat.address);
                 }}
               />
             ))}
