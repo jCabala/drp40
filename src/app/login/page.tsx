@@ -7,7 +7,6 @@ import RegistrationForm from "@/components/forms/RegistrationForm";
 import Overlay from "@/components/helper/Overlay";
 import Alert from "@/components/helper/Alert";
 import Button from "@/components/helper/buttons/Button";
-
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +22,7 @@ const Login: React.FC = () => {
     console.log("Password:", password);
     const id: string | null = await getUserIdByEmail(email);
     if (id) {
+      console.log("userID:", id);
       Cookies.set("userID", id);
     } else {
       console.log("ERR: UserID not set");

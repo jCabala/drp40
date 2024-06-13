@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import type { NavbarConfig } from "@/data/navbarConfig";
 import Cookies from "js-cookie";
-
 type Props = {
   navConfig: NavbarConfig;
 };
@@ -11,8 +10,23 @@ export default function Navbar({ navConfig }: Props) {
   const [userID, setUserId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    setUserId(Cookies.get("userID"));
-  }, []);
+    // Function to update userId based on current value of Cookies.get("userID")
+    const updateUserId = () => {
+      const userID = Cookies.get("userID");
+      setUserId(userID); // Assuming setUserId is a state setter function
+    };
+
+    // Initial call to update userId when component mounts
+    updateUserId();
+
+    // Poll for updates every 1 second using setInterval
+    const intervalId = setInterval(updateUserId, 1000);
+
+    // Clean up interval on component unmount
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []); // Empty dependency array ensures this effect runs only once on mount
 
   const [navbarOpen, setNavbarOpen] = useState(false);
   return (
