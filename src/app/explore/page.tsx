@@ -24,7 +24,7 @@ export default function Explore() {
 
   useEffect(() => {
     getFlats();
-  }, []);
+  }, [getFlats]);
 
   return (
     <div className="w-full flex flex-row">

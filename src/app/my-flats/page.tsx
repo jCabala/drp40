@@ -26,7 +26,7 @@ export default function MyFlats() {
 
   useEffect(() => {
     getOwnedFlats();
-  }, []);
+  }, [getOwnedFlats]);
 
   return (
     <div className="w-full flex flex-row">

@@ -5,9 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 type Props = {
   email: string;
   phoneNumber?: string;
+  isMyProfile: boolean;
 };
 
-const ContactInfo = ({ email, phoneNumber }: Props) => (
+const ContactInfo = ({ email, phoneNumber, isMyProfile }: Props) => (
   <>
     <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
       <FontAwesomeIcon icon={faLock} className="text-yellow-500" />
@@ -23,10 +24,12 @@ const ContactInfo = ({ email, phoneNumber }: Props) => (
         <strong>Phone Number:</strong> {phoneNumber}
       </p>
     )}
-    <p className="text-gray-500 text-sm mt-2 flex items-center gap-2">
-      <FontAwesomeIcon icon={faLock} className="text-yellow-500" />
-      Only you can see your contact information here.
-    </p>
+    {isMyProfile && (
+      <p className="text-gray-500 text-sm mt-2 flex items-center gap-2">
+        <FontAwesomeIcon icon={faLock} className="text-yellow-500" />
+        Only you can see your contact information here.
+      </p>
+    )}
   </>
 );
 

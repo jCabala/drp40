@@ -11,11 +11,13 @@ import { UserProfile } from "@/data/userProfile";
 import Cookies from "js-cookie";
 import { db } from "@/lib/firebase"; // Import your Firestore instance
 import { collection, query, where, onSnapshot } from "firebase/firestore";
+import Spinner from "../helper/Spinner";
 
 type Props = { ownedFlats: FlatAdvertisment[]; getOwnedFlats: () => void };
 
 function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
   const [focusedFlat, setFocusedFlat] = useState<FlatAdvertisment | null>(null);
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
   // This contains all applications with user profiles attached, filtering out
   // applications that have already been rejected
@@ -23,6 +25,10 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
     useState<(UserApplication & { user: UserProfile })[]>();
 
   const userID = Cookies.get("userID");
+
+  const alignLeftPanel =
+    ownedFlats.length > 0 ? "justify-start" : "justify-center";
+  const alignRightPanel = focusedFlat ? "justify-start" : "justify-center";
 
   const closeAdvertisementAction = async (flatID: string) => {
     if (userID) {
@@ -56,6 +62,7 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
           ...app,
           user: fetchedUsers[idx],
         }));
+        setIsLoading(false);
         setFocusedApplications(applicationsWithUsers);
       }
     }
@@ -78,17 +85,20 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
 
       return () => unsubscribe(); // Cleanup the listener on component unmount
     }
-  }, [focusedFlat]);
+  }, [focusedFlat, fetchData]);
 
   return (
     <div className="w-full flex flex-row">
-      <section className="flex flex-col items-center justify-center min-h-screen w-3/5 ml-6">
+      <section
+        className={`flex flex-col items-center ${alignLeftPanel} min-h-screen w-3/5 ml-6`}
+      >
         {ownedFlats.length > 0 ? (
           ownedFlats.map((ownedFlat, idx) => (
             <ManageFlatCard
               key={idx}
               flat={ownedFlat}
               seeInterestedAction={async () => {
+                setIsLoading(true);
                 setFocusedFlat(ownedFlat);
               }}
               closeAdvertisementAction={() =>
@@ -107,7 +117,9 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
           </div>
         )}
       </section>
-      <section className="w-3/5 ml-6 flex flex-col items-center justify-center h-screen">
+      <section
+        className={`w-3/5 ml-6 flex flex-col items-center h-screen ${alignRightPanel}`}
+      >
         <TransitionGroup>
           {focusedFlat &&
           focusedApplications &&
@@ -144,11 +156,17 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
                 exitActive: "hidden",
               }}
             >
-              <div className="flex flex-col items-center justify-center h-full w-full">
+              <div className="flex flex-col items-center h-full w-full">
                 <div className="bg-orange-500 text-white text-2xl font-bold p-8 rounded-xl shadow-2xl text-center max-w-lg mx-auto">
-                  {!focusedFlat
-                    ? "Manage your flats all in one place"
-                    : "No pending applications yet for this flat :("}
+                  {!focusedFlat ? (
+                    "Manage your flats all in one place"
+                  ) : isLoading ? (
+                    <div className="bg-white text-gray-800 text-2xl font-bold p-8 rounded-xl shadow-2xl text-center max-w-lg mx-auto">
+                      <Spinner />
+                    </div>
+                  ) : (
+                    "No pending applications yet for this flat :("
+                  )}
                 </div>
               </div>
             </CSSTransition>

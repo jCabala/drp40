@@ -8,6 +8,7 @@ import confetti from "canvas-confetti";
 import ReactRain from "react-rain-animation";
 import "react-rain-animation/lib/style.css";
 import { UserProfile } from "@/data/userProfile";
+import Image from "../../../node_modules/next/image";
 
 type Props = {
   applicationWithUser: UserApplication & {

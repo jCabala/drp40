@@ -8,10 +8,11 @@ import MyApplicationCard from "../cards/MyApplicationCard";
 import Cookies from "js-cookie";
 import { UserApplication } from "@/data/userApplication";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
+import { UserProfile } from "@/data/userProfile";
 
 type Props = {
   applications: (UserApplication & { flat: FlatAdvertisment } & {
-    ownerEmail: string;
+    ownerProfile: UserProfile;
   })[];
   getApplications: () => void;
 };
@@ -31,13 +32,10 @@ function UserApplicationsView({ applications, getApplications }: Props) {
         applications.map((flatObj, idx) => (
           <MyApplicationCard
             key={idx}
-            img1={flatObj.flat.images[0]}
-            img2={flatObj.flat.images[1] || flatObj.flat.images[0]}
-            status={flatObj.status}
+            flatObj={flatObj}
             withdrawApplicationAction={() =>
               withdrawApplicationAction(flatObj.id, flatObj.flat.id)
             }
-            ownerEmail={flatObj.ownerEmail}
           />
         ))
       ) : (

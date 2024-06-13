@@ -28,7 +28,10 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
           rentPerWeek={flat.rentPerWeek}
           numberOfRooms={flat.numberOfRooms}
           numberOfGaps={flat.numberOfGaps}
-          images={flat.images.map((img) => ({ original: img, thumbnail: img }))}
+          images={flat.images.map((img) => ({
+            original: img,
+            thumbnail: img,
+          }))}
           tenants={tenants}
           labels={flat.labels}
           houseDescription={flat.houseDescription}

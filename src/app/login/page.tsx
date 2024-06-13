@@ -28,7 +28,6 @@ const Login: React.FC = () => {
       console.log("ERR: UserID not set");
     }
 
-    Cookies.set("email", email);
     MyRouter.push("/explore");
   };
 
@@ -56,7 +55,7 @@ const Login: React.FC = () => {
             />
           </div>
           <div>
-            <label
+            {/* <label
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
             >
@@ -69,7 +68,7 @@ const Login: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full px-4 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-orange-200"
-            />
+            /> */}
           </div>
           <Button type="submit">Login</Button>
         </form>

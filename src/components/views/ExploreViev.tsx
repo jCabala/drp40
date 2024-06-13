@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SeeFlatCard from "../cards/SeeFlatCard";
 import {
   APIProvider,
@@ -9,6 +9,7 @@ import {
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import { useState } from "react";
 import AddFlatFormButton from "../forms/AddFlatFormButton";
+import Image from "../../../node_modules/next/image";
 
 type Props = { flats: FlatAdvertisment[]; getFlats: () => void };
 const centerPlaceholder = { lat: 51.509865, lng: -0.118092 };
@@ -18,6 +19,7 @@ function MainFlatsViev({ flats, getFlats }: Props) {
     null
   );
   const [showReducedCards, setShowReducedCards] = useState(false);
+  const [currentFlatIndex, setCurrentFlatIndex] = useState(0);
 
   const filteredFlats =
     selectedFlat && showReducedCards
@@ -35,7 +37,7 @@ function MainFlatsViev({ flats, getFlats }: Props) {
             </div>
           ) : (
             <div>
-              {filteredFlats.map((flat, index) => (
+              {flats.map((flat, index) => (
                 <SeeFlatCard
                   key={index}
                   id={flat.id}

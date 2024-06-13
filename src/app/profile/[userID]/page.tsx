@@ -25,7 +25,7 @@ export default function Page({
 
   useEffect(() => {
     fetchUserProfile();
-  }, [userID]);
+  }, [userID, fetchUserProfile]);
 
   return (
     <>

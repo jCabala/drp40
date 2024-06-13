@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import Alert from "../../helper/Alert";
 import Overlay from "../../helper/Overlay";
 import ApplyFlatForm from "../../forms/ApplyFlatForm";
 import ImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
 import { UserProfile } from "@/data/userProfile";
 import QuickAccessButton from "../../helper/buttons/QuickAccessButton";
 import BasicInformation from "./BasicInformation";
@@ -47,13 +48,18 @@ export default function SeeMoreMainViews({
     <div className="grid grid-cols-11 gap-4 w-full p-6">
       <section className="col-span-6 bg-white p-4">
         <div className={containerClassName}>
-          <h3 className="text-orange-500 text-2xl font-semibold text-gray-800 mb-4">Images</h3>
-          <ImageGallery
-            items={images}
-            showPlayButton={false}
-            thumbnailPosition="right"
-            showFullscreenButton={false}
-          />
+          <h3 className="text-orange-500 text-2xl font-semibold text-gray-800 mb-4">
+            Images
+          </h3>
+          <div style={{ maxWidth: "100%", maxHeight: "400px" }}>
+            <ImageGallery
+              items={images}
+              showPlayButton={false}
+              showFullscreenButton={false}
+              thumbnailPosition="right"
+              showThumbnails={false}
+            />
+          </div>
         </div>
         <div className={containerClassName}>
           <h3 className="text-orange-500 text-2xl font-semibold text-gray-800 mb-4">

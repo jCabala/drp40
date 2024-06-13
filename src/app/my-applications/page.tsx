@@ -17,7 +17,9 @@ import { collection, onSnapshot } from "firebase/firestore";
 function MyApplications() {
   const [applicationsWithFlat, setApplicationsWithFlat] =
     useState<
-      (UserApplication & { flat: FlatAdvertisment } & { ownerEmail: string })[]
+      (UserApplication & { flat: FlatAdvertisment } & {
+        ownerProfile: UserProfile;
+      })[]
     >();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -35,21 +37,21 @@ function MyApplications() {
         )
       ).filter((flat): flat is FlatAdvertisment => flat !== null);
 
-      const emails = (
+      const owners = (
         await Promise.all(
           apps.map(async (app) => {
-            return (await fetchUserByID(app.userID))?.email;
+            return await fetchUserByID(app.userID);
           })
         )
-      ).filter((flat): flat is string => flat !== null);
+      ).filter((user): user is UserProfile => user !== null);
 
       const myApplicationsWithFlat = apps.map((app, index) => ({
         ...app,
         flat: flats[index],
-        ownerEmail: emails[index],
+        ownerProfile: owners[index],
       }));
       setApplicationsWithFlat(
-        myApplicationsWithFlat.filter((e) => e && e?.flat && e.flat?.images)
+        myApplicationsWithFlat.filter((e) => e && e.flat && e.ownerProfile )
       );
 
       setTimeout(() => setIsLoading(false), 600);
@@ -62,7 +64,7 @@ function MyApplications() {
     });
 
     return () => unsubscribe(); // Cleanup the listener on component unmount
-  }, [userID]);
+  }, [userID, getApplications]);
 
   return (
     <>

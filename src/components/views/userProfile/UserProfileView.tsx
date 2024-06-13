@@ -10,6 +10,8 @@ import BasicInfo from "./BasicInfo";
 import HobbiesInfo from "./HobbiesInfo";
 import UserDescription from "./UserDescription";
 import ContactInfo from "./ContactInfo";
+import { useRouter } from "../../../../node_modules/next/navigation";
+import Image from "../../../../node_modules/next/image";
 
 type Props = {
   userProfile: UserProfile;
@@ -27,6 +29,13 @@ function UserProfileView({ userProfile, fetchData }: Props) {
   useEffect(() => {
     setUserId(Cookies.get("userID"));
   }, []);
+
+  const MyRouter = useRouter();
+
+  const handleLogout = () => {
+    Cookies.remove("userID");
+    MyRouter.push("/login");
+  };
 
   return (
     <div className="flex flex-col md:flex-row gap-8 w-full p-8 bg-gray-50 rounded-lg shadow-lg">
@@ -49,7 +58,14 @@ function UserProfileView({ userProfile, fetchData }: Props) {
             <ContactInfo
               email={userProfile.email}
               phoneNumber={userProfile.phoneNumber}
+              isMyProfile={true}
             />
+            <button
+              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4"
+              onClick={handleLogout} // Replace handleLogout with your logout function
+            >
+              Log Out
+            </button>
           </div>
         )}
         {userProfile.description && (

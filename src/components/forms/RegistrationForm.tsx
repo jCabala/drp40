@@ -23,7 +23,8 @@ function RegistrationForm({ onFinish, setAlertText }: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     const email = emailRef.current?.value;
-    const password = passwordRef.current?.value;
+    // const password = passwordRef.current?.value;
+    const password = "NULL";
     const images = profilePicRef.current?.files;
     const phoneNumber = phoneRef.current?.value;
     const age = ageRef.current?.value;
@@ -45,7 +46,14 @@ function RegistrationForm({ onFinish, setAlertText }: Props) {
 
       const profileUrl = await getDownloadURL((await uploadTask).ref);
 
-      registerUser(email, password, profileUrl, phoneNumber, gender, parseInt(age));
+      registerUser(
+        email,
+        password,
+        profileUrl,
+        phoneNumber,
+        gender,
+        parseInt(age)
+      );
     } else {
       setAlertText("ERR: Invalid registration");
       return false;
@@ -72,7 +80,7 @@ function RegistrationForm({ onFinish, setAlertText }: Props) {
           required
         />
       </FormSection>
-      <FormSection>
+      {/* <FormSection>
         <FormLabel>Password:</FormLabel>
         <input
           type="password"
@@ -81,7 +89,7 @@ function RegistrationForm({ onFinish, setAlertText }: Props) {
           placeholder="*********"
           required
         />
-      </FormSection>
+      </FormSection> */}
 
       <FormHeader>More about you: </FormHeader>
       <FormSection>

@@ -14,6 +14,7 @@ import Cookies from "js-cookie";
 import FormSection from "./style/FormSection";
 import FormLabel from "./style/FormLabel";
 import { formInputStyle } from "./style/formStyles";
+import { FlatAdvertisment } from "@/data/flatAdvertisments";
 
 type Props = {
   onFinish: () => void;
@@ -41,7 +42,7 @@ function AddFlatForm({ onFinish, setAlertText }: Props) {
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
-    const userID = Cookies.get("userID");
+    const currUserID = Cookies.get("userID");
     const images = imgRef.current?.files;
     const rent = rentRef.current?.value;
     const rooms = roomsRef.current?.value;
@@ -80,14 +81,18 @@ function AddFlatForm({ onFinish, setAlertText }: Props) {
       imgUrls.push(url);
     }
 
-    const userIDs = (
+    const tenantIDs = (
       await Promise.all(tenants.map((email) => fetchUserByEmail(email)))
     )
       .map((profile) => profile?.userID)
       .filter((userID): userID is string => typeof userID === "string");
 
+    if (currUserID && !tenantIDs.includes(currUserID)) {
+      tenantIDs.push(currUserID);
+    }
+
     const docRef = await addDoc(collection(db, "flats"), {
-      lister: userID,
+      lister: currUserID,
       address: addr,
       longitude: lng,
       latitude: lat,
@@ -97,12 +102,12 @@ function AddFlatForm({ onFinish, setAlertText }: Props) {
       images: imgUrls,
       labels: selectedLabels,
       houseDescription: houseDescription,
-      tenants: userIDs,
+      tenants: tenantIDs,
     });
 
     // We want to add that this user owns this listing
-    if (userID) {
-      addUserOwnedFlatByID(userID, docRef.id);
+    if (currUserID) {
+      addUserOwnedFlatByID(currUserID, docRef.id);
     } else {
       console.log("LOGIN ERROR? NO USER SET");
     }
@@ -188,7 +193,7 @@ function AddFlatForm({ onFinish, setAlertText }: Props) {
         />
       </FormSection>
       <FormSection>
-        <b className="block text-orange-500 mb-2">Add current flatmates</b>
+        <b className="block text-orange-500 mb-2">Add current tenants</b>
         <p className="text-xs mb-2">
           (If your current flatmates already have accounts, enter their emails
           separated by a comma)
