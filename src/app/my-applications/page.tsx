@@ -64,7 +64,7 @@ function MyApplications() {
     });
 
     return () => unsubscribe(); // Cleanup the listener on component unmount
-  }, [userID, getApplications]);
+  }, [userID]);
 
   return (
     <>

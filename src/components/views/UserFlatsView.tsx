@@ -85,7 +85,7 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
 
       return () => unsubscribe(); // Cleanup the listener on component unmount
     }
-  }, [focusedFlat, fetchData]);
+  }, [focusedFlat]);
 
   return (
     <div className="w-full flex flex-row">
