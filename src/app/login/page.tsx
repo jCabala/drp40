@@ -5,7 +5,6 @@ import Cookies from "js-cookie";
 import { getUserIdByEmail } from "@/lib/firebase";
 import RegistrationForm from "@/components/forms/RegistrationForm";
 import Overlay from "@/components/helper/Overlay";
-import LoadingOverlay from "@/components/helper/LoadingOverlay";
 import Alert from "@/components/helper/Alert";
 import Button from "@/components/helper/buttons/Button";
 
@@ -14,7 +13,6 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const MyRouter = useRouter();
   const [showForm, setShowForm] = useState(false);
-  const [isFormLoading, setIsFormLoading] = useState(false);
   const [alertText, setAlertText] = useState<string | undefined>(undefined);
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -88,7 +86,6 @@ const Login: React.FC = () => {
         {showForm && (
           <Overlay onClick={() => setShowForm(false)}>
             <RegistrationForm
-              setIsLoading={setIsFormLoading}
               setAlertText={setAlertText}
               onFinish={() => {
                 setShowForm(false);
@@ -96,7 +93,6 @@ const Login: React.FC = () => {
             />
           </Overlay>
         )}
-        {isFormLoading && <LoadingOverlay />}
         {alertText && (
           <Alert exitAction={() => setAlertText(undefined)} text={alertText} />
         )}

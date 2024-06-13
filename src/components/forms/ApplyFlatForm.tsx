@@ -3,10 +3,10 @@ import { addApplication } from "@/lib/firebase";
 import FormWrapper from "./FormWrapper";
 
 import Cookies from "js-cookie";
+import FormLabel from "./style/FormLabel";
 
 type Props = {
   onFinish: () => void;
-  setIsLoading: (loading: boolean) => void;
   setAlertText: (text: string) => void;
   flatID: string;
 };
@@ -16,7 +16,6 @@ const inputStyle =
 
 function ApplyFlatForm({
   onFinish,
-  setIsLoading,
   setAlertText,
   flatID,
 }: Props) {
@@ -45,13 +44,12 @@ function ApplyFlatForm({
     <FormWrapper
       handleSubmit={handleSubmit}
       onFinish={onFinish}
-      setIsLoading={setIsLoading}
       setAlertText={setAlertText}
       title="Upload details for your Application: *"
     >
-      <label className="block text-orange-500 mb-2">
+      <FormLabel>
         Personalized Message:
-      </label>
+      </FormLabel>
       <textarea
         required
         className="border border-orange-500 mb-4 resize-none w-full h-40 p-2 rounded-md"

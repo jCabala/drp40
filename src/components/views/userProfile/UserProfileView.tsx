@@ -2,9 +2,18 @@ import React, { useEffect, useState } from "react";
 import { UserProfile } from "@/data/userProfile";
 import Cookies from "js-cookie";
 import UpdateUserInfo from "./UpdateUserInfo";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import UniversityInfo from "./UniversityInfo";
+import LifestyleInfo from "./LifestyleInfo";
+import BasicInfo from "./BasicInfo";
+import HobbiesInfo from "./HobbiesInfo";
+import UserDescription from "./UserDescription";
+import ContactInfo from "./ContactInfo";
 
 type Props = {
   userProfile: UserProfile;
+  fetchData: () => void;
 };
 
 const containerClassName =
@@ -12,15 +21,7 @@ const containerClassName =
 const sectionClassName =
   "border border-orange-200 flex flex-col items-center bg-white p-6 rounded-lg shadow-md w-full md:w-1/2";
 
-const hardcodedInfo = {
-  age: 30,
-  gender: "Male",
-  hobbies: ["Swimming", "Reading", "Running"],
-  drinkFrequency: "Sometimes",
-  smoker: "No",
-};
-
-function UserProfileView({ userProfile }: Props) {
+function UserProfileView({ userProfile, fetchData }: Props) {
   const [userId, setUserId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -39,45 +40,54 @@ function UserProfileView({ userProfile }: Props) {
         </div>
         {userProfile && userId === userProfile.userID && (
           <div className={containerClassName}>
-            <h1 className="text-xl text-orange-500 font-semibold text-center mb-4">
+            <h1 className="text-2xl font-semibold text-center mb-2 flex items-center justify-center gap-2">
+              <FontAwesomeIcon icon={faUser} className="text-orange-500" />
               It is your profile!
             </h1>
-            <UpdateUserInfo userID={userId} />
+            <UpdateUserInfo fetchData={fetchData} userID={userId} />
+            <div className="h-4" />
+            <ContactInfo
+              email={userProfile.email}
+              phoneNumber={userProfile.phoneNumber}
+            />
           </div>
         )}
-        <div className={containerClassName}>
-          <h1 className="text-2xl font-semibold text-center mb-2">
-            {userProfile?.email}
-          </h1>
-          <p className="text-gray-600 text-center">
-            {userProfile?.description}
-          </p>
-        </div>
+        {userProfile.description && (
+          <div className={containerClassName}>
+            <UserDescription description={userProfile.description} />
+          </div>
+        )}
       </section>
       <section className={sectionClassName}>
         <div className={containerClassName}>
-          <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
-          <p className="text-gray-700">
-            <strong>Age:</strong> {hardcodedInfo.age}
-          </p>
-          <p className="text-gray-700">
-            <strong>Gender:</strong> {hardcodedInfo.gender}
-          </p>
-          <p className="text-gray-700">
-            <strong>Drink Frequency:</strong> {hardcodedInfo.drinkFrequency}
-          </p>
-          <p className="text-gray-700">
-            <strong>Smoker:</strong> {hardcodedInfo.smoker}
-          </p>
+          <BasicInfo
+            name={userProfile.name || "John Doe"}
+            age={userProfile.age || 18}
+            gender={userProfile.gender || "Male"}
+          />
         </div>
         {userProfile.hobbies && (
           <div className={containerClassName}>
-            <h2 className="text-xl font-semibold mb-4">Hobbies</h2>
-            <ul className="list-disc pl-5 text-gray-700">
-              {userProfile.hobbies.map((hobby, index) => (
-                <li key={index}>{hobby}</li>
-              ))}
-            </ul>
+            <HobbiesInfo hobbies={userProfile.hobbies} />
+          </div>
+        )}
+        {(userProfile.graduationYear || userProfile.universityName) && (
+          <div className={containerClassName}>
+            <UniversityInfo
+              universityName={userProfile.universityName}
+              graduationYear={userProfile.graduationYear}
+            />
+          </div>
+        )}
+        {(userProfile.drinkFrequency ||
+          userProfile.sleepHours ||
+          userProfile.smoker) && (
+          <div className={containerClassName}>
+            <LifestyleInfo
+              smoker={userProfile.smoker}
+              drinkFrequency={userProfile.drinkFrequency}
+              sleepHours={userProfile.sleepHours}
+            />
           </div>
         )}
       </section>

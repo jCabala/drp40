@@ -2,15 +2,12 @@ import React, { useState, useEffect } from "react";
 import { UserApplication } from "@/data/userApplication";
 import { useRouter } from "next/navigation";
 import {
-  fetchApplicationByID,
-  fetchUserByID,
   updateApplication,
 } from "@/lib/firebase";
 import confetti from "canvas-confetti";
 import ReactRain from "react-rain-animation";
 import "react-rain-animation/lib/style.css";
 import { UserProfile } from "@/data/userProfile";
-import ApplyFlatForm from "../forms/ApplyFlatForm";
 
 type Props = {
   applicationWithUser: UserApplication & {

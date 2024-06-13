@@ -15,7 +15,6 @@ import {
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import { UserApplication } from "@/data/userApplication";
 import { UserProfile } from "@/data/userProfile";
-import ApplyFlatForm from "@/components/forms/ApplyFlatForm";
 
 // Your web app's Firebase configuration
 interface FirebaseConfig {
@@ -155,14 +154,14 @@ const getUserIdByEmail = async (email: string) => {
 const registerUser = async (
   email: string,
   password: string,
-  description: string,
-  profilePic: string
+  profilePic: string,
+  phoneNumber: string
 ) => {
   const docRef = await addDoc(collection(db, "users"), {
     email: email,
     password: password,
-    description: description,
     profilePic: profilePic,
+    phoneNumber: phoneNumber,
   });
 };
 
@@ -288,13 +287,24 @@ const addApplication = async (
 };
 
 type UserProfileRefs = {
-  hobbies?: string[];
+  // Basic
+  profilePic?: string;
   phoneNumber?: string;
+
+  // University
+  universityName?: string;
+  graduationYear?: number;
+
+  // Lifestyle
+  drinkFrequency?: string;
+  smoker?: string;
+  sleepHours?: string;
+
+  // Other
+  description?: string;
+  hobbies?: string[];
 };
-const updateUserProfile = async (
-  userId: string,
-  refs: UserProfileRefs
-) => {
+const updateUserProfile = async (userId: string, refs: UserProfileRefs) => {
   const docRef = doc(db, "users", userId);
   await updateDoc(docRef, refs);
 };

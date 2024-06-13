@@ -12,22 +12,25 @@ export default function Page({
 }) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      const userProfileData = await fetchUserByID(userID);
-      setUserProfile(userProfileData);
-    };
 
-    fetchUserProfile();
+  const fetchUserProfile = async () => {
+    setLoading(true);
+    const userProfileData = await fetchUserByID(userID);
+    setUserProfile(userProfileData);
+
     setInterval(() => {
       setLoading(false);
     }, 600);
+  };
+
+  useEffect(() => {
+    fetchUserProfile();
   }, [userID]);
 
   return (
     <>
       {loading && <LoadingOverlay />}
-      {userProfile && <UserProfileView userProfile={userProfile} />}
+      {userProfile && <UserProfileView fetchData={fetchUserProfile} userProfile={userProfile} />}
     </>
   );
 }

@@ -5,30 +5,34 @@ import AddUserInfoForm from "@/components/forms/AddUserInfoForm";
 import { useState } from "react";
 import Alert from "@/components/helper/Alert";
 import LoadingOverlay from "@/components/helper/LoadingOverlay";
+import { fetchAndActivate } from "firebase/remote-config";
 
 type Props = {
   userID: string;
+  fetchData: () => void;
 };
 
-function UpdateUserInfo({ userID }: Props) {
+function UpdateUserInfo({ userID, fetchData }: Props) {
   const [showForm, setShowForm] = useState(false);
-  const [isFormLoading, setIsFormLoading] = useState(false);
   const [alertText, setAlertText] = useState<string | undefined>(undefined);
 
   return (
     <>
-      <Button onClick={() => setShowForm(true)}>Update User Information</Button>
+      <Button onClick={() => setShowForm(true)}>
+        Update and add information!
+      </Button>
       {showForm && (
         <Overlay onClick={() => setShowForm(false)}>
           <AddUserInfoForm
             userID={userID}
-            onFinish={() => setShowForm(false)}
-            setIsLoading={setIsFormLoading}
+            onFinish={() => {
+              setShowForm(false);
+              fetchData();
+            }}
             setAlertText={setAlertText}
           />
         </Overlay>
       )}
-      {isFormLoading && <LoadingOverlay />}
       {alertText && (
         <Alert exitAction={() => setAlertText(undefined)} text={alertText} />
       )}

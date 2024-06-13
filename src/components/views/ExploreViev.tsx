@@ -8,7 +8,7 @@ import {
 } from "@vis.gl/react-google-maps";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import { useState } from "react";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { TransitionGroup } from "react-transition-group";
 import AddFlatFormButton from "../forms/AddFlatFormButton";
 import ListTransitionElement from "../helper/transitions/ListTransitionElement";
 

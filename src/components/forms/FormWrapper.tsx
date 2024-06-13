@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import PopUpWIndow from "../helper/PopUpWindow";
 import CloseButton from "../helper/buttons/CloseButton";
+import LoadingOverlay from "../helper/LoadingOverlay";
 
 type Props = {
   onFinish: () => void;
-  setIsLoading: (loading: boolean) => void;
   setAlertText: (text: string) => void;
   handleSubmit: (e: React.FormEvent) => Promise<boolean>;
   title: string;
@@ -17,7 +17,6 @@ const inputStyle =
 
 function FormWrapper({
   onFinish,
-  setIsLoading,
   handleSubmit,
   title,
   children,
@@ -25,6 +24,8 @@ function FormWrapper({
 }: Props) {
   const [showPopUp, setShowPopUp] = useState(false);
   const [showQuestions, setShowQuestions] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +44,7 @@ function FormWrapper({
 
   return (
     <>
+      {isLoading && <LoadingOverlay />}
       {showPopUp && (
         <PopUpWIndow
           message="Operation Successful!"

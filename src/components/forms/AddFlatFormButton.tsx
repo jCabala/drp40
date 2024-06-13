@@ -10,7 +10,6 @@ type Props = {
 }
 
 function AddFlatFormButton({onFinish}: Props) {
-  const [isFormLoading, setIsFormLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [alertText, setAlertText] = useState<string | undefined>(undefined);
   
@@ -30,7 +29,6 @@ function AddFlatFormButton({onFinish}: Props) {
       {showForm && (
         <Overlay onClick={() => setShowForm(false)}>
           <AddFlatForm
-            setIsLoading={setIsFormLoading}
             setAlertText={setAlertText}
             onFinish={() => {
               onFinish();
@@ -42,7 +40,6 @@ function AddFlatFormButton({onFinish}: Props) {
       {alertText && (
         <Alert exitAction={() => setAlertText(undefined)} text={alertText} />
       )}
-      {isFormLoading && <LoadingOverlay />}
     </>
   );
 }

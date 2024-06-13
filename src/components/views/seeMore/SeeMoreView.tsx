@@ -39,7 +39,6 @@ export default function SeeMoreMainViews({
   labels,
 }: Props) {
   const [showForm, setShowForm] = useState(false);
-  const [isFormLoading, setIsFormLoading] = useState(false);
   const [alertText, setAlertText] = useState<string | undefined>(undefined);
 
   return (
@@ -90,7 +89,6 @@ export default function SeeMoreMainViews({
         {showForm && (
           <Overlay onClick={() => setShowForm(false)}>
             <ApplyFlatForm
-              setIsLoading={setIsFormLoading}
               setAlertText={setAlertText}
               onFinish={() => {
                 setShowForm(false);
@@ -101,7 +99,6 @@ export default function SeeMoreMainViews({
         )}
         {/* Render form when showForm is true */}
       </div>
-      {isFormLoading && <LoadingOverlay />}
       {alertText && (
         <Alert exitAction={() => setAlertText(undefined)} text={alertText} />
       )}

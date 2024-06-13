@@ -11,10 +11,12 @@ import Autocomplete from "react-google-autocomplete";
 import FormWrapper from "./FormWrapper";
 import { labelTypes } from "@/data/labelTypes";
 import Cookies from "js-cookie";
+import FormSection from "./style/FormSection";
+import FormLabel from "./style/FormLabel";
+import { formInputStyle } from "./style/formStyles";
 
 type Props = {
   onFinish: () => void;
-  setIsLoading: (loading: boolean) => void;
   setAlertText: (text: string) => void;
 };
 
@@ -24,10 +26,7 @@ type Label = {
   isSet: boolean;
 };
 
-const inputStyle =
-  "shadow appearance-none border border-orange-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline";
-
-function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
+function AddFlatForm({ onFinish, setAlertText }: Props) {
   const rentRef = useRef<HTMLInputElement>(null);
   const roomsRef = useRef<HTMLInputElement>(null);
   const gapsRef = useRef<HTMLInputElement>(null);
@@ -115,14 +114,11 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
     <FormWrapper
       handleSubmit={handleSubmit}
       onFinish={onFinish}
-      setIsLoading={setIsLoading}
       setAlertText={setAlertText}
       title="Upload details for your GAP: *"
     >
-      <div className="mb-4">
-        <label className="block text-orange-500 mb-2">
-          Address of property:
-        </label>
+      <FormSection>
+        <FormLabel>Address of property:</FormLabel>
         <Autocomplete
           options={{
             types: ["address"],
@@ -130,7 +126,7 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
           }}
           placeholder="Address of property"
           apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
-          className={inputStyle}
+          className={formInputStyle}
           onPlaceSelected={(place: any) => {
             latRef.current = place.geometry.location.lat();
             lngRef.current = place.geometry.location.lng();
@@ -138,53 +134,51 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
           }}
           required
         />
-      </div>
-      <div className="mb-4">
-        <label className="block text-orange-500 mb-2">Rent (£/week):</label>
+      </FormSection>
+      <FormSection>
+        <FormLabel>Rent (£/week):</FormLabel>
         <input
           type="number"
-          className={inputStyle}
+          className={formInputStyle}
           ref={rentRef}
           placeholder="Rent (£/week)"
           required
         />
-      </div>
-      <div className="mb-4">
-        <label className="block text-orange-500 mb-2">Total No. Rooms:</label>
+      </FormSection>
+      <FormSection>
+        <FormLabel>Total No. Rooms:</FormLabel>
         <input
           type="number"
-          className={inputStyle}
+          className={formInputStyle}
           ref={roomsRef}
           placeholder="Total No. Rooms"
           required
         />
-      </div>
-      <div className="mb-4">
-        <label className="block text-orange-500 mb-2">
-          Total No. vacancies:
-        </label>
+      </FormSection>
+      <FormSection>
+        <FormLabel>Total No. vacancies:</FormLabel>
         <input
           type="number"
-          className={inputStyle}
+          className={formInputStyle}
           ref={gapsRef}
           placeholder="Total No. vacancies"
           required
         />
-      </div>
-      <div className="mb-4">
+      </FormSection>
+      <FormSection>
         <b className="block text-orange-500 mb-2">
           Select some property images: *
         </b>
         <input
           type="file"
-          className={inputStyle}
+          className={formInputStyle}
           ref={imgRef}
           multiple
           required
           accept="image/png, image/gif, image/jpeg, image/jpg, image/webp"
         />
-      </div>
-      <div className="mb-4">
+      </FormSection>
+      <FormSection>
         <b className="block text-orange-500 mb-2">
           Add a description for your property
         </b>
@@ -192,16 +186,21 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
           className="border border-orange-500 w-full p-2 rounded-md h-40 resize-none"
           ref={houseDescriptionRef}
         />
-      </div>
-      <div className="mb-4">
+      </FormSection>
+      <FormSection>
         <b className="block text-orange-500 mb-2">Add current flatmates</b>
         <p className="text-xs mb-2">
           (If your current flatmates already have accounts, enter their emails
           separated by a comma)
         </p>
-        <input type="email" className={inputStyle} multiple ref={tenantsRef} />
-      </div>
-      <div className="mb-4">
+        <input
+          type="email"
+          className={formInputStyle}
+          multiple
+          ref={tenantsRef}
+        />
+      </FormSection>
+      <FormSection>
         <b className="block text-orange-500 mb-2">
           Select additional requirements for future tenants:
         </b>
@@ -220,7 +219,7 @@ function AddFlatForm({ onFinish, setIsLoading, setAlertText }: Props) {
             </div>
           ))}
         </div>
-      </div>
+      </FormSection>
     </FormWrapper>
   );
 }
