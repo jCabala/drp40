@@ -11,6 +11,8 @@ import {
 } from "@/lib/firebase";
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
+import { db } from "@/lib/firebase"; // Import your Firestore instance
+import { collection, onSnapshot } from "firebase/firestore";
 
 function MyApplications() {
   const [applicationsWithFlat, setApplicationsWithFlat] =
@@ -55,7 +57,11 @@ function MyApplications() {
   };
 
   useEffect(() => {
-    getApplications();
+    const unsubscribe = onSnapshot(collection(db, "applications"), () => {
+      getApplications();
+    });
+
+    return () => unsubscribe(); // Cleanup the listener on component unmount
   }, [userID]);
 
   return (

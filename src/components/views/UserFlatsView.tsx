@@ -9,6 +9,8 @@ import { fetchApplicationByID } from "@/lib/firebase";
 import { UserApplication } from "@/data/userApplication";
 import { UserProfile } from "@/data/userProfile";
 import Cookies from "js-cookie";
+import { db } from "@/lib/firebase"; // Import your Firestore instance
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 
 type Props = { ownedFlats: FlatAdvertisment[]; getOwnedFlats: () => void };
 
@@ -32,17 +34,15 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
   };
 
   const fetchData = async () => {
-    // Fetch the application data by ID
     if (focusedFlat) {
       const fetchedApplications = (
         await Promise.all(
           focusedFlat.applications.map((app) => fetchApplicationByID(app))
         )
       )
-        .filter((app) => app?.status != "REJECTED")
+        .filter((app) => app?.status !== "REJECTED")
         .filter((app): app is UserApplication => app !== null);
 
-      // If the application exists, fetch the user data by userID
       if (fetchedApplications) {
         const fetchedUsers = (
           await Promise.all(
@@ -50,7 +50,8 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
           )
         ).filter((user): user is UserProfile => user !== null);
 
-        // Map the fetched users into the corresponding application objects
+        fetchedApplications.map((app) => console.log(app.status));
+
         const applicationsWithUsers = fetchedApplications.map((app, idx) => ({
           ...app,
           user: fetchedUsers[idx],
@@ -61,10 +62,23 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
   };
 
   useEffect(() => {
-    fetchData();
-  }, [focusedFlat]);
+    if (focusedFlat?.id) {
+      const q = query(
+        collection(db, "applications"),
+        where("flatID", "==", focusedFlat.id)
+      );
 
-  console.log("OWNED FLATS", ownedFlats);
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        console.log(
+          "Snapshot data:",
+          querySnapshot.docs.map((doc) => doc.data())
+        ); // Debugging log
+        fetchData();
+      });
+
+      return () => unsubscribe(); // Cleanup the listener on component unmount
+    }
+  }, [focusedFlat]);
 
   return (
     <div className="w-full flex flex-row">
