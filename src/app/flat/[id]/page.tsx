@@ -1,25 +1,24 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import SeeMoreView from "@/components/views/seeMore/SeeMoreView";
 import { fetchFlat, fetchTenantsByID } from "@/lib/firebase";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
-import LoadingOverlay from "@/components/helper/LoadingOverlay";
 import { UserProfile } from "@/data/userProfile";
+import { AlertAndLoadingContext } from "@/components/helper/contexts/AlertAndLoadingContext";
 
 export default function Page({ params: { id } }: { params: { id: string } }) {
   // Query database
   const [flat, setFlat] = useState<FlatAdvertisment | undefined>(undefined);
   const [tenants, setTenants] = useState<UserProfile[] | undefined>(undefined);
-  const [loading, setLoading] = useState<boolean>(true);
+  const { setIsLoading } = useContext(AlertAndLoadingContext);
   useEffect(() => {
     fetchFlat(id, setFlat);
     fetchTenantsByID(id, setTenants);
-    setTimeout(() => setLoading(false), 800);
+    setTimeout(() => setIsLoading(false), 600);
   }, []);
 
   return (
     <div className="w-full flex flex-row">
-      {loading && <LoadingOverlay />}
       {flat && tenants != undefined && (
         <SeeMoreView
           flatID={flat.id}

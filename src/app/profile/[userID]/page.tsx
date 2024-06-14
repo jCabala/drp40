@@ -1,9 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { UserProfile } from "@/data/userProfile";
 import { fetchUserByID } from "@/lib/firebase";
 import UserProfileView from "@/components/views/userProfile/UserProfileView";
-import LoadingOverlay from "@/components/helper/LoadingOverlay";
+import { AlertAndLoadingContext } from "@/components/helper/contexts/AlertAndLoadingContext";
 
 export default function Page({
   params: { userID },
@@ -11,15 +11,15 @@ export default function Page({
   params: { userID: string };
 }) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { setIsLoading } = useContext(AlertAndLoadingContext);
 
   const fetchUserProfile = async () => {
-    setLoading(true);
+    setIsLoading(true);
     const userProfileData = await fetchUserByID(userID);
     setUserProfile(userProfileData);
 
     setInterval(() => {
-      setLoading(false);
+      setIsLoading(false);
     }, 600);
   };
 
@@ -27,10 +27,9 @@ export default function Page({
     fetchUserProfile();
   }, [userID]);
 
-  return (
-    <>
-      {loading && <LoadingOverlay />}
-      {userProfile && <UserProfileView fetchData={fetchUserProfile} userProfile={userProfile} />}
-    </>
+  return userProfile ? (
+    <UserProfileView fetchData={fetchUserProfile} userProfile={userProfile} />
+  ) : (
+    <></>
   );
 }

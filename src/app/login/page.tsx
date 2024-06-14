@@ -1,35 +1,36 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { getUserIdByEmail } from "@/lib/firebase";
 import RegistrationForm from "@/components/forms/RegistrationForm";
 import Overlay from "@/components/helper/Overlay";
-import Alert from "@/components/helper/Alert";
 import Button from "@/components/helper/buttons/Button";
+import { AlertAndLoadingContext } from "@/components/helper/contexts/AlertAndLoadingContext";
+
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const MyRouter = useRouter();
   const [showForm, setShowForm] = useState(false);
-  const [alertText, setAlertText] = useState<string | undefined>(undefined);
+  const { setIsLoading, setAlertText } = useContext(AlertAndLoadingContext);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     // Handle login logic here
 
-    console.log("Email:", email);
-    console.log("Password:", password);
     const id: string | null = await getUserIdByEmail(email);
     if (id) {
-      console.log("userID:", id);
       Cookies.set("userID", id);
     } else {
-      console.log("ERR: UserID not set");
+      setAlertText("User not found")
     }
 
     MyRouter.push("/explore");
   };
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -54,22 +55,6 @@ const Login: React.FC = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-orange-200"
             />
           </div>
-          <div>
-            {/* <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring focus:ring-orange-200"
-            /> */}
-          </div>
           <Button type="submit">Login</Button>
         </form>
 
@@ -85,15 +70,11 @@ const Login: React.FC = () => {
         {showForm && (
           <Overlay onClick={() => setShowForm(false)}>
             <RegistrationForm
-              setAlertText={setAlertText}
               onFinish={() => {
                 setShowForm(false);
               }}
             />
           </Overlay>
-        )}
-        {alertText && (
-          <Alert exitAction={() => setAlertText(undefined)} text={alertText} />
         )}
       </div>
     </div>

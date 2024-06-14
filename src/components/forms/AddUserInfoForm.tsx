@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
 import FormWrapper from "./FormWrapper";
 import { UserProfileRefs } from "@/lib/firebase";
 import { updateUserProfile } from "@/lib/firebase";
@@ -8,14 +8,16 @@ import { formInputStyle } from "./style/formStyles";
 import FormHeader from "./style/FormHeader";
 import FormLabel from "./style/FormLabel";
 import FormSection from "./style/FormSection";
+import { AlertAndLoadingContext } from "../helper/contexts/AlertAndLoadingContext";
 
 type Props = {
   onFinish: () => void;
   userID: string;
-  setAlertText: (text: string) => void;
 };
 
-function AddUserInfoForm({ userID, onFinish, setAlertText }: Props) {
+function AddUserInfoForm({ userID, onFinish }: Props) {
+  const { setAlertText } = useContext(AlertAndLoadingContext);
+
   const hobbiesRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -98,7 +100,6 @@ function AddUserInfoForm({ userID, onFinish, setAlertText }: Props) {
     <FormWrapper
       handleSubmit={handleSubmit}
       onFinish={onFinish}
-      setAlertText={setAlertText}
       title="Update your information: *"
     >
       <b className="mb-3 text-sm mt-4 text-orange-500 block text-center">

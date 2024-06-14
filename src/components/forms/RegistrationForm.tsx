@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { registerUser } from "@/lib/firebase";
 import { storage } from "@/lib/firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -7,19 +7,19 @@ import FormSection from "./style/FormSection";
 import FormLabel from "./style/FormLabel";
 import { formInputStyle } from "./style/formStyles";
 import FormHeader from "./style/FormHeader";
+import { AlertAndLoadingContext } from "../helper/contexts/AlertAndLoadingContext";
 
 type Props = {
   onFinish: () => void;
-  setAlertText: (text: string) => void;
 };
 
-function RegistrationForm({ onFinish, setAlertText }: Props) {
+function RegistrationForm({ onFinish }: Props) {
   const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
   const profilePicRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
   const ageRef = useRef<HTMLInputElement>(null);
   const genderRef = useRef<HTMLSelectElement>(null);
+  const { setAlertText } = useContext(AlertAndLoadingContext);
 
   const handleSubmit = async (e: React.FormEvent) => {
     const email = emailRef.current?.value;
@@ -66,7 +66,6 @@ function RegistrationForm({ onFinish, setAlertText }: Props) {
     <FormWrapper
       handleSubmit={handleSubmit}
       onFinish={onFinish}
-      setAlertText={setAlertText}
       title="Register: *"
       btnText="Register"
     >
@@ -80,16 +79,6 @@ function RegistrationForm({ onFinish, setAlertText }: Props) {
           required
         />
       </FormSection>
-      {/* <FormSection>
-        <FormLabel>Password:</FormLabel>
-        <input
-          type="password"
-          className={formInputStyle}
-          ref={passwordRef}
-          placeholder="*********"
-          required
-        />
-      </FormSection> */}
 
       <FormHeader>More about you: </FormHeader>
       <FormSection>

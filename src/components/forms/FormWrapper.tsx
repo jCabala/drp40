@@ -1,19 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import PopUpWIndow from "../helper/PopUpWindow";
 import CloseButton from "../helper/buttons/CloseButton";
-import LoadingOverlay from "../helper/LoadingOverlay";
+import { AlertAndLoadingContext } from "../helper/contexts/AlertAndLoadingContext";
 
 type Props = {
   onFinish: () => void;
-  setAlertText: (text: string) => void;
   handleSubmit: (e: React.FormEvent) => Promise<boolean>;
   title: string;
   btnText?: string;
   children: React.ReactNode;
 };
-
-const inputStyle =
-  "shadow appearance-none border border-orange-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline";
 
 function FormWrapper({
   onFinish,
@@ -24,7 +20,7 @@ function FormWrapper({
 }: Props) {
   const [showPopUp, setShowPopUp] = useState(false);
   const [showQuestions, setShowQuestions] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const {setIsLoading} = useContext(AlertAndLoadingContext);
   
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -44,7 +40,6 @@ function FormWrapper({
 
   return (
     <>
-      {isLoading && <LoadingOverlay />}
       {showPopUp && (
         <PopUpWIndow
           message="Operation Successful!"

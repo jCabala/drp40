@@ -1,5 +1,5 @@
 "use client";
-import LoadingOverlay from "@/components/helper/LoadingOverlay";
+import React, { useContext, useEffect, useState } from "react";
 import UserApplicationsView from "@/components/views/UserApplicationsView";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import { UserApplication } from "@/data/userApplication";
@@ -10,18 +10,17 @@ import {
   fetchUserByID,
 } from "@/lib/firebase";
 import Cookies from "js-cookie";
-import React, { useEffect, useState } from "react";
 import { db } from "@/lib/firebase"; // Import your Firestore instance
 import { collection, onSnapshot } from "firebase/firestore";
+import { AlertAndLoadingContext } from "@/components/helper/contexts/AlertAndLoadingContext";
 
 function MyApplications() {
-  const [applicationsWithFlat, setApplicationsWithFlat] =
-    useState<
-      (UserApplication & { flat: FlatAdvertisment } & {
-        ownerProfile: UserProfile;
-      })[]
-    >();
-  const [isLoading, setIsLoading] = useState(true);
+  const [applicationsWithFlat, setApplicationsWithFlat] = useState<
+    (UserApplication & { flat: FlatAdvertisment } & {
+      ownerProfile: UserProfile;
+    })[]
+  >();
+  const { setIsLoading, setAlertText } = useContext(AlertAndLoadingContext);
 
   const userID = Cookies.get("userID");
 
@@ -51,11 +50,12 @@ function MyApplications() {
         ownerProfile: owners[index],
       }));
       setApplicationsWithFlat(
-        myApplicationsWithFlat.filter((e) => e && e.flat && e.ownerProfile )
+        myApplicationsWithFlat.filter((e) => e && e.flat && e.ownerProfile)
       );
-
-      setTimeout(() => setIsLoading(false), 600);
+    } else {
+      setAlertText("Please log in to view your applications");
     }
+    setTimeout(() => setIsLoading(false), 600);
   };
 
   useEffect(() => {
@@ -67,13 +67,10 @@ function MyApplications() {
   }, [userID]);
 
   return (
-    <>
-      {isLoading && <LoadingOverlay />}
-      <UserApplicationsView
-        applications={applicationsWithFlat || []}
-        getApplications={getApplications}
-      />
-    </>
+    <UserApplicationsView
+      applications={applicationsWithFlat || []}
+      getApplications={getApplications}
+    />
   );
 }
 

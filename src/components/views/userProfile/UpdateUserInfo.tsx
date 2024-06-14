@@ -3,9 +3,6 @@ import React from "react";
 import Overlay from "@/components/helper/Overlay";
 import AddUserInfoForm from "@/components/forms/AddUserInfoForm";
 import { useState } from "react";
-import Alert from "@/components/helper/Alert";
-import LoadingOverlay from "@/components/helper/LoadingOverlay";
-import { fetchAndActivate } from "firebase/remote-config";
 
 type Props = {
   userID: string;
@@ -14,7 +11,6 @@ type Props = {
 
 function UpdateUserInfo({ userID, fetchData }: Props) {
   const [showForm, setShowForm] = useState(false);
-  const [alertText, setAlertText] = useState<string | undefined>(undefined);
 
   return (
     <>
@@ -29,12 +25,8 @@ function UpdateUserInfo({ userID, fetchData }: Props) {
               setShowForm(false);
               fetchData();
             }}
-            setAlertText={setAlertText}
           />
         </Overlay>
-      )}
-      {alertText && (
-        <Alert exitAction={() => setAlertText(undefined)} text={alertText} />
       )}
     </>
   );

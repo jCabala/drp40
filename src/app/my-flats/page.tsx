@@ -1,16 +1,16 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { fetchUserFlatsOwnedByID } from "../../lib/firebase";
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
-import LoadingOverlay from "@/components/helper/LoadingOverlay";
 import UserFlatsView from "@/components/views/UserFlatsView";
 import Cookies from "js-cookie";
+import { AlertAndLoadingContext } from "@/components/helper/contexts/AlertAndLoadingContext";
 
 export default function MyFlats() {
   const [ownedFlats, setOwnedFlats] = useState<
     Array<FlatAdvertisment> | undefined
   >(undefined);
-  const [isLoading, setIsLoading] = useState(true);
+  const {setIsLoading} = useContext(AlertAndLoadingContext);
   const userID = Cookies.get("userID");
 
   const getOwnedFlats = () => {
@@ -30,7 +30,6 @@ export default function MyFlats() {
 
   return (
     <div className="w-full flex flex-row">
-      {isLoading && <LoadingOverlay />}
       {ownedFlats &&
         <UserFlatsView
           getOwnedFlats={getOwnedFlats}

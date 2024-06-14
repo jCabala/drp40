@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
 import {
   fetchUserByEmail,
   addUserOwnedFlatByID,
@@ -14,11 +14,10 @@ import Cookies from "js-cookie";
 import FormSection from "./style/FormSection";
 import FormLabel from "./style/FormLabel";
 import { formInputStyle } from "./style/formStyles";
-import { FlatAdvertisment } from "@/data/flatAdvertisments";
+import { AlertAndLoadingContext } from "../helper/contexts/AlertAndLoadingContext";
 
 type Props = {
   onFinish: () => void;
-  setAlertText: (text: string) => void;
 };
 
 type Label = {
@@ -27,7 +26,8 @@ type Label = {
   isSet: boolean;
 };
 
-function AddFlatForm({ onFinish, setAlertText }: Props) {
+function AddFlatForm({ onFinish }: Props) {
+  const { setAlertText } = useContext(AlertAndLoadingContext);
   const rentRef = useRef<HTMLInputElement>(null);
   const roomsRef = useRef<HTMLInputElement>(null);
   const gapsRef = useRef<HTMLInputElement>(null);
@@ -119,7 +119,6 @@ function AddFlatForm({ onFinish, setAlertText }: Props) {
     <FormWrapper
       handleSubmit={handleSubmit}
       onFinish={onFinish}
-      setAlertText={setAlertText}
       title="Upload details for your GAP: *"
     >
       <FormSection>
