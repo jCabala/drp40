@@ -11,10 +11,10 @@ function ListTransitionElement({ children, delay = 0 }: Props) {
     <CSSTransition
       timeout={500}
       classNames={{
-        enter: `transition-opacity transform duration-500 ease-in-out delay-${delay}`,
+        enter: `transition-opacity transform duration-100 ease-in-out delay-${delay}`,
         enterActive: "opacity-100 scale-100 animate-fadeIn",
-        exit: `hidden`,
-        exitActive: "opacity-0 hidden",
+        exit: `transition-opacity transform duration-100 ease-in-out`,
+        exitActive: "hidden opacity-0 scale-90 animate-fadeOut",
       }}
     >
       {children}

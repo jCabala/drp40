@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import PopUpWIndow from "../helper/PopUpWindow";
 import CloseButton from "../helper/buttons/CloseButton";
 import { AlertAndLoadingContext } from "../helper/contexts/AlertAndLoadingContext";
+import Spinner from "../helper/Spinner";
 
 type Props = {
   onFinish: () => void;
@@ -20,22 +21,25 @@ function FormWrapper({
 }: Props) {
   const [showPopUp, setShowPopUp] = useState(false);
   const [showQuestions, setShowQuestions] = useState(true);
-  const {setIsLoading} = useContext(AlertAndLoadingContext);
-  
+  const { setIsLoading } = useContext(AlertAndLoadingContext);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setShowQuestions(false);
 
     const res = await handleSubmit(e);
 
+    if (res) {
+      setShowQuestions(false);
+      setShowPopUp(true);
+    } else {
+      setShowQuestions(true);
+    }
+
     setTimeout(() => {
       setIsLoading(false);
-      if (res) {
-        setShowQuestions(false);
-        setShowPopUp(true);
-      }
-    }, 200);
+    }, 300);
   };
 
   return (
@@ -65,14 +69,20 @@ function FormWrapper({
             <CloseButton onClick={onFinish} />
             {children}
             <input
-              className="mt-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded w-full"
+              className="mt-2 bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded w-full cursor-pointer"
               type="submit"
               value={btnText}
+              onClick={() => setIsLoading(true)}
             />
             <b className="text-sm mt-4 text-orange-500 block text-center">
               All sections marked (*) are required
             </b>
           </form>
+        </div>
+      )}
+      {!showQuestions && !showPopUp && (
+        <div className="h-64 w-64 flex items-center justify-center">
+          <Spinner />
         </div>
       )}
     </>

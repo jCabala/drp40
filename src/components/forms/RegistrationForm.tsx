@@ -19,7 +19,9 @@ function RegistrationForm({ onFinish }: Props) {
   const phoneRef = useRef<HTMLInputElement>(null);
   const ageRef = useRef<HTMLInputElement>(null);
   const genderRef = useRef<HTMLSelectElement>(null);
-  const { setAlertText } = useContext(AlertAndLoadingContext);
+  const { setAlertText, setAlertColor, setAlertTitle } = useContext(
+    AlertAndLoadingContext
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     const email = emailRef.current?.value;
@@ -54,6 +56,13 @@ function RegistrationForm({ onFinish }: Props) {
         gender,
         parseInt(age)
       );
+      setTimeout(() => {
+        setAlertTitle("Hey, gap filler!");
+        setAlertColor("green");
+        setAlertText(
+          "Consider visiting `Your Profile` section and adding more information about yourself! It will help you find a better match!"
+        );
+      }, 400);
     } else {
       setAlertText("ERR: Invalid registration");
       return false;

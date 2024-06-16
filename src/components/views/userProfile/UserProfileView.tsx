@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { UserProfile } from "@/data/userProfile";
 import Cookies from "js-cookie";
 import UpdateUserInfo from "./UpdateUserInfo";
@@ -11,8 +11,8 @@ import HobbiesInfo from "./HobbiesInfo";
 import UserDescription from "./UserDescription";
 import ContactInfo from "./ContactInfo";
 import { useRouter } from "../../../../node_modules/next/navigation";
-import Image from "../../../../node_modules/next/image";
 import GoBack from "@/components/helper/GoBack";
+import { AlertAndLoadingContext } from "@/components/helper/contexts/AlertAndLoadingContext";
 
 type Props = {
   userProfile: UserProfile;
@@ -26,10 +26,30 @@ const sectionClassName =
 
 function UserProfileView({ userProfile, fetchData }: Props) {
   const [userId, setUserId] = useState<string | undefined>(undefined);
+  const { setAlertText, setAlertColor, setAlertTitle } = useContext(
+    AlertAndLoadingContext
+  );
 
   useEffect(() => {
     setUserId(Cookies.get("userID"));
   }, []);
+
+  useEffect(() => {
+    if (userId == userProfile.userID) {
+      const keys = Object.keys(userProfile);
+      const almostFull = keys.length >= 8;
+
+      if (!almostFull) {
+        setTimeout(() => {
+          setAlertTitle("Hey, gap filler!");
+          setAlertColor("green");
+          setAlertText(
+            "Consider adding more information about yourself! It will help you find a better match!"
+          );
+        }, 500);
+      }
+    }
+  }, [userId]);
 
   const MyRouter = useRouter();
 
