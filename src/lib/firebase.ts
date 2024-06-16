@@ -93,7 +93,8 @@ const fetchNotOwnedFlats = async (userID: string, callback: any) => {
 };
 
 const fetchFlat = async (id: string, callback: any) => {
-  callback(await fetchFlatByID(id));
+  const flat = await fetchFlatByID(id)
+  callback(flat);
   return;
 };
 

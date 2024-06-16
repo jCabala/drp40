@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, {
   Dispatch,
   SetStateAction,
@@ -19,6 +19,7 @@ const AlertAndLoadingContext = createContext<ContextType>({} as ContextType);
 function AlertAndLoadingProvider({ children }: { children: React.ReactNode }) {
   const [alertText, setAlertText] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [shouldRenderLoading, setShouldRenderLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (alertText != undefined) {
@@ -26,13 +27,22 @@ function AlertAndLoadingProvider({ children }: { children: React.ReactNode }) {
     }
   }, [alertText]);
 
+  useEffect(() => {
+    if (!isLoading) {
+      const timeout = setTimeout(() => setShouldRenderLoading(false), 1000);
+      return () => clearTimeout(timeout);
+    } else {
+      setShouldRenderLoading(true);
+    }
+  }, [isLoading]);
+
   return (
     <AlertAndLoadingContext.Provider value={{ setAlertText, setIsLoading }}>
       {children}
       {alertText && (
         <Alert text={alertText} exitAction={() => setAlertText(undefined)} />
       )}
-      {isLoading && <LoadingOverlay />}
+      {shouldRenderLoading && <LoadingOverlay />}
     </AlertAndLoadingContext.Provider>
   );
 }

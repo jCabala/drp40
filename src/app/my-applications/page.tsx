@@ -10,7 +10,7 @@ import {
   fetchUserByID,
 } from "@/lib/firebase";
 import Cookies from "js-cookie";
-import { db } from "@/lib/firebase"; // Import your Firestore instance
+import { db } from "@/lib/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import { AlertAndLoadingContext } from "@/components/helper/contexts/AlertAndLoadingContext";
 
@@ -25,7 +25,9 @@ function MyApplications() {
   const userID = Cookies.get("userID");
 
   const getApplications = async () => {
-    setIsLoading(true);
+    if (applicationsWithFlat) {
+      setIsLoading(false);
+    }
     if (userID) {
       const apps = await fetchAllApplicationsByUserID(userID);
       const flats = (
@@ -55,7 +57,7 @@ function MyApplications() {
     } else {
       setAlertText("Please log in to view your applications");
     }
-    setTimeout(() => setIsLoading(false), 600);
+    setIsLoading(false);
   };
 
   useEffect(() => {
