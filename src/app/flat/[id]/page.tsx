@@ -12,6 +12,7 @@ export default function Page({ params: { id } }: { params: { id: string } }) {
   const [tenants, setTenants] = useState<UserProfile[] | undefined>(undefined);
   const { setIsLoading } = useContext(AlertAndLoadingContext);
   useEffect(() => {
+    setIsLoading(true);
     fetchFlat(id, setFlat);
     fetchTenantsByID(id, setTenants);
     setTimeout(() => setIsLoading(false), 600);

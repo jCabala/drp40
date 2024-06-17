@@ -6,7 +6,7 @@ function GoBack() {
   const router = useRouter();
   return (
     <div
-      className="font-semibold text-orange-500 text-xl cursor-pointer hover:text-orange-700"
+      className="font-semibold text-orange-500 text-2xl cursor-pointer hover:text-orange-700"
       onClick={() => router.back()}
     >
       Go Back

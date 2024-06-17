@@ -58,7 +58,6 @@ export default function SeeMoreMainViews({
                 showPlayButton={false}
                 showFullscreenButton={false}
                 thumbnailPosition="right"
-                showThumbnails={false}
               />
             </div>
           </div>

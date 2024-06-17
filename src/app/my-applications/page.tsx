@@ -27,6 +27,8 @@ function MyApplications() {
   const getApplications = async () => {
     if (applicationsWithFlat) {
       setIsLoading(false);
+    } else {
+      setIsLoading(true);
     }
     if (userID) {
       const apps = await fetchAllApplicationsByUserID(userID);

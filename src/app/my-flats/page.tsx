@@ -17,6 +17,8 @@ export default function MyFlats() {
     console.log("Getting owned flats");
     if (ownedFlats) {
       setIsLoading(false);
+    } else {
+      setIsLoading(true);
     }
     if (userID) {
       await fetchUserFlatsOwnedByID(userID, setOwnedFlats);
