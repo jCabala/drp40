@@ -62,8 +62,6 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
             )
           ).filter((user): user is UserProfile => user !== null);
 
-          fetchedApplications.map((app) => console.log(app.status));
-
           const applicationsWithUsers = fetchedApplications.map((app, idx) => ({
             ...app,
             user: fetchedUsers[idx],
@@ -72,6 +70,7 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
           setFocusedApplications(applicationsWithUsers);
         }
       }
+      setIsLoading(false);
     }
   };
 
@@ -148,14 +147,12 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
                 key={idx}
                 timeout={500}
                 classNames={{
-                  enter: `transition-opacity transform duration-500 ease-in-out delay-${
+                  enter: `transition-opacity transform duration-100 ease-in-out delay-${
                     idx * 150
                   }`,
                   enterActive: "opacity-100 scale-100 animate-fadeIn",
-                  exit: `transition-opacity transform duration-500 ease-in-out delay-${
-                    idx * 150
-                  }`,
-                  exitActive: "opacity-0 scale-90 animate-fadeOut",
+                  exit: `transition-opacity transform duration-100 ease-in-out`,
+                  exitActive: "hidden opacity-0 scale-90 animate-fadeOut",
                 }}
               >
                 <UserApplicationCard
@@ -169,24 +166,26 @@ function UserFlatsView({ ownedFlats, getOwnedFlats }: Props) {
             <CSSTransition
               timeout={500}
               classNames={{
-                enter: `transition-opacity transform duration-500 ease-in-out`,
+                enter: `transition-opacity transform duration-100 ease-in-out delay-${0}`,
                 enterActive: "opacity-100 scale-100 animate-fadeIn",
-                exit: `hidden`,
-                exitActive: "hidden",
+                exit: `transition-opacity transform duration-100 ease-in-out`,
+                exitActive: "hidden opacity-0 scale-90 animate-fadeOut",
               }}
             >
               <div className="flex flex-col items-center h-full w-full">
-                <div className="bg-orange-500 text-white text-2xl font-bold p-8 rounded-xl shadow-2xl text-center max-w-lg mx-auto">
-                  {!focusedFlatID ? (
-                    "Manage your flats all in one place"
-                  ) : isLoading ? (
-                    <div className="bg-white text-gray-800 text-2xl font-bold p-8 rounded-xl shadow-2xl text-center max-w-lg mx-auto">
-                      <Spinner />
-                    </div>
-                  ) : (
-                    "No pending applications yet for this flat :("
-                  )}
-                </div>
+                {!focusedFlatID ? (
+                  <div className="bg-orange-500 text-white text-2xl font-bold p-8 rounded-xl shadow-2xl text-center max-w-lg mx-auto">
+                    Manage your flats all in one place
+                  </div>
+                ) : isLoading ? (
+                  <div className="fixed top-1/2">
+                    <Spinner />
+                  </div>
+                ) : (
+                  <div className="bg-orange-500 text-white text-2xl font-bold p-8 rounded-xl shadow-2xl text-center max-w-lg mx-auto">
+                    No pending applications yet for this flat :(
+                  </div>
+                )}
               </div>
             </CSSTransition>
           )}

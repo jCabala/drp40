@@ -20,7 +20,9 @@ function RegistrationForm({ onFinish }: Props) {
   const ageRef = useRef<HTMLInputElement>(null);
   const genderRef = useRef<HTMLSelectElement>(null);
   const fullNameRef = useRef<HTMLInputElement>(null);
-  const { setAlertText } = useContext(AlertAndLoadingContext);
+  const { setAlertText, setAlertColor, setAlertTitle } = useContext(
+    AlertAndLoadingContext
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     const email = emailRef.current?.value;
@@ -43,7 +45,15 @@ function RegistrationForm({ onFinish }: Props) {
       `userImages/${profilePic?.name}-${Date.now()}`
     );
 
-    if (profilePic && email && password && phoneNumber && age && gender) {
+    if (
+      profilePic &&
+      email &&
+      password &&
+      phoneNumber &&
+      age &&
+      gender &&
+      fullName
+    ) {
       const uploadTask = uploadBytes(storageRef, profilePic);
 
       const profileUrl = await getDownloadURL((await uploadTask).ref);
@@ -57,6 +67,13 @@ function RegistrationForm({ onFinish }: Props) {
         fullName,
         parseInt(age)
       );
+      setTimeout(() => {
+        setAlertTitle("Hey, gap filler!");
+        setAlertColor("green");
+        setAlertText(
+          "Consider visiting `Your Profile` section and adding more information about yourself! It will help you find a better match!"
+        );
+      }, 400);
     } else {
       setAlertText("ERR: Invalid registration");
       return false;

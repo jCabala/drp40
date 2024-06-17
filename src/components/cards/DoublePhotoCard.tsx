@@ -45,7 +45,7 @@ function DoublePhotoCard({
         <img
           src={img1}
           alt=""
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity  ${
+          className={`absolute inset-0 w-full h-full object-cover duration-500 transition-opacity  ${
             img1Loaded ? "opacity-100 hover:opacity-0" : "opacity-0"
           }`}
           onLoad={() => setImg1Loaded(true)}

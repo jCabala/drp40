@@ -9,7 +9,7 @@ export type NavbarConfig = {
 };
 
 const navbarConfig: NavbarConfig = {
-  title: "Fill that gap please",
+  title: "Fill that gap",
   links: [
     {
       title: "Explore",
