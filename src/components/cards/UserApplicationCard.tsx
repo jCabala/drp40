@@ -51,7 +51,7 @@ function UserApplicationCard({ applicationWithUser, flatID }: Props) {
 
   const handleApprove = () => {
     if (applicationWithUser) {
-      updateApplication(flatID, applicationWithUser.userID, true);
+      updateApplication(flatID, applicationWithUser.userID, true, "");
     }
     showConfettiAndMessage();
   };
