@@ -21,7 +21,6 @@ function ApplyFlatForm({ onFinish, flatID }: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     const msg = msgRef.current?.value;
-    console.log("Message: ", msg);
     if (!msg) {
       setAlertText("Please fill in all the fields!");
       return false;

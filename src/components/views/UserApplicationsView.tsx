@@ -22,7 +22,7 @@ function UserApplicationsView({ applications, getApplications }: Props) {
     applicationID: string,
     flatID: string
   ) => {
-    withdrawApplication(applicationID, flatID);
+    await withdrawApplication(applicationID, flatID);
     await getApplications();
   };
 
@@ -33,7 +33,7 @@ function UserApplicationsView({ applications, getApplications }: Props) {
           <MyApplicationCard
             key={idx}
             flatObj={flatObj}
-            withdrawApplicationAction={() =>
+            withdrawApplicationAction={async () =>
               withdrawApplicationAction(flatObj.id, flatObj.flat.id)
             }
           />

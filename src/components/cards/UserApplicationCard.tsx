@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { UserApplication } from "@/data/userApplication";
 import { useRouter } from "next/navigation";
-import {
-  updateApplication,
-} from "@/lib/firebase";
+import { updateApplication } from "@/lib/firebase";
 import confetti from "canvas-confetti";
 import ReactRain from "react-rain-animation";
 import "react-rain-animation/lib/style.css";
@@ -20,11 +18,12 @@ type Props = {
 function UserApplicationCard({ applicationWithUser, flatID }: Props) {
   const [showSuccessMsg, setShowSuccessMsg] = useState(false);
   const [showFailMsg, setShowFailMsg] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
   const MyRouter = useRouter();
 
   const handleSeeProfile = async () => {
     const userID = applicationWithUser.userID;
-    console.log("UserID", userID);
     MyRouter.push(`/profile/${userID}`);
   };
 
@@ -59,7 +58,17 @@ function UserApplicationCard({ applicationWithUser, flatID }: Props) {
 
   const handleReject = () => {
     if (applicationWithUser) {
-      updateApplication(flatID, applicationWithUser.userID, false);
+      const rejectionMessage = messageRef.current?.value;
+
+      console.log("Rejection Message:", rejectionMessage);
+
+      setShowPopup(false); // Close the popup after submission
+      updateApplication(
+        flatID,
+        applicationWithUser.userID,
+        false,
+        rejectionMessage
+      );
     }
     showRainAndMessage();
   };
@@ -124,7 +133,9 @@ function UserApplicationCard({ applicationWithUser, flatID }: Props) {
                     </button>
                     <button
                       className="ml-2 w-24 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
-                      onClick={handleReject}
+                      onClick={() => {
+                        setShowPopup(true);
+                      }}
                     >
                       Reject
                     </button>
@@ -155,6 +166,32 @@ function UserApplicationCard({ applicationWithUser, flatID }: Props) {
               <h1 className="text-3xl font-bold text-center">
                 Sorry to see they were not your gap filler!
               </h1>
+            </div>
+          )}
+          {showPopup && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white p-4 rounded shadow-lg w-96">
+                <h2 className="text-xl font-bold mb-4">Rejection Message</h2>
+                <textarea
+                  ref={messageRef}
+                  className="w-full p-2 border rounded mb-4"
+                  placeholder="Enter rejection message"
+                />
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setShowPopup(false)}
+                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleReject}
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </>
