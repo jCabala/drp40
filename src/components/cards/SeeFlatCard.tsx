@@ -12,6 +12,7 @@ type Props = {
   numberOfRooms: number;
   numberOfGaps: number;
   labels?: { name: string; color: string }[];
+  address: string;
 };
 
 function SeeFlatCard({
@@ -22,12 +23,16 @@ function SeeFlatCard({
   numberOfRooms,
   numberOfGaps,
   labels,
+  address,
 }: Props) {
   const flatPath = `/flat/${id}`;
 
   return (
     <Link className="self-end" href={flatPath}>
       <DoublePhotoCard img1={img1} img2={img2}>
+        <div className="w-full text-left font-bold text-gray-200-xs mb-4">
+          {address}
+        </div>
         <div>
           <p className="mx-1">
             <b className="text-orange-500">Rent: </b>

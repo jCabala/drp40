@@ -46,6 +46,7 @@ function MainFlatsViev({ flats, getFlats }: Props) {
                   numberOfGaps={flat.numberOfGaps}
                   numberOfRooms={flat.numberOfRooms}
                   labels={flat.labels}
+                  address={flat.address}
                 />
               ))}
             </div>

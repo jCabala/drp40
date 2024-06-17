@@ -30,6 +30,9 @@ function ManageFlatCard({
         onImgClick={seeInterestedAction}
         color={focused ? "emerald" : "orange"}
       >
+        <div className="w-full text-center font-bold text-gray-700 mb-4">
+          {flat.address}
+        </div>
         <Link href={`/flat/${id}`}>
           <Button color={color}>See More</Button>
         </Link>
