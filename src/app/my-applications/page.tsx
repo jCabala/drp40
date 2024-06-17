@@ -11,7 +11,7 @@ import {
 } from "@/lib/firebase";
 import Cookies from "js-cookie";
 import { db } from "@/lib/firebase";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 import { AlertAndLoadingContext } from "@/components/helper/contexts/AlertAndLoadingContext";
 
 function MyApplications() {
@@ -63,20 +63,11 @@ function MyApplications() {
   };
 
   useEffect(() => {
-    if (userID) {
-      const q = query(
-        collection(db, "applications"),
-        where("userID", "==", userID)
-      );
+    const unsubscribe = onSnapshot(collection(db, "applications"), () => {
+      getApplications();
+    });
 
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        getApplications();
-      });
-
-      return () => {
-        unsubscribe();
-      };
-    }
+    return () => unsubscribe(); // Cleanup the listener on component unmount
   }, [userID]);
 
   return (
