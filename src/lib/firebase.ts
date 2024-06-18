@@ -62,6 +62,7 @@ const getFlatData = (id: string, data: DocumentData) => {
     applications: data?.applications || [],
     labels: data?.labels || [],
     tenants: data?.tenants || [],
+    lister: data?.lister,
   } as FlatAdvertisment;
 };
 

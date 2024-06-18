@@ -45,7 +45,7 @@ function ApplyFlatForm({ onFinish, flatID }: Props) {
       <FormLabel>Personalized Message:</FormLabel>
       <textarea
         required
-        className="border border-orange-500 mb-4 resize-none w-full h-40 p-2 rounded-md"
+        className="border border-orange-500 mb-4 resize-none w-full h-40 p-2 rounded-md "
         ref={msgRef}
       />
     </FormWrapper>
