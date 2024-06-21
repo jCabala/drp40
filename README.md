@@ -1,3 +1,9 @@
+## Group
+- [Elliot Benson](https://github.com/ElliotBLabs)
+- [Avinash Bommareddy](https://github.com/avinashbommareddy)
+- [Jakub Cabala](https://github.com/jCabala)
+- [Nicolas Schelicher](https://github.com/scaraven)
+
 ## Project Overview
 
 - Module: COMP Designing For Real People
@@ -29,6 +35,7 @@ stress-free way to handle their private housing during university.
 ## Documents
 - [HCD Portfolio](./assets/HCD_portfolio.pdf) - document discussing how we used HCD to develop the project.
 - [Legal Document](./assets/DRP%20License%20Document.pdf) - document discussing legal side of the project
+- [Pitch Leaflet](./assets/fill_that_gap_leaflet.pdf)
 
 ## Digital Touchpoint
 ![app1](./assets/app1.png)
