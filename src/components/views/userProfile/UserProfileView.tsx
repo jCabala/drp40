@@ -74,7 +74,7 @@ function UserProfileView({ userProfile, fetchData }: Props) {
             <div className={containerClassName}>
               <h1 className="text-2xl font-semibold text-center mb-2 flex items-center justify-center gap-2">
                 <FontAwesomeIcon icon={faUser} className="text-orange-500" />
-                It is your profile!
+                {userProfile.name}
               </h1>
               <UpdateUserInfo fetchData={fetchData} userID={userId} />
               <div className="h-4" />

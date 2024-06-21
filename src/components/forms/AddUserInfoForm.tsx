@@ -40,8 +40,6 @@ function AddUserInfoForm({ userID, onFinish }: Props) {
     const smoker = smokerRef.current?.value;
     const drink = drinkRef.current?.value;
 
-    console.log("DRINK", drink);
-
     let userProfileRefs: UserProfileRefs = {};
     if (hobbies) {
       userProfileRefs = { ...userProfileRefs, hobbies: hobbies.split(",") };

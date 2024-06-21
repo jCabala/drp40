@@ -1,4 +1,3 @@
-import { UserProfile } from "./userProfile";
 
 export type UserApplication = {
     id: string
@@ -6,5 +5,6 @@ export type UserApplication = {
     flatID: string
     msg: string;
     status: string;
+    rejectionMsg?: string;
   };
   

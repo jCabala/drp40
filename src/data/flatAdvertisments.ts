@@ -14,4 +14,5 @@ export type FlatAdvertisment = {
   tenants: UserProfile[]
   lat: number;
   lng: number;
+  lister: string;
 };

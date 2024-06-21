@@ -24,23 +24,26 @@ function ManageFlatCard({
 
   return (
     <div className="w-full max-h-60 my-4">
-    <DoublePhotoCard
-      img1={img1}
-      img2={img2}
-      onImgClick={seeInterestedAction}
-      color={focused ? "emerald" : "orange"}
-    >
-      <Link href={`/flat/${id}`}>
-        <Button color={color}>See More</Button>
-      </Link>
-      <Button color={color} onClick={closeAdvertisementAction}>
-        Close the advertisement
-      </Button>
+      <DoublePhotoCard
+        img1={img1}
+        img2={img2}
+        onImgClick={seeInterestedAction}
+        color={focused ? "emerald" : "orange"}
+      >
+        <div className="w-full text-centerpp font-bold text-gray-700 mb-4">
+          {flat.address}
+        </div>
+        <Link href={`/flat/${id}`}>
+          <Button color={color}>See More</Button>
+        </Link>
+        <Button color={color} onClick={closeAdvertisementAction}>
+          Close the advertisement
+        </Button>
 
-      <Button onClick={seeInterestedAction} color={color}>
-        See interested people
-      </Button>
-    </DoublePhotoCard>
+        <Button onClick={seeInterestedAction} color={color}>
+          See interested people
+        </Button>
+      </DoublePhotoCard>
     </div>
   );
 }

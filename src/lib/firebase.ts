@@ -62,6 +62,7 @@ const getFlatData = (id: string, data: DocumentData) => {
     applications: data?.applications || [],
     labels: data?.labels || [],
     tenants: data?.tenants || [],
+    lister: data?.lister,
   } as FlatAdvertisment;
 };
 
@@ -104,7 +105,6 @@ const fetchFlatByID = async (id: string) => {
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     const data = docSnap.data();
-    console.log(data.images);
     return getFlatData(docSnap.id, data);
   } else {
     return;
@@ -116,9 +116,7 @@ const fetchUserFlatsOwnedByID = async (userID: string, callback: any) => {
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     const data: string[] = docSnap.data().flatsOwned || [];
-    console.log("FLAT IDS", data);
     const flatsOwned = await Promise.all(data.map((id) => fetchFlatByID(id)));
-    console.log("OWNED FLATS", flatsOwned);
     callback(flatsOwned);
   } else {
     return;
@@ -158,6 +156,7 @@ const registerUser = async (
   profilePic: string,
   phoneNumber: string,
   gender: string,
+  fullName: string,
   age: number,
 ) => {
   const docRef = await addDoc(collection(db, "users"), {
@@ -166,7 +165,8 @@ const registerUser = async (
     profilePic: profilePic,
     phoneNumber: phoneNumber,
     gender: gender,
-    age: age
+    age: age,
+    name: fullName
   });
 };
 
@@ -189,7 +189,6 @@ const fetchUserByEmail = async (email: string): Promise<UserProfile | null> => {
     const doc = querySnapshot.docs[0];
     const data = doc.data();
     userProfile = getUserData(doc.id, data);
-    console.log("FETCHING USER", userProfile);
   }
   return userProfile;
 };
@@ -226,6 +225,7 @@ const getApplicationData = (id: string, data: DocumentData) => {
     flatID: data.flatID,
     msg: data.msg,
     status: data.status,
+    rejectionMsg: data.rejectionMsg || "",
   } as UserApplication;
 };
 
@@ -317,7 +317,8 @@ const updateUserProfile = async (userId: string, refs: UserProfileRefs) => {
 const updateApplication = async (
   flatID: string,
   userID: string,
-  approve: boolean
+  approve: boolean,
+  rejectionMsg?: string
 ) => {
   const q = query(
     collection(db, "applications"),
@@ -329,8 +330,8 @@ const updateApplication = async (
   if (!querySnapshot.empty) {
     const refDoc = querySnapshot.docs[0];
     const newStatus = approve ? "APPROVED" : "REJECTED";
-
-    await updateDoc(doc(db, "applications", refDoc.id), { status: newStatus });
+    
+    await updateDoc(doc(db, "applications", refDoc.id), { status: newStatus, rejectionMsg: rejectionMsg });
   } else {
     console.log("No document found with the given ID");
     return null;
@@ -339,20 +340,20 @@ const updateApplication = async (
 
 const withdrawApplication = async (applicationID: string, flatID: string) => {
   {
+    const docRef = doc(db, "flats", flatID);
+    const docSnap = await getDoc(docRef);
+    if (docSnap) {
+      const data: string[] = docSnap.data()?.applications || [];
+      const newData = data.filter((appID) => appID !== applicationID);
+      await updateDoc(doc(db, "flats", flatID), { applications: newData });
+    }
+  }
+
+  {
     const docRef = doc(db, "applications", applicationID);
     await deleteDoc(docRef);
   }
-
-  console.log("TRYING TO WITHDRAW APPLOICATION OF FLAT ID", flatID);
-
-  const docRef = doc(db, "flats", flatID);
-  const docSnap = await getDoc(docRef);
-  if (docSnap) {
-    const data: string[] = docSnap.data()?.applications || [];
-    console.log("CURRENT APPLICATION IDS stored ", data);
-    const newData = data.filter((appID) => appID !== applicationID);
-    await updateDoc(doc(db, "flats", flatID), { applications: newData });
-  }
+  
 };
 
 const closeAdvertisement = async (flatID: string, ownerID: string) => {

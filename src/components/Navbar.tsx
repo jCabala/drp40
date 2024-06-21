@@ -75,7 +75,7 @@ export default function Navbar({ navConfig }: Props) {
                 href={userID ? `/profile/${userID}` : "/"}
               >
                 <i className="fab fa-facebook-square text-lg leading-lg text-white opacity-75"></i>
-                <span className="ml-2">Your Profile</span>
+                <span className="ml-2">My Profile</span>
               </a>
             </li>
           </ul>

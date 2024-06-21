@@ -21,7 +21,6 @@ function ApplyFlatForm({ onFinish, flatID }: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     const msg = msgRef.current?.value;
-    console.log("Message: ", msg);
     if (!msg) {
       setAlertText("Please fill in all the fields!");
       return false;
@@ -46,7 +45,7 @@ function ApplyFlatForm({ onFinish, flatID }: Props) {
       <FormLabel>Personalized Message:</FormLabel>
       <textarea
         required
-        className="border border-orange-500 mb-4 resize-none w-full h-40 p-2 rounded-md"
+        className="border border-orange-500 mb-4 resize-none w-full h-40 p-2 rounded-md "
         ref={msgRef}
       />
     </FormWrapper>

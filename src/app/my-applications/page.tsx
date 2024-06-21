@@ -27,6 +27,8 @@ function MyApplications() {
   const getApplications = async () => {
     if (applicationsWithFlat) {
       setIsLoading(false);
+    } else {
+      setIsLoading(true);
     }
     if (userID) {
       const apps = await fetchAllApplicationsByUserID(userID);
@@ -41,7 +43,12 @@ function MyApplications() {
       const owners = (
         await Promise.all(
           apps.map(async (app) => {
-            return await fetchUserByID(app.userID);
+            const flat = await fetchFlatByID(app.flatID);
+            const ownerID = flat?.lister;
+            if (ownerID) {
+              const owner = await fetchUserByID(ownerID);
+              return owner;
+            }
           })
         )
       ).filter((user): user is UserProfile => user !== null);

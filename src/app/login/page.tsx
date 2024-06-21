@@ -22,14 +22,17 @@ const Login: React.FC = () => {
     if (id) {
       Cookies.set("userID", id);
     } else {
-      setAlertText("User not found")
+      setAlertText("User not found");
     }
 
     MyRouter.push("/explore");
   };
 
   useEffect(() => {
-    setIsLoading(false);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 200);
   }, []);
 
   return (

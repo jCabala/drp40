@@ -13,12 +13,15 @@ export default function MyFlats() {
   const { setIsLoading } = useContext(AlertAndLoadingContext);
   const userID = Cookies.get("userID");
 
-  const getOwnedFlats = () => {
+  const getOwnedFlats = async () => {
+    console.log("Getting owned flats");
     if (ownedFlats) {
       setIsLoading(false);
+    } else {
+      setIsLoading(true);
     }
     if (userID) {
-      fetchUserFlatsOwnedByID(userID, setOwnedFlats);
+      await fetchUserFlatsOwnedByID(userID, setOwnedFlats);
     } else {
       console.log("LOGIN ERROR? NO USER SET");
     }

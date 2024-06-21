@@ -19,6 +19,7 @@ function RegistrationForm({ onFinish }: Props) {
   const phoneRef = useRef<HTMLInputElement>(null);
   const ageRef = useRef<HTMLInputElement>(null);
   const genderRef = useRef<HTMLSelectElement>(null);
+  const fullNameRef = useRef<HTMLInputElement>(null);
   const { setAlertText, setAlertColor, setAlertTitle } = useContext(
     AlertAndLoadingContext
   );
@@ -31,6 +32,7 @@ function RegistrationForm({ onFinish }: Props) {
     const phoneNumber = phoneRef.current?.value;
     const age = ageRef.current?.value;
     const gender = genderRef.current?.value;
+    const fullName = fullNameRef.current?.value;
 
     let profilePic;
 
@@ -43,7 +45,15 @@ function RegistrationForm({ onFinish }: Props) {
       `userImages/${profilePic?.name}-${Date.now()}`
     );
 
-    if (profilePic && email && password && phoneNumber && age && gender) {
+    if (
+      profilePic &&
+      email &&
+      password &&
+      phoneNumber &&
+      age &&
+      gender &&
+      fullName
+    ) {
       const uploadTask = uploadBytes(storageRef, profilePic);
 
       const profileUrl = await getDownloadURL((await uploadTask).ref);
@@ -54,6 +64,7 @@ function RegistrationForm({ onFinish }: Props) {
         profileUrl,
         phoneNumber,
         gender,
+        fullName,
         parseInt(age)
       );
       setTimeout(() => {
@@ -91,13 +102,13 @@ function RegistrationForm({ onFinish }: Props) {
 
       <FormHeader>More about you: </FormHeader>
       <FormSection>
-        <FormLabel>Phone number:</FormLabel>
+        <FormLabel>Full Name:</FormLabel>
         <input
           type="string"
           className={formInputStyle}
-          placeholder="+91 1234567890"
+          placeholder="John Doe"
           required
-          ref={phoneRef}
+          ref={fullNameRef}
         />
       </FormSection>
       <FormSection>
@@ -117,6 +128,16 @@ function RegistrationForm({ onFinish }: Props) {
           <option value="Female">Female</option>
           <option value="Other">Other</option>
         </select>
+      </FormSection>
+      <FormSection>
+        <FormLabel>Phone number:</FormLabel>
+        <input
+          type="string"
+          className={formInputStyle}
+          placeholder="+91 1234567890"
+          required
+          ref={phoneRef}
+        />
       </FormSection>
       <FormSection>
         <b className="block text-orange-500 mb-2">

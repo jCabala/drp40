@@ -28,6 +28,7 @@ function MyApplicationCard({ flatObj, withdrawApplicationAction }: Props) {
   const status = flatObj.status;
   const statusStyle = statusStyles.get(status) || "bg-gray-500 text-white";
   const id = flatObj.flatID;
+  const rejectionMsg = flatObj.rejectionMsg;
 
   return (
     <div className="w-1/2 h-auto p-4 rounded-lg">
@@ -41,10 +42,12 @@ function MyApplicationCard({ flatObj, withdrawApplicationAction }: Props) {
           >
             {status}
           </span>
-          {status === "APPROVED" && (
+          {(status === "APPROVED" && (
             <>
               <div className="mt-4 bg-green-100 text-green-800 p-4 rounded-md shadow-inner text-center w-full">
-                Good job, you got approved! Use the following info to follow up
+                Good job, you got approved!
+                <br />
+                Contact the lister:
               </div>
               <ContactInfo
                 email={flatObj.ownerProfile.email}
@@ -52,7 +55,18 @@ function MyApplicationCard({ flatObj, withdrawApplicationAction }: Props) {
                 isMyProfile={false}
               />
             </>
-          )}
+          )) ||
+            (status === "REJECTED" && (
+              <>
+                <div className="mt-4 bg-green-100 text-red-800 p-4 rounded-md shadow-inner text-center w-full">
+                  Sorry but you were rejected by the lister.
+                  <br />
+                  FEEDBACK:
+                  <br />:{rejectionMsg}
+                </div>
+              </>
+            ))}
+
           <Link href={`/flat/${id}`}>
             <Button color={"orange"}>See More</Button>
           </Link>

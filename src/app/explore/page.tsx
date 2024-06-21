@@ -18,6 +18,8 @@ export default function Explore() {
   const getFlats = () => {
     if (flats) {
       setIsLoading(false);
+    } else {
+      setIsLoading(true);
     }
     if (userID) {
       fetchNotOwnedFlats(userID, setFlats);

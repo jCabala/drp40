@@ -9,7 +9,6 @@ import {
 import { FlatAdvertisment } from "@/data/flatAdvertisments";
 import { useState } from "react";
 import AddFlatFormButton from "../forms/AddFlatFormButton";
-import Image from "../../../node_modules/next/image";
 
 type Props = { flats: FlatAdvertisment[]; getFlats: () => void };
 const centerPlaceholder = { lat: 51.509865, lng: -0.118092 };
@@ -37,7 +36,7 @@ function MainFlatsViev({ flats, getFlats }: Props) {
             </div>
           ) : (
             <div>
-              {flats.map((flat, index) => (
+              {filteredFlats.map((flat, index) => (
                 <SeeFlatCard
                   key={index}
                   id={flat.id}
@@ -47,6 +46,7 @@ function MainFlatsViev({ flats, getFlats }: Props) {
                   numberOfGaps={flat.numberOfGaps}
                   numberOfRooms={flat.numberOfRooms}
                   labels={flat.labels}
+                  address={flat.address}
                 />
               ))}
             </div>
